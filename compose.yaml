@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  back:
+    build: 
+      context: ./back
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./back:/app
+      - /app/node_modules
+
+  front:
+    depends_on:
+      - back
+    build: 
+      context: ./front
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+      - "4173:4173"
+    volumes:
+      - ./front:/app
+      - /app/node_modules
+
+volumes:
+  db_data:
