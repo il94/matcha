@@ -21,7 +21,7 @@ services:
       - "3000:3000"
     volumes:
       - ./back:/app
-      - /app/node_modules
+      - node_modules_back:/app/node_modules
 
   front:
     depends_on:
@@ -34,7 +34,9 @@ services:
       - "4173:4173"
     volumes:
       - ./front:/app
-      - /app/node_modules
+      - node_modules_front:/app/node_modules
 
 volumes:
   db_data:
+  node_modules_back:
+  node_modules_front:
