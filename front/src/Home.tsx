@@ -1,12 +1,69 @@
 import { HeartIcon, MapPinIcon, XIcon } from "lucide-react"
 import { Button } from "./components/ui/button"
 import { motion } from "motion/react"
+import { MouseEvent, useCallback, useMemo, useState } from "react"
+import { cn } from "./lib/utils"
 
 export default function Home() {
+	/* ===== Temp values ===== */
+
+	const images = useMemo(
+		() => ["/model.JPG", "/model_2.JPG", "/model_3.JPG"],
+		[],
+	)
+
+	/* ======================= */
+
+	const [displayedImage, setDisplayedImage] = useState(0)
+
+	const displayPreviousImage = useCallback(() => {
+		if (displayedImage <= 0) return
+		setDisplayedImage(displayedImage - 1)
+	}, [displayedImage])
+
+	const displayNextImage = useCallback(() => {
+		if (displayedImage >= images.length - 1) return
+		setDisplayedImage(displayedImage + 1)
+	}, [displayedImage, images])
+
+	const handleImageClick = useCallback(
+		(event: MouseEvent<HTMLDivElement>) => {
+			const { clientX, currentTarget } = event
+			const clickPosition = clientX / currentTarget.offsetWidth
+
+			if (clickPosition < 0.5) displayPreviousImage()
+			else displayNextImage()
+		},
+		[displayPreviousImage, displayNextImage],
+	)
+
 	return (
 		<div className="flex grow flex-col justify-between bg-background px-3 py-3">
-			<div className="relative grow overflow-hidden rounded-lg">
-				<img src="/model.JPG" className="absolute size-full object-cover" />
+			<div
+				onClick={handleImageClick}
+				className="relative grow overflow-hidden rounded-lg"
+			>
+				{images.map((image, index) => (
+					<img
+						key={`test_${index}`}
+						src={image}
+						className={cn(
+							"absolute hidden size-full object-cover",
+							index === displayedImage && "block",
+						)}
+					/>
+				))}
+				<div className="absolute top-2 flex h-1 w-full bg-background/20">
+					{images.map((_, index) => (
+						<div
+							key={`image_${index}`}
+							className={cn(
+								"mx-0.5 h-full grow rounded-full bg-foreground",
+								index !== displayedImage && "opacity-20",
+							)}
+						/>
+					))}
+				</div>
 				<div className="absolute bottom-0 flex h-48 w-full flex-col justify-end bg-gradient-to-b from-transparent to-background p-3">
 					<p className="text-3xl">
 						Loremosowddsd <span className="text-2xl">27</span>
