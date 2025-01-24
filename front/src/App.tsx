@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router"
-import MobileLayout from "./MobileLayout"
-import Home from "./Home"
+import MobileLayout from "./views/mobile/MobileLayout"
+import Home from "./views/mobile/home/Home"
 import { ThemeProvider } from "./providers/ThemeProvider"
 
 function App() {

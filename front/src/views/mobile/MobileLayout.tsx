@@ -1,6 +1,6 @@
 import { Outlet } from "react-router"
-import HeaderNavbar from "./components/HeaderNavbar"
-import FooterNavbar from "./components/FooterNavbar"
+import HeaderNavbar from "./HeaderNavbar"
+import FooterNavbar from "./FooterNavbar"
 
 export default function MobileLayout() {
 	return (

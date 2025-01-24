@@ -1,8 +1,8 @@
 import { HeartIcon, MapPinIcon, XIcon } from "lucide-react"
-import { Button } from "./components/ui/button"
+import { Button } from "../../../components/ui/button"
 import { motion } from "motion/react"
 import { MouseEvent, useCallback, useMemo, useState } from "react"
-import { cn } from "./lib/utils"
+import { cn } from "../../../lib/utils"
 
 export default function Home() {
 	/* ===== Temp values ===== */
