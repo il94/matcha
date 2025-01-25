@@ -11,7 +11,7 @@ export default function AnimateHeart() {
 				duration: 0.75,
 			}}
 		>
-			<HeartIcon className="size-10 fill-red-400 stroke-emerald-500 stroke-[3.5]" />
+			<HeartIcon className="size-10 fill-pink-300 stroke-emerald-500 stroke-[3.5]" />
 		</motion.div>
 	)
 }

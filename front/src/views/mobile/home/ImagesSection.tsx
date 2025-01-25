@@ -1,23 +1,25 @@
 import AnimateHalo from "@/components/AnimateHalo"
 import { cn } from "@/lib/utils"
 import { MapPinIcon } from "lucide-react"
-import {
-	MouseEvent,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from "react"
+import { MouseEvent, useCallback, useEffect, useRef, useState } from "react"
 
-export default function ImagesSection() {
+type ImagesSectionProps = {
+	firstName: string
+	age: number
+	location: string
+	status: string
+	images: string[]
+}
+
+export default function ImagesSection({
+	firstName,
+	age,
+	location,
+	status,
+	images,
+}: ImagesSectionProps) {
 	const [displayedImage, setDisplayedImage] = useState(0)
 	const [height, setHeight] = useState(0)
-
-	const images = useMemo(
-		() => ["/model.JPG", "/model_2.JPG", "/model_3.JPG"],
-		[],
-	)
 
 	const displayPreviousImage = useCallback(() => {
 		if (displayedImage <= 0) return
@@ -89,15 +91,15 @@ export default function ImagesSection() {
 			</div>
 			<div className="absolute bottom-0 flex h-48 w-full flex-col justify-end bg-gradient-to-b from-transparent to-background p-3">
 				<p className="text-3xl">
-					Loremosowddsd <span className="text-2xl">27</span>
+					{firstName} <span className="text-2xl">{age}</span>
 				</p>
 				<div className="flex items-center gap-2">
 					<MapPinIcon className="ml-0.5 size-4" />
-					<p>à 8 kilomètres</p>
+					<p>{location}</p>
 				</div>
 				<div className="flex items-center gap-2 pl-0.5">
 					<AnimateHalo size={4} />
-					<p>En ligne</p>
+					<p>{status}</p>
 				</div>
 			</div>
 		</section>
