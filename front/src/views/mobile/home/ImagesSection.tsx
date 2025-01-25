@@ -1,10 +1,18 @@
 import AnimateHalo from "@/components/AnimateHalo"
 import { cn } from "@/lib/utils"
 import { MapPinIcon } from "lucide-react"
-import { MouseEvent, useCallback, useMemo, useState } from "react"
+import {
+	MouseEvent,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react"
 
 export default function ImagesSection() {
 	const [displayedImage, setDisplayedImage] = useState(0)
+	const [height, setHeight] = useState(0)
 
 	const images = useMemo(
 		() => ["/model.JPG", "/model_2.JPG", "/model_3.JPG"],
@@ -32,10 +40,31 @@ export default function ImagesSection() {
 		[displayPreviousImage, displayNextImage],
 	)
 
+	const sectionRef = useRef<HTMLDivElement>(null)
+
+	useEffect(() => {
+		if (!sectionRef.current || !sectionRef.current.parentElement) return
+
+		const sectionParent = sectionRef.current.parentElement
+
+		const resizeObserver = new ResizeObserver(() =>
+			setHeight(sectionParent.offsetHeight),
+		)
+
+		resizeObserver.observe(sectionParent)
+
+		return () => {
+			resizeObserver.disconnect()
+		}
+	}, [])
+
 	return (
 		<section
 			onClick={handleImageClick}
 			className="relative grow overflow-hidden rounded-lg"
+			style={{ height }}
+			onResize={() => console.log("Test")}
+			ref={sectionRef}
 		>
 			{images.map((image, index) => (
 				<img
