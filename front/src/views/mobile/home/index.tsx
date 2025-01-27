@@ -6,7 +6,7 @@ import BioSection from "./BioSection"
 import EssentialsSection from "./EssentialsSection"
 import TagsSection from "./TagsSection"
 
-export default function Home() {
+export default function HomePage() {
 	const user = {
 		firstName: "Loremosowddsd",
 		lastName: "Moussochocolat",

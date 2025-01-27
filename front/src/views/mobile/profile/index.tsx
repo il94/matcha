@@ -5,14 +5,16 @@ type StatProps = {
 	label: string
 }
 
-const Stat = ({ value, label }: StatProps) => (
-	<div className="flex flex-col items-center">
-		<p className="text-3xl font-bold">{value}</p>
-		<p className="text-1xl">{label}</p>
-	</div>
-)
+function Stat({ value, label }: StatProps) {
+	return (
+		<div className="flex flex-col items-center">
+			<p className="text-3xl font-bold">{value}</p>
+			<p className="text-1xl">{label}</p>
+		</div>
+	)
+}
 
-export default function Profile() {
+export default function ProfilePage() {
 	const user = {
 		firstName: "Loremosowddsd",
 		profilePicture: "/model.JPG",
