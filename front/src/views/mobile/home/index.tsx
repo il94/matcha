@@ -5,6 +5,7 @@ import ImagesSection from "./ImagesSection"
 import BioSection from "./BioSection"
 import EssentialsSection from "./EssentialsSection"
 import TagsSection from "./TagsSection"
+
 export default function Home() {
 	const user = {
 		firstName: "Loremosowddsd",
