@@ -1,8 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router"
 import MobileLayout from "./views/mobile/MobileLayout"
-import Home from "./views/mobile/home"
 import { ThemeProvider } from "./providers/ThemeProvider"
-import Profile from "./views/mobile/profile"
+import HomePage from "./views/mobile/home"
+import ProfilePage from "./views/mobile/profile"
+import ChatPage from "./views/mobile/chat"
 
 function App() {
 	return (
@@ -10,8 +11,9 @@ function App() {
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<MobileLayout />}>
-						<Route index element={<Home />} />
-						<Route path="profile" element={<Profile />} />
+						<Route index element={<HomePage />} />
+						<Route path="profile" element={<ProfilePage />} />
+						<Route path="chat" element={<ChatPage />} />
 					</Route>
 				</Routes>
 			</BrowserRouter>
