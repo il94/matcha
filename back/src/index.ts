@@ -1,38 +1,71 @@
-import Fastify, { FastifyInstance, RouteShorthandOptions } from "fastify"
-import { Server, IncomingMessage, ServerResponse } from "http"
+import "dotenv/config"
+import build from "./app"
+import fastify, { FastifyInstance } from "fastify"
+import fastifyCookie from "fastify-cookie"
+import path from "path"
+import fs from "fs"
+import fp from "fastify-plugin"
+import appLogger from "./app.logger"
+import fastifyMultipart from "fastify-multipart"
+import fastifyCors from "@fastify/cors"
 
-const server: FastifyInstance = Fastify({})
+const setup = () => {
+	const uploadDir = path.resolve(__dirname, "uploads")
+	if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true })
+}
 
-const opts: RouteShorthandOptions = {
-	schema: {
-		response: {
-			200: {
-				type: "object",
-				properties: {
-					pong: {
-						type: "string",
-					},
+export const init = (): FastifyInstance => {
+	setup()
+
+	const app = fastify({
+		disableRequestLogging: true,
+		logger: {
+			transport: {
+				target: "pino-pretty",
+				options: {
+					ignore: "pid,hostname",
+					translateTime: "yyyy-mm-dd HH:MM:ss Z",
 				},
 			},
 		},
-	},
+		genReqId() {
+			return undefined as unknown as string
+		},
+	})
+
+	app.register(fastifyCors, {
+		origin: process.env.API_FRONT_URL,
+		credentials: true,
+	})
+	app.register(fastifyCookie)
+	app.register(fastifyMultipart, {
+		limits: {
+			fileSize: 50 * 1024 * 1024,
+			files: 1,
+		},
+	})
+
+	app.register(fp(appLogger), { env: process.env.NODE_ENV })
+
+	app.register(build)
+
+	return app
 }
 
-server.get("/ping", opts, async (request, reply) => {
-	return { pong: "it worked!" }
-})
-
 const start = async () => {
-	try {
-		await server.listen({ host: "0.0.0.0", port: 3000 })
+	const app = init()
 
-		console.log("Server listening on port 3000")
-		const address = server.server.address()
-		const port = typeof address === "string" ? address : address?.port
-	} catch (err) {
-		server.log.error(err)
+	try {
+		await app.listen({
+			port: process.env.BACK_PORT ? parseInt(process.env.BACK_PORT) : 3000,
+			host: "0.0.0.0",
+		})
+	} catch (error) {
+		app.log.error(error)
 		process.exit(1)
 	}
 }
 
-start()
+if (process.env.NODE_ENV !== "test") {
+	start()
+}
