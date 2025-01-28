@@ -10,7 +10,7 @@ type ChatDateProps = {
 }
 
 function ChatDate({ date }: ChatDateProps) {
-	return <p className="text-center text-xs">{date}</p>
+	return <p className="text-center text-xs opacity-70">{date}</p>
 }
 
 type ChatUserProps = {
@@ -20,9 +20,11 @@ type ChatUserProps = {
 function ChatUser({ children }: ChatUserProps) {
 	return (
 		<div className="flex justify-end">
-			<p className="w-3/5 rounded-2xl bg-secondary px-4 py-2 text-sm text-primary-foreground">
-				{children}
-			</p>
+			<div className="flex w-3/5 justify-end">
+				<p className="w-fit rounded-2xl bg-secondary px-4 py-2 text-sm text-primary-foreground">
+					{children}
+				</p>
+			</div>
 		</div>
 	)
 }
@@ -36,9 +38,11 @@ function ChatSender({ avatar, children }: ChatSenderProps) {
 	return (
 		<div className="flex items-end justify-start gap-x-2">
 			<img src={avatar} className="size-7 rounded-full object-cover" />
-			<p className="w-3/5 rounded-2xl bg-gray-300 px-4 py-2 text-sm text-primary-foreground">
-				{children}
-			</p>
+			<div className="w-3/5">
+				<p className="w-fit rounded-2xl bg-gray-300 px-4 py-2 text-sm text-primary-foreground">
+					{children}
+				</p>
+			</div>
 		</div>
 	)
 }
