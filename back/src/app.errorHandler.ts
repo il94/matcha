@@ -7,7 +7,9 @@ const appErrorHandler: FastifyErrorHandler = (error, request, reply) => {
 
 		return reply.status(httpError.code).send({ message: httpError.message })
 	}
-	return reply.status(500).send({ message: "UNKNOWN_ERROR" })
+	return reply
+		.status(error.statusCode ?? 500)
+		.send({ message: "UNKNOWN_ERROR" })
 }
 
 export default appErrorHandler

@@ -38,17 +38,18 @@ const appLogger: FastifyPluginAsync<AppLoggerOptions> = async (
 			const httpError = error as HttpException
 
 			request.log.error(
-				{ err: error },
+				process.env.NODE_ENV === "development" ? error : null,
 				print(
 					RED,
 					`(${request.ip}) ${httpError.code} ${request.method} ${request.url}`,
 				),
 			)
-		} else
+		} else {
 			request.log.error(
-				error,
+				process.env.NODE_ENV === "development" ? error : null,
 				print(RED, `(${request.ip}) ${500} ${request.method} ${request.url}`),
 			)
+		}
 	})
 }
 

@@ -11,6 +11,8 @@ services:
       - db_data:/var/lib/postgresql/data
 
   back:
+    depends_on:
+      - db
     build: 
       context: ./back
       dockerfile: Dockerfile
