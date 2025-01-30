@@ -1,12 +1,17 @@
 import { FastifyPluginAsync } from "fastify"
 import appErrorHandler from "./app.errorHandler"
-import appPlugin from "@/app/app.plugin"
 import dbPlugin from "./db/db.plugin"
 import fastifyPlugin from "fastify-plugin"
+import appController from "./app/app.controller"
+import adminController from "./admin/admin.controller"
+import s3Plugin from "./s3/s3.plugin"
 
 const build: FastifyPluginAsync = async (app, options) => {
 	app.register(fastifyPlugin(dbPlugin))
-	app.register(appPlugin)
+	app.register(fastifyPlugin(s3Plugin))
+
+	app.register(appController)
+	app.register(adminController, { prefix: "/admin" })
 
 	app.setErrorHandler(appErrorHandler)
 }

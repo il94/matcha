@@ -4,9 +4,11 @@ import { BadRequestException } from "@/lib/HttpException"
 
 class appRepository {
 	private db
+	private s3
 
 	constructor(app: FastifyInstance, options: FastifyPluginOptions) {
 		this.db = app.pg
+		this.s3 = app.s3
 	}
 
 	async createUser(userData: Omit<UserData, "id" | "createdAt">) {
