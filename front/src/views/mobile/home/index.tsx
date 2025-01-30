@@ -6,51 +6,72 @@ import BioSection from "./BioSection"
 import EssentialsSection from "./EssentialsSection"
 import TagsSection from "./TagsSection"
 
+import { useQuery } from "@tanstack/react-query"
+import getUsers from "@/services/getUsers"
+import { useMemo } from "react"
+import dayjs from "@/lib/dayjs"
+
 export default function HomePage() {
-	const user = {
-		firstName: "Loremosowddsd",
-		lastName: "Moussochocolat",
-		userName: "chouf",
-		age: 27,
-		gender: "F",
-		sexualPreference: "Hetero",
+	const {
+		data: users,
+		isPending,
+		isError,
+		error,
+	} = useQuery({
+		queryKey: ["users"],
+		queryFn: getUsers,
+	})
 
-		bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam okok",
-		images: ["/model.JPG", "/model_2.JPG", "/model_3.JPG"],
+	if (isError) throw error // TODO Gestion d'erreur
 
-		elo: 48,
-		location: "Paris",
-		status: "En ligne",
-	}
+	const today = useMemo(() => dayjs(), [])
 
 	return (
 		<div className="flex h-full flex-col justify-between overflow-y-hidden bg-background px-3 py-3">
 			<div className="no-scrollbar h-full space-y-3 overflow-y-scroll">
-				<ImagesSection
-					firstName={user.firstName}
-					age={user.age}
-					location={user.location}
-					status={user.status}
-					images={user.images}
-				/>
-				<BioSection bio={user.bio} firstName={user.firstName} />
-				<EssentialsSection
-					firstName={user.firstName}
-					lastName={user.lastName}
-					userName={user.userName}
-					age={user.age}
-					gender={user.gender}
-					sexualPreference={user.sexualPreference}
-					location={user.location}
-					elo={user.elo}
-				/>
-				<TagsSection />
-				<Button variant="destructiveDark" className="h-10 w-full rounded-xl">
-					Block {user.firstName}
-				</Button>
-				<Button variant="destructiveDark" className="h-10 w-full rounded-xl">
-					Report {user.firstName}
-				</Button>
+				{isPending ? <p>Load</p> : users.map((user) => {
+
+						const age = today.diff(user.birthDate, "year")
+						const location = "Paris" // TODO Definir
+						const status = "En ligne" // TODO Definir
+
+						return (
+							<> { /* TODO key */ }
+								<ImagesSection
+									firstName={user.firstName}
+									age={age}
+									location={location}
+									status={status}
+									images={user.images}
+								/>
+								<BioSection bio={user.bio} firstName={user.firstName} />
+								<EssentialsSection
+									firstName={user.firstName}
+									lastName={user.lastName}
+									userName={user.userName}
+									age={age}
+									gender={user.gender}
+									sexuality={user.sexuality}
+									location={location}
+									elo={user.elo}
+								/>
+								<TagsSection />
+								<Button
+									variant="destructiveDark"
+									className="h-10 w-full rounded-xl"
+								>
+									Block {user.firstName}
+								</Button>
+								<Button
+									variant="destructiveDark"
+									className="h-10 w-full rounded-xl"
+								>
+									Report {user.firstName}
+								</Button>
+							</>
+						)
+					})
+				}
 			</div>
 			<div className="flex h-16 w-full items-center justify-evenly">
 				<Button className="size-16 rounded-full" size="icon" variant="ghost">

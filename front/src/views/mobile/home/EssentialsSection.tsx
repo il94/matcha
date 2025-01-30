@@ -13,8 +13,8 @@ type EssentialsSectionProps = {
 	lastName: string
 	userName: string
 	age: number
-	gender: string
-	sexualPreference: string
+	gender?: string
+	sexuality: string
 	location: string
 	elo: number
 }
@@ -25,7 +25,7 @@ export default function EssentialsSection({
 	userName,
 	age,
 	gender,
-	sexualPreference,
+	sexuality,
 	location,
 	elo,
 }: EssentialsSectionProps) {
@@ -49,12 +49,12 @@ export default function EssentialsSection({
 				<div className="flex items-center space-x-2">
 					<UserIcon />
 					<p className="text-sm">
-						{age} - {gender}
+						{age}{gender ?` - ${gender}` : ''}
 					</p>
 				</div>
 				<div className="flex items-center space-x-2">
 					<HeartIcon />
-					<p className="text-sm">{sexualPreference}</p>
+					<p className="text-sm">{sexuality}</p>
 				</div>
 				<div className="flex items-center space-x-2">
 					<MapPinIcon />
