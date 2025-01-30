@@ -8,8 +8,8 @@ type UserData = {
 	userName: string
 	email: string
 	birthDate: string
-	gender: string
 	sexualOrientation: string
+	gender?: string
 
 	bio?: string
 	images: string[]

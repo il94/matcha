@@ -5,9 +5,9 @@ export const createUserMutation = `
 		user_name,
 		email,
 		birth_date,
-		gender,
-		sexualOrientation,
+		sexual_orientation,
 		
+		gender,
 		bio,
 		elo,
 		views,
