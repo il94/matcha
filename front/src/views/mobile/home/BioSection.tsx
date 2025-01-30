@@ -1,6 +1,6 @@
 type BioSectionProps = {
-	bio: string
-	firstName: string
+	bio: User["bio"]
+	firstName: User["firstName"]
 }
 
 export default function BioSection({ bio, firstName }: BioSectionProps) {

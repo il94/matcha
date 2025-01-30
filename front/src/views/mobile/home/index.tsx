@@ -29,12 +29,14 @@ export default function HomePage() {
 	return (
 		<div className="flex h-full flex-col justify-between overflow-y-hidden bg-background px-3 py-3">
 			<div className="no-scrollbar h-full space-y-3 overflow-y-scroll">
-				{isPending ? <p>Load</p> : users.map((user) => {
+				{isPending ? <p>Load</p> : users.map((user) => { // TODO Loader
 
 						const age = today.diff(user.birthDate, "year")
 						const location = "Paris" // TODO Definir
 						const status = "En ligne" // TODO Definir
 
+						// TODO Vrai display pour les profils
+						
 						return (
 							<> { /* TODO key */ }
 								<ImagesSection
@@ -51,7 +53,7 @@ export default function HomePage() {
 									userName={user.userName}
 									age={age}
 									gender={user.gender}
-									sexuality={user.sexuality}
+									sexualOrientation={user.sexualOrientation}
 									location={location}
 									elo={user.elo}
 								/>

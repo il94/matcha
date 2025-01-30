@@ -9,14 +9,14 @@ import {
 } from "lucide-react"
 
 type EssentialsSectionProps = {
-	firstName: string
-	lastName: string
-	userName: string
+	firstName: User["firstName"]
+	lastName: User["lastName"]
+	userName: User["lastName"]
 	age: number
-	gender?: string
-	sexuality: string
+	gender: User["gender"]
+	sexualOrientation: User["sexualOrientation"]
 	location: string
-	elo: number
+	elo: User["elo"]
 }
 
 export default function EssentialsSection({
@@ -25,7 +25,7 @@ export default function EssentialsSection({
 	userName,
 	age,
 	gender,
-	sexuality,
+	sexualOrientation,
 	location,
 	elo,
 }: EssentialsSectionProps) {
@@ -49,12 +49,12 @@ export default function EssentialsSection({
 				<div className="flex items-center space-x-2">
 					<UserIcon />
 					<p className="text-sm">
-						{age}{gender ?` - ${gender}` : ''}
+						{age} - {gender}
 					</p>
 				</div>
 				<div className="flex items-center space-x-2">
 					<HeartIcon />
-					<p className="text-sm">{sexuality}</p>
+					<p className="text-sm">{sexualOrientation}</p>
 				</div>
 				<div className="flex items-center space-x-2">
 					<MapPinIcon />

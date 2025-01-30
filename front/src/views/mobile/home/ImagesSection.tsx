@@ -4,11 +4,11 @@ import { MapPinIcon } from "lucide-react"
 import { MouseEvent, useCallback, useEffect, useRef, useState } from "react"
 
 type ImagesSectionProps = {
-	firstName: string
+	firstName: User["firstName"]
 	age: number
 	location: string
-	status: string
-	images: string[]
+	status: string // TODO Definir
+	images: User["images"]
 }
 
 export default function ImagesSection({
@@ -68,6 +68,21 @@ export default function ImagesSection({
 			onResize={() => console.log("Test")}
 			ref={sectionRef}
 		>
+			{
+				images.length > 1 &&
+				<div className="absolute top-2 flex h-1 w-full bg-background/20 z-10">
+					{images.map((_, index) => (
+						<div
+							key={`image_${index}`}
+							className={cn(
+								"mx-0.5 h-full grow rounded-full bg-foreground",
+								index !== displayedImage && "opacity-20",
+							)}
+						/>
+					))}
+				</div>
+			}
+
 			{images.map((image, index) => (
 				<img
 					key={`test_${index}`}
@@ -78,17 +93,6 @@ export default function ImagesSection({
 					)}
 				/>
 			))}
-			<div className="absolute top-2 flex h-1 w-full bg-background/20">
-				{images.map((_, index) => (
-					<div
-						key={`image_${index}`}
-						className={cn(
-							"mx-0.5 h-full grow rounded-full bg-foreground",
-							index !== displayedImage && "opacity-20",
-						)}
-					/>
-				))}
-			</div>
 			<div className="absolute bottom-0 flex h-48 w-full flex-col justify-end bg-gradient-to-b from-transparent to-background p-3">
 				<p className="text-3xl">
 					{firstName} <span className="text-2xl">{age}</span>
