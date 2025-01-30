@@ -1,9 +1,9 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
 import {
+	createImagesTableMutation,
 	createUsersTableMutation,
 	createUuidExtensionMutation,
 } from "./queries"
-import { createImagesTableMutation } from "./queries/createImagesTableMutation"
 
 class dbRepository {
 	private db

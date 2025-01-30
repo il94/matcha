@@ -1,15 +1,15 @@
 import { FastifyPluginAsync } from "fastify"
 import {
+	createImageMutation,
+	createImagesTableMutation,
 	createUserMutation,
 	createUsersTableMutation,
 	createUuidExtensionMutation,
+	dropImagesTableMutation,
+	dropUsersTableMutation,
 } from "@/db/queries"
-import { dropImagesTableMutation } from "@/db/queries/dropImagesTableMutation"
-import { dropUsersTableMutation } from "@/db/queries/dropUsersTableMutation"
-import { createImagesTableMutation } from "@/db/queries/createImagesTableMutation"
 import { users } from "./data/users"
 import { images } from "./data/images"
-import { createImageMutation } from "@/db/queries/createImageMutation"
 
 const adminController: FastifyPluginAsync = async (app, options) => {
 	app.post("/", async () => {
