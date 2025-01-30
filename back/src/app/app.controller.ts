@@ -1,7 +1,6 @@
 import { FastifyPluginAsync } from "fastify"
 import appService from "@/app/app.service"
-import { BadRequestException, HttpException } from "@/lib/HttpException"
-import { postUserSchema } from "./schemas/postUserSchema"
+import { BadRequestException } from "@/lib/HttpException"
 
 const appController: FastifyPluginAsync = async (app, options) => {
 	const service = new appService(app, options)
@@ -15,7 +14,7 @@ const appController: FastifyPluginAsync = async (app, options) => {
 		}
 	})
 
-	app.post<{ Body: PostUserBody }>("/user", postUserSchema, (request) => {
+	app.post<{ Body: PostUserBody }>("/user", (request) => {
 		const userData = request.body
 
 		return service.createUser(userData)
