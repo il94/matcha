@@ -1,3 +1,3 @@
 export * from "./createUuidExtensionMutation"
-export * from "./createUserTableMutation"
+export * from "./createUsersTableMutation"
 export * from "./createUserMutation"
