@@ -7,10 +7,10 @@ export const createUsersTableMutation = `
 		user_name VARCHAR NOT NULL UNIQUE,
 		email VARCHAR NOT NULL UNIQUE,
 		birth_date VARCHAR NOT NULL,
-		sexuality VARCHAR NOT NULL,
+		gender VARCHAR NOT NULL,
+		sexualOrientation VARCHAR NOT NULL,
 
 		bio TEXT,
-		gender VARCHAR,
 		elo INT DEFAULT 0 NOT NULL,
 		views INT DEFAULT 0 NOT NULL,
 		matchs INT DEFAULT 0 NOT NULL,

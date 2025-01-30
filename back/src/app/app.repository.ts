@@ -21,7 +21,6 @@ class appRepository {
 		userData: Omit<UserData, "id" | "createdAt">,
 	): Promise<UserData[]> {
 		if (!userData.bio) userData.bio = undefined
-		if (!userData.gender) userData.gender = undefined
 		if (!userData.elo) userData.elo = 0
 		if (!userData.views) userData.views = 0
 		if (!userData.matchs) userData.matchs = 0

@@ -7,8 +7,8 @@ declare global {
 		userName: string
 		email: string
 		birthDate: string
-		sexuality: string
-		gender?: string
+		gender: string
+		sexualOrientation: string
 		
 		bio?: string
 		images: string[]

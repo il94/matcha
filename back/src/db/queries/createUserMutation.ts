@@ -5,10 +5,10 @@ export const createUserMutation = `
 		user_name,
 		email,
 		birth_date,
-		sexuality,
+		gender,
+		sexualOrientation,
 		
 		bio,
-		gender,
 		elo,
 		views,
 		matchs,
