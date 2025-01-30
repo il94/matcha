@@ -9,8 +9,12 @@ class appService {
 		this.repository = new appRepository(app, options)
 	}
 
-	async createUser(userData: Omit<UserData, "id" | "createdAt">) {
-		await this.repository.createUser(userData)
+	createUser(userData: Omit<UserData, "id" | "createdAt">) {
+		this.repository.createUser(userData)
+	}
+
+	getUsers() {
+		return this.repository.getUsers()
 	}
 }
 

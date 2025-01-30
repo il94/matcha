@@ -1,6 +1,12 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
 import { createUserMutation } from "@/db/queries"
 import { BadRequestException } from "@/lib/HttpException"
+import { getUsersQuery } from "@/db/queries/getUsersQuery"
+import {
+	GetObjectCommand,
+} from "@aws-sdk/client-s3"
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
+import convertObjectKeysToCamelCase from "@/lib/convertObjectKeysToCamelCase"
 
 class appRepository {
 	private db
@@ -31,6 +37,29 @@ class appRepository {
 		} catch (error) {
 			throw new BadRequestException((error as Error).message)
 		}
+	}
+
+	async getUsers(): Promise<UserData[]> {
+		const result = await this.db.query(getUsersQuery)
+
+		for (const user of result.rows) {
+			user.images = []
+			for (const imageName of user.image_names) {
+				user.images.push(
+					await getSignedUrl(
+						this.s3,
+						new GetObjectCommand({
+							Bucket: process.env.AWS_BUCKET_NAME,
+							Key: imageName,
+						}),
+						{ expiresIn: 15 * 60 },
+					),
+				)
+			}
+			delete user.image_names
+		}
+
+		return convertObjectKeysToCamelCase(result.rows)
 	}
 }
 
