@@ -9,7 +9,7 @@ declare global {
 		birthDate: string
 		sexualOrientation: string
 		gender?: string
-		
+
 		bio?: string
 		images: string[]
 
