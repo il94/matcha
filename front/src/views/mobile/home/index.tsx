@@ -36,13 +36,24 @@ export default function HomePage() {
 		setCurrentCardIndex((prev) => (prev === users.length ? prev : prev + 1))
 	}, [users])
 
-	const onDislike = useCallback(() => {
-		photoSectionRef.current?.dislike()
+	const scrollToTop = useCallback(async () => {
+		scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })
+		if (scrollRef.current?.scrollTop !== 0)
+			await new Promise((resolve) => setTimeout(resolve, 300))
 	}, [])
 
-	const onLike = useCallback(() => {
+	const onDislike = useCallback(async () => {
+		await scrollToTop()
+		photoSectionRef.current?.dislike()
+	}, [scrollToTop])
+
+	const onLike = useCallback(async () => {
+		await scrollToTop()
+
 		photoSectionRef.current?.like()
-	}, [])
+	}, [scrollToTop])
+
+	const scrollRef = useRef<HTMLDivElement>(null)
 
 	const today = useMemo(() => dayjs(), [])
 
@@ -52,7 +63,10 @@ export default function HomePage() {
 				<h1>Load</h1> // TODO Loader
 			) : (
 				<>
-					<div className="no-scrollbar relative h-full space-y-3 overflow-y-scroll">
+					<div
+						className="no-scrollbar relative h-full space-y-3 overflow-y-scroll"
+						ref={scrollRef}
+					>
 						<PhotosSection
 							users={users}
 							currentCardIndex={currentCardIndex}
