@@ -5,5 +5,5 @@ export const createImagesTableMutation = `
 		user_id UUID NOT NULL,
 		name VARCHAR NOT NULL,
 		CONSTRAINT fk_images_user FOREIGN KEY(user_id) REFERENCES users(id)
-	)
+	);
 `

@@ -15,5 +15,5 @@ export const createUsersTableMutation = `
 		views INT DEFAULT 0 NOT NULL,
 		matchs INT DEFAULT 0 NOT NULL,
 		dates INT DEFAULT 0 NOT NULL
-	)
+	);
 `

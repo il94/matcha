@@ -4,8 +4,7 @@ import {
 	createUserMutation,
 	createUsersTableMutation,
 	createUuidExtensionMutation,
-	dropImagesTableMutation,
-	dropUsersTableMutation,
+	dropDatabase,
 } from "@/db/queries"
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
 import { images } from "./data/images"
@@ -36,8 +35,7 @@ class adminRepository {
 
 	async dropDb() {
 		await this.db.transact(async (transact) => {
-			await transact.query(dropImagesTableMutation)
-			await transact.query(dropUsersTableMutation)
+			await transact.query(dropDatabase)
 		})
 	}
 }
