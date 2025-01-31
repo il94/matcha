@@ -23,16 +23,20 @@ export default forwardRef(function PhotosSection(
 	const today = useMemo(() => dayjs(), [])
 
 	const cardContainer = useRef<HTMLDivElement>(null)
-	const [cardContainerHeight, setSwipeableCardContainerHeight] = useState(0)
+	const [cardContainerSize, setCardContainerSize] = useState({
+		width: 0,
+		height: 0,
+	})
 
 	useEffect(() => {
 		if (!cardContainer.current?.parentElement) return
 
 		const resizeObserver = new ResizeObserver(() => {
 			if (cardContainer.current?.parentElement)
-				setSwipeableCardContainerHeight(
-					cardContainer.current.parentElement.offsetHeight,
-				)
+				setCardContainerSize({
+					width: cardContainer.current.parentElement.offsetWidth,
+					height: cardContainer.current.parentElement.offsetHeight,
+				})
 		})
 
 		resizeObserver.observe(cardContainer.current.parentElement)
@@ -58,7 +62,7 @@ export default forwardRef(function PhotosSection(
 	return (
 		<section
 			className="relative w-full overflow-hidden"
-			style={{ height: cardContainerHeight }}
+			style={{ height: cardContainerSize.height }}
 			ref={cardContainer}
 		>
 			{[...users].reverse().map((user, index) => {
@@ -75,6 +79,7 @@ export default forwardRef(function PhotosSection(
 						status={status}
 						images={user.images}
 						setNextCard={setNextCard}
+						parentWidth={cardContainerSize.width}
 						ref={cardRefs[Math.abs(index - users.length) - 1]}
 					/>
 				)

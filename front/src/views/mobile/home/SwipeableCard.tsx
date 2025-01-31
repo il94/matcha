@@ -12,10 +12,7 @@ import { motion } from "framer-motion"
 import { FramerCallback } from "./types"
 
 const dragElastic = 1
-const confrimThreshold = 150
-const velocityThreshold = 500
-const hideCardDistance = 1000
-const rotate = 45
+const rotateCard = 45
 
 type SwipeableCardProps = {
 	firstName: User["firstName"]
@@ -24,6 +21,7 @@ type SwipeableCardProps = {
 	status: string // TODO Definir
 	images: User["images"]
 	setNextCard: () => void
+	parentWidth: number
 }
 
 export default forwardRef(function SwipeableCard(
@@ -34,26 +32,31 @@ export default forwardRef(function SwipeableCard(
 		status,
 		images,
 		setNextCard,
+		parentWidth,
 	}: SwipeableCardProps,
 	ref,
 ) {
-	const [dragPosition, setDragPosition] = useState(0)
+	const velocityThreshold = parentWidth * 2 // Seuil de vitesse pour valider le like/dislike
+	const confrimThreshold = parentWidth / 3.5 // Seuil de distance pour valider le like/dislike
+	const hideCardDistance = parentWidth * 1.5 // Distance à laquelle la carte doit être déplacée pour être cachée
+
+	const [cardRotation, setCardRotation] = useState(0)
 	const [cardX, setSwipeableCardX] = useState(0)
 
 	const like = useCallback(() => {
 		setSwipeableCardX(hideCardDistance)
-		setDragPosition(rotate)
-	}, [])
+		setCardRotation(rotateCard)
+	}, [hideCardDistance])
 
 	const dislike = useCallback(() => {
 		setSwipeableCardX(-hideCardDistance)
-		setDragPosition(-rotate)
-	}, [])
+		setCardRotation(-rotateCard)
+	}, [hideCardDistance])
 
 	useImperativeHandle(ref, () => ({ like, dislike }))
 
 	const onDrag: FramerCallback = useCallback((_, info) => {
-		setDragPosition(info.offset.x / 10)
+		setCardRotation(info.offset.x / 10)
 	}, [])
 	const onDragEnd: FramerCallback = useCallback(
 		(_, info) => {
@@ -67,9 +70,9 @@ export default forwardRef(function SwipeableCard(
 				info.offset.x < -confrimThreshold
 			)
 				dislike()
-			else setDragPosition(0)
+			else setCardRotation(0)
 		},
-		[like, dislike],
+		[like, dislike, confrimThreshold, velocityThreshold],
 	)
 
 	const [displayedImage, setDisplayedImage] = useState(0)
@@ -102,6 +105,11 @@ export default forwardRef(function SwipeableCard(
 			dragElastic={dragElastic}
 			onDrag={onDrag}
 			onDragEnd={onDragEnd}
+			animate={{ x: cardX, rotate: cardRotation }}
+			transition={{
+				x: { duration: 0.2 },
+				rotate: { ease: "backOut" },
+			}}
 			onAnimationComplete={(latest: { x: number }) => {
 				if (latest.x) setNextCard()
 			}}
@@ -134,14 +142,15 @@ export default forwardRef(function SwipeableCard(
 			)}
 			<motion.div
 				className="absolute left-0 top-0 h-full w-full"
+				initial={{ backgroundColor: "hsl(0 0% 0%)" }}
 				animate={{
 					backgroundColor:
-						dragPosition > 0
-							? "hsl(var(--primary))"
-							: dragPosition < 0
-								? "#f87171"
-								: "transparent",
-					opacity: (0.5 * Math.abs(dragPosition)) / 15,
+						cardRotation > 0
+							? "hsl(139 35% 47%)"
+							: cardRotation < 0
+								? "hsl(0 91%, 71%)"
+								: "hsl(0 0% 0%)",
+					opacity: (0.5 * Math.abs(cardRotation)) / 15,
 				}}
 			/>
 			<div className="absolute bottom-0 flex h-48 w-full flex-col justify-end bg-gradient-to-b from-transparent to-background p-3">
