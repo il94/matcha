@@ -13,10 +13,11 @@ import dayjs from "dayjs"
 type PhotosSectionProps = {
 	users: User[]
 	currentCardIndex: number
+	setNextCard: () => void
 }
 
 export default forwardRef(function PhotosSection(
-	{ users, currentCardIndex }: PhotosSectionProps,
+	{ users, currentCardIndex, setNextCard }: PhotosSectionProps,
 	ref,
 ) {
 	const today = useMemo(() => dayjs(), [])
@@ -73,6 +74,7 @@ export default forwardRef(function PhotosSection(
 						location={location}
 						status={status}
 						images={user.images}
+						setNextCard={setNextCard}
 						ref={cardRefs[Math.abs(index - users.length) - 1]}
 					/>
 				)

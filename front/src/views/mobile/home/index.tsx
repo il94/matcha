@@ -38,13 +38,11 @@ export default function HomePage() {
 
 	const onDislike = useCallback(() => {
 		photoSectionRef.current?.dislike()
-		setNextCard()
-	}, [setNextCard])
+	}, [])
 
 	const onLike = useCallback(() => {
 		photoSectionRef.current?.like()
-		setNextCard()
-	}, [setNextCard])
+	}, [])
 
 	const today = useMemo(() => dayjs(), [])
 
@@ -58,6 +56,7 @@ export default function HomePage() {
 						<PhotosSection
 							users={users}
 							currentCardIndex={currentCardIndex}
+							setNextCard={setNextCard}
 							ref={photoSectionRef}
 						/>
 						<BioSection

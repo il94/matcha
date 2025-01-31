@@ -23,10 +23,18 @@ type SwipeableCardProps = {
 	location: string
 	status: string // TODO Definir
 	images: User["images"]
+	setNextCard: () => void
 }
 
 export default forwardRef(function SwipeableCard(
-	{ firstName, age, location, status, images }: SwipeableCardProps,
+	{
+		firstName,
+		age,
+		location,
+		status,
+		images,
+		setNextCard,
+	}: SwipeableCardProps,
 	ref,
 ) {
 	const [dragPosition, setDragPosition] = useState(0)
@@ -94,7 +102,9 @@ export default forwardRef(function SwipeableCard(
 			dragElastic={dragElastic}
 			onDrag={onDrag}
 			onDragEnd={onDragEnd}
-			animate={{ x: cardX, rotate: dragPosition }}
+			onAnimationComplete={(latest: { x: number }) => {
+				if (latest.x) setNextCard()
+			}}
 			onClick={handleImageClick}
 			className="absolute h-full w-full overflow-hidden rounded-xl"
 		>
