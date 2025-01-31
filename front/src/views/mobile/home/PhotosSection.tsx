@@ -1,12 +1,24 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import {
+	createRef,
+	forwardRef,
+	useEffect,
+	useImperativeHandle,
+	useMemo,
+	useRef,
+	useState,
+} from "react"
 import SwipeableCard from "./SwipeableCard"
 import dayjs from "dayjs"
 
 type PhotosSectionProps = {
 	users: User[]
+	currentCardIndex: number
 }
 
-export default function PhotosSection({ users }: PhotosSectionProps) {
+export default forwardRef(function PhotosSection(
+	{ users, currentCardIndex }: PhotosSectionProps,
+	ref,
+) {
 	const today = useMemo(() => dayjs(), [])
 
 	const cardContainer = useRef<HTMLDivElement>(null)
@@ -29,13 +41,26 @@ export default function PhotosSection({ users }: PhotosSectionProps) {
 		}
 	}, [])
 
+	const cardRefs = Array.from({ length: users.length }).map(() =>
+		createRef<{ like: () => void; dislike: () => void } | null>(),
+	)
+
+	useImperativeHandle(ref, () => ({
+		like: () => {
+			cardRefs[currentCardIndex].current?.like()
+		},
+		dislike: () => {
+			cardRefs[currentCardIndex].current?.dislike()
+		},
+	}))
+
 	return (
 		<section
 			className="relative w-full overflow-hidden"
 			style={{ height: cardContainerHeight }}
 			ref={cardContainer}
 		>
-			{[...users].reverse().map((user) => {
+			{[...users].reverse().map((user, index) => {
 				const age = today.diff(user.birthDate, "year")
 				const location = "Paris" // TODO Definir
 				const status = "En ligne" // TODO Definir
@@ -48,9 +73,10 @@ export default function PhotosSection({ users }: PhotosSectionProps) {
 						location={location}
 						status={status}
 						images={user.images}
+						ref={cardRefs[Math.abs(index - users.length) - 1]}
 					/>
 				)
 			})}
 		</section>
 	)
-}
+})

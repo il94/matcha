@@ -1,7 +1,13 @@
 import AnimateHalo from "@/components/AnimateHalo"
 import { cn } from "@/lib/utils"
 import { MapPinIcon } from "lucide-react"
-import { MouseEvent, useCallback, useState } from "react"
+import {
+	forwardRef,
+	MouseEvent,
+	useCallback,
+	useImperativeHandle,
+	useState,
+} from "react"
 import { motion } from "framer-motion"
 import { FramerCallback } from "./types"
 
@@ -9,6 +15,7 @@ const dragElastic = 1
 const confrimThreshold = 150
 const velocityThreshold = 500
 const hideCardDistance = 1000
+const rotate = 45
 
 type SwipeableCardProps = {
 	firstName: User["firstName"]
@@ -18,30 +25,44 @@ type SwipeableCardProps = {
 	images: User["images"]
 }
 
-export default function SwipeableCard({
-	firstName,
-	age,
-	location,
-	status,
-	images,
-}: SwipeableCardProps) {
+export default forwardRef(function SwipeableCard(
+	{ firstName, age, location, status, images }: SwipeableCardProps,
+	ref,
+) {
 	const [dragPosition, setDragPosition] = useState(0)
 	const [cardX, setSwipeableCardX] = useState(0)
 
-	const onDrag: FramerCallback = useCallback(
-		(_, info) => setDragPosition(info.offset.x / 10),
-		[],
-	)
-	const onDragEnd: FramerCallback = useCallback((_, info) => {
-		if (info.velocity.x > velocityThreshold || info.offset.x > confrimThreshold)
-			setSwipeableCardX(hideCardDistance)
-		else if (
-			info.velocity.x < -velocityThreshold ||
-			info.offset.x < -confrimThreshold
-		)
-			setSwipeableCardX(-hideCardDistance)
-		else setDragPosition(0)
+	const like = useCallback(() => {
+		setSwipeableCardX(hideCardDistance)
+		setDragPosition(rotate)
 	}, [])
+
+	const dislike = useCallback(() => {
+		setSwipeableCardX(-hideCardDistance)
+		setDragPosition(-rotate)
+	}, [])
+
+	useImperativeHandle(ref, () => ({ like, dislike }))
+
+	const onDrag: FramerCallback = useCallback((_, info) => {
+		setDragPosition(info.offset.x / 10)
+	}, [])
+	const onDragEnd: FramerCallback = useCallback(
+		(_, info) => {
+			if (
+				info.velocity.x > velocityThreshold ||
+				info.offset.x > confrimThreshold
+			)
+				like()
+			else if (
+				info.velocity.x < -velocityThreshold ||
+				info.offset.x < -confrimThreshold
+			)
+				dislike()
+			else setDragPosition(0)
+		},
+		[like, dislike],
+	)
 
 	const [displayedImage, setDisplayedImage] = useState(0)
 
@@ -72,9 +93,8 @@ export default function SwipeableCard({
 			dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
 			dragElastic={dragElastic}
 			onDrag={onDrag}
-			whileDrag={{ rotate: dragPosition }}
 			onDragEnd={onDragEnd}
-			animate={{ x: cardX }}
+			animate={{ x: cardX, rotate: dragPosition }}
 			onClick={handleImageClick}
 			className="absolute h-full w-full overflow-hidden rounded-xl"
 		>
@@ -129,4 +149,4 @@ export default function SwipeableCard({
 			</div>
 		</motion.div>
 	)
-}
+})
