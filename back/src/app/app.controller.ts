@@ -23,6 +23,10 @@ const appController: FastifyPluginAsync = async (app, options) => {
 	app.get("/users", () => {
 		return service.getUsers()
 	})
+
+	app.get("/tags", () => {
+		return service.getTags()
+	})
 }
 
 export default appController

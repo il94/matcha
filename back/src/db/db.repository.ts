@@ -1,7 +1,9 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
 import {
 	createImagesTableMutation,
+	createTagsTableMutation,
 	createUsersTableMutation,
+	createUserTagsTableMutation,
 	createUuidExtensionMutation,
 } from "./queries"
 
@@ -16,6 +18,8 @@ class dbRepository {
 		await this.db.query(createUuidExtensionMutation)
 		await this.db.query(createUsersTableMutation)
 		await this.db.query(createImagesTableMutation)
+		await this.db.query(createTagsTableMutation)
+		await this.db.query(createUserTagsTableMutation)
 	}
 }
 

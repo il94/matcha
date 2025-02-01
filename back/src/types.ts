@@ -14,8 +14,15 @@ type UserData = {
 	bio?: string
 	images: string[]
 
+	tags: TagData[]
+
 	elo: number
 	views: number
 	matchs: number
 	dates: number
+}
+
+type TagData = {
+	id: number
+	name: string
 }

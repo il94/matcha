@@ -3,7 +3,7 @@ import { BadRequestException } from "@/lib/HttpException"
 import { GetObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import convertObjectKeysToCamelCase from "@/lib/convertObjectKeysToCamelCase"
-import { createUserMutation, getUsersQuery } from "@/db/queries"
+import { createUserMutation, getTagsQuery, getUsersQuery } from "@/db/queries"
 
 class appRepository {
 	private db
@@ -57,6 +57,13 @@ class appRepository {
 
 		return convertObjectKeysToCamelCase(result.rows)
 	}
+
+	async getTags(): Promise<TagData[]> {
+		const result = await this.db.query(getTagsQuery)
+
+		return convertObjectKeysToCamelCase(result.rows)
+	}
+
 }
 
 export default appRepository

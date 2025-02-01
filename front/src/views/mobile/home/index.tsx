@@ -87,7 +87,9 @@ export default function HomePage() {
 							location={"Paris"}
 							elo={users[currentCardIndex].elo}
 						/>
-						<TagsSection />
+						{users[currentCardIndex].tags.length ? (
+							<TagsSection tags={users[currentCardIndex].tags} />
+						) : null}
 						<Button
 							variant="destructiveDark"
 							className="h-10 w-full rounded-xl"

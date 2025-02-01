@@ -16,6 +16,10 @@ class appService {
 	getUsers() {
 		return this.repository.getUsers()
 	}
+
+	getTags() {
+		return this.repository.getTags()
+	}
 }
 
 export default appService
