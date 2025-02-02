@@ -44,16 +44,22 @@ class appRepository {
 		for (const user of result.rows) {
 			user.images = []
 			for (const imageName of user.image_names) {
-				user.images.push(
-					await getSignedUrl(
-						this.s3,
-						new GetObjectCommand({
-							Bucket: process.env.AWS_BUCKET_NAME,
-							Key: imageName,
-						}),
-						{ expiresIn: 15 * 60 },
-					),
-				)
+
+				// TODO Décommenter cette partie quand il y aura de vrais users
+				// user.images.push(
+				// 	await getSignedUrl(
+				// 		this.s3,
+				// 		new GetObjectCommand({
+				// 			Bucket: process.env.AWS_BUCKET_NAME,
+				// 			Key: imageName,
+				// 		}),
+				// 		{ expiresIn: 15 * 60 },
+				// 	),
+				// )
+
+				// TODO Temporaire pour fake users
+				user.images.push(imageName)
+
 			}
 			delete user.image_names
 		}
