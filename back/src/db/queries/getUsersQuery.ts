@@ -8,4 +8,6 @@ export const getUsersQuery = `
 	LEFT JOIN user_tags ON user_tags.user_id = users.id
 	LEFT JOIN tags ON tags.id = user_tags.tag_id
 	GROUP BY users.id
+	OFFSET ($1 - 1) * $2
+	LIMIT $2
 `

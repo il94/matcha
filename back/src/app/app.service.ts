@@ -13,8 +13,8 @@ class appService {
 		this.repository.createUser(userData)
 	}
 
-	getUsers() {
-		return this.repository.getUsers()
+	getUsers(page: number, limit: number) {
+		return this.repository.getUsers(page, limit)
 	}
 
 	getTags() {

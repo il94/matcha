@@ -20,8 +20,23 @@ const appController: FastifyPluginAsync = async (app, options) => {
 		return service.createUser(userData)
 	})
 
-	app.get("/users", () => {
-		return service.getUsers()
+	const getUsersSchema = {
+		schema: {
+			querystring: {
+				type: "object",
+				properties: {
+					page: { type: "number", default: 1 },
+					limit: { type: "number", default: 5 },
+				},
+			},
+		},
+	}
+
+	app.get<{ Querystring: GetUsersQuery }>("/users", getUsersSchema, (request) => {
+
+		const { page, limit } = request.query
+
+		return service.getUsers(page, limit)
 	})
 
 	app.get("/tags", () => {

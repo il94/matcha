@@ -35,8 +35,11 @@ class appRepository {
 		}
 	}
 
-	async getUsers(): Promise<UserData[]> {
-		const result = await this.db.query(getUsersQuery)
+	async getUsers(page: number, limit: number): Promise<{
+		users: UserData[],
+		nextPage: number | null
+	}> {
+		const result = await this.db.query(getUsersQuery, [page, limit])
 
 		for (const user of result.rows) {
 			user.images = []
@@ -55,7 +58,12 @@ class appRepository {
 			delete user.image_names
 		}
 
-		return convertObjectKeysToCamelCase(result.rows)
+		const nextPage = result.rows.length >= limit ? page + 1 : null
+
+		return {
+			users: convertObjectKeysToCamelCase(result.rows),
+			nextPage
+		}
 	}
 
 	async getTags(): Promise<TagData[]> {

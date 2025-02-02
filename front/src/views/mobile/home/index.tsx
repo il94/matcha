@@ -2,7 +2,7 @@ import { XIcon } from "lucide-react"
 import { Button } from "../../../components/ui/button"
 import AnimateHeart from "@/components/AnimateHeart"
 
-import { useQuery } from "@tanstack/react-query"
+import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query"
 import getUsers from "@/services/getUsers"
 import { useCallback, useMemo, useRef, useState } from "react"
 import dayjs from "@/lib/dayjs"
@@ -13,16 +13,32 @@ import PhotosSection from "./PhotosSection"
 
 export default function HomePage() {
 	const {
-		data: users,
+		data,
 		isPending,
 		isError,
 		error,
-	} = useQuery({
+
+		fetchNextPage,
+	} = useInfiniteQuery({
 		queryKey: ["users"],
-		queryFn: getUsers,
+		queryFn: ({ pageParam: page }) =>
+			getUsers({
+				page,
+				limit: 15,
+			}),
+
+		initialPageParam: 1,
+		getNextPageParam: (lastPage) => {
+			return lastPage.nextPage
+		},
+		placeholderData: keepPreviousData,
 	})
 
 	if (isError) throw error // TODO Gestion d'erreur
+
+	const users = useMemo(() => {
+		return data?.pages.flatMap((page) => page.users) ?? []
+	}, [data])
 
 	const [currentCardIndex, setCurrentCardIndex] = useState(0)
 
@@ -33,8 +49,11 @@ export default function HomePage() {
 
 	const setNextCard = useCallback(() => {
 		if (!users) return
+
+		if (currentCardIndex % 15 === 0) fetchNextPage()
+
 		setCurrentCardIndex((prev) => (prev === users.length ? prev : prev + 1))
-	}, [users])
+	}, [users, currentCardIndex, fetchNextPage])
 
 	const scrollToTop = useCallback(async () => {
 		scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })
@@ -49,7 +68,6 @@ export default function HomePage() {
 
 	const onLike = useCallback(async () => {
 		await scrollToTop()
-
 		photoSectionRef.current?.like()
 	}, [scrollToTop])
 

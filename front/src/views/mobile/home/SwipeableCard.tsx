@@ -6,10 +6,23 @@ import {
 	MouseEvent,
 	useCallback,
 	useImperativeHandle,
+	useMemo,
 	useState,
 } from "react"
 import { motion } from "framer-motion"
-import { FramerCallback } from "./types"
+import { FramerCallback } from "@/types"
+
+function shuffleImages(images: string[]) {
+	const firstImage = images[0]
+
+	const restImages = images.slice(1)
+	for (let i = restImages.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1))
+		;[restImages[i], restImages[j]] = [restImages[j], restImages[i]]
+	}
+
+	return [firstImage, ...restImages]
+}
 
 const dragElastic = 1
 const rotateCard = 45
@@ -98,6 +111,8 @@ export default forwardRef(function SwipeableCard(
 		[displayPreviousImage, displayNextImage],
 	)
 
+	const imagesShuffled = useMemo(() => shuffleImages(images), [images])
+
 	return (
 		<motion.div
 			drag="x"
@@ -116,20 +131,20 @@ export default forwardRef(function SwipeableCard(
 			onClick={handleImageClick}
 			className="absolute h-full w-full overflow-hidden rounded-xl"
 		>
-			{images.map((image, index) => (
+			{imagesShuffled.map((image, index) => (
 				<img
 					key={`test_${index}`}
 					src={image}
 					className={cn(
-						"absolute hidden size-full object-cover",
+						"absolute hidden size-full bg-background object-cover",
 						index === displayedImage && "block",
 					)}
 				/>
 			))}
 
-			{images.length > 1 && (
+			{imagesShuffled.length > 1 && (
 				<div className="absolute top-2 flex h-1 w-full bg-background/20">
-					{images.map((_, index) => (
+					{imagesShuffled.map((_, index) => (
 						<div
 							key={`image_${index}`}
 							className={cn(

@@ -1,5 +1,10 @@
 type PostUserBody = Omit<UserData, "id" | "createdAt">
 
+type GetUsersQuery = {
+	page: number
+	limit: number
+}
+
 type UserData = {
 	id: string
 	createdAt: string
