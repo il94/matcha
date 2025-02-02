@@ -39,6 +39,12 @@ const appController: FastifyPluginAsync = async (app, options) => {
 		return service.getUsers(page, limit)
 	})
 
+	app.get<{ Params: { userId: UserData["id"] } }>("/user/:userId", (request) => {
+		const { userId } = request.params
+
+		return service.getUser(userId)
+	})
+
 	app.get("/tags", () => {
 		return service.getTags()
 	})

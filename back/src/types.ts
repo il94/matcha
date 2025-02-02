@@ -1,3 +1,5 @@
+type ID<Entity extends { id?: any }> = NonNullable<Entity["id"]>
+
 type PostUserBody = Omit<UserData, "id" | "createdAt">
 
 type GetUsersQuery = {

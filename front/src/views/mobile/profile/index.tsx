@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button"
+import getUser from "@/services/getUser"
+import { useQuery } from "@tanstack/react-query"
 
 type StatProps = {
 	value: number
@@ -15,14 +17,18 @@ function Stat({ value, label }: StatProps) {
 }
 
 export default function ProfilePage() {
-	const user = {
-		firstName: "Loremosowddsd",
-		profilePicture: "/model.JPG",
-		elo: 48,
-		views: 128,
-		matchs: 204,
-		dates: 203,
-	}
+	const {
+		data: user,
+		isPending,
+		isError,
+		error,
+	} = useQuery({
+		queryKey: ["user", { id: "f3fbeaa4-e413-4c76-a932-4574a6e3dce2" }],
+		queryFn: () => getUser({ userId: "f3fbeaa4-e413-4c76-a932-4574a6e3dce2" }),
+	})
+
+	if (isError) throw error // TODO
+	if (isPending) return <p>Load</p> // TODO
 
 	return (
 		<div className="flex h-full flex-col items-center justify-between overflow-y-hidden px-3 py-8">
@@ -30,7 +36,7 @@ export default function ProfilePage() {
 
 			<div className="flex h-full w-full flex-col items-center justify-evenly">
 				<img
-					src={user.profilePicture}
+					src={user.images[0]}
 					className="size-32 rounded-full object-cover"
 				/>
 				<div className="flex w-full justify-evenly">

@@ -17,6 +17,10 @@ class appService {
 		return this.repository.getUsers(page, limit)
 	}
 
+	getUser(userId: UserData["id"]) {
+		return this.repository.getUser(userId)
+	}
+
 	getTags() {
 		return this.repository.getTags()
 	}
