@@ -25,7 +25,7 @@ export default function LoginPage() {
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
-					className="flex h-full w-full flex-col items-center justify-between px-9 pb-4 pt-16"
+					className="flex h-full w-full flex-col items-center justify-between px-9 pb-4 pt-10"
 				>
 					<h1 className="text-6xl">Login</h1>
 					<div className="flex w-full flex-col gap-6">

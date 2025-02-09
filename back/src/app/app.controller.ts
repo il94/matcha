@@ -51,14 +51,11 @@ const appController: FastifyPluginAsync = async (app, options) => {
 		},
 	)
 
-	app.get(
-		"/user/me",
-		() => {
-			const userId = process.env.VITE_USER_ID_TEST as string
+	app.get("/user/me", () => {
+		const userId = process.env.VITE_USER_ID_TEST as string
 
-			return service.getUser(userId)
-		},
-	)
+		return service.getUser(userId)
+	})
 
 	app.get("/chats", () => {
 		const userId = process.env.VITE_USER_ID_TEST as string
