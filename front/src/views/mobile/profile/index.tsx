@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import getUser from "@/services/getUser"
+import getUserMe from "@/services/getUserMe"
 import { useQuery } from "@tanstack/react-query"
 
 type StatProps = {
@@ -23,8 +23,8 @@ export default function ProfilePage() {
 		isError,
 		error,
 	} = useQuery({
-		queryKey: ["user", { id: "f3fbeaa4-e413-4c76-a932-4574a6e3dce2" }],
-		queryFn: () => getUser({ userId: "f3fbeaa4-e413-4c76-a932-4574a6e3dce2" }),
+		queryKey: ["me"],
+		queryFn: getUserMe,
 	})
 
 	if (isError) throw error // TODO

@@ -128,8 +128,7 @@ export default function ChatIdPage() {
 							return (
 								<Fragment key={message.id}>
 									{Date && <Date date={message.createdAt} />}
-									{message.authorId ===
-									"f09206cc-bac5-4f20-8df2-0abdacff9e57" ? (
+									{message.authorId === import.meta.env.VITE_USER_ID_TEST ? (
 										<ChatUser>{message.content}</ChatUser>
 									) : (
 										<ChatSender avatar={message.avatar}>
