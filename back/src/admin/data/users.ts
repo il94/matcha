@@ -14,7 +14,7 @@ export const users = [
 			250,
 			100,
 		],
-		tags: ["Entrepreneurship", "Technology News", "History"]
+		tags: ["Entrepreneurship", "Technology News", "History"],
 	},
 	{
 		data: [
@@ -31,7 +31,7 @@ export const users = [
 			800,
 			500,
 		],
-		tags: ["Movies", "Fashion", "Art", "Photography", "Theater"]
+		tags: ["Movies", "Fashion", "Art", "Photography", "Theater"],
 	},
 	{
 		data: [
@@ -48,7 +48,7 @@ export const users = [
 			400,
 			200,
 		],
-		tags: ["Movies", "Art", "Photography", "Reading"]
+		tags: ["Movies", "Art", "Photography", "Reading"],
 	},
 	{
 		data: [
@@ -65,7 +65,13 @@ export const users = [
 			300,
 			150,
 		],
-		tags: ["Technology", "Entrepreneurship", "Technology News", "Coding", "Astronomy"]
+		tags: [
+			"Technology",
+			"Entrepreneurship",
+			"Technology News",
+			"Coding",
+			"Astronomy",
+		],
 	},
 	{
 		data: [
@@ -82,7 +88,7 @@ export const users = [
 			900,
 			600,
 		],
-		tags: ["Music", "Fashion", "Books", "Social Media", "Writing"]
+		tags: ["Music", "Fashion", "Books", "Social Media", "Writing"],
 	},
 	{
 		data: [
@@ -99,7 +105,7 @@ export const users = [
 			700,
 			500,
 		],
-		tags: ["Movies", "Sports", "Adventure", "Travel"]
+		tags: ["Movies", "Sports", "Adventure", "Travel"],
 	},
 	{
 		data: [
@@ -109,7 +115,7 @@ export const users = [
 			"emma.watson@mail.fr",
 			"1990-04-15",
 			"Straight",
-			
+
 			"F",
 			"Actress, activist, and lover of knowledge. Passionate about gender equality, literature, and the arts. Looking for someone who values deep conversations, curiosity, and making the world a better place.",
 			120,
@@ -124,8 +130,8 @@ export const users = [
 			"Travel",
 			"Volunteering",
 			"Nature",
-			"Reading"
-		]
+			"Reading",
+		],
 	},
 	{
 		data: [
@@ -135,7 +141,7 @@ export const users = [
 			"zendaya.coleman@mail.fr",
 			"1996-09-01",
 			"Straight",
-			
+
 			"F",
 			"Actress, singer, and fashion icon. I love creativity, self-expression, and challenging the status quo. Looking for someone who appreciates individuality and loves to explore new ideas.",
 			180,
@@ -150,8 +156,8 @@ export const users = [
 			"Art",
 			"Social Media",
 			"Photography",
-			"Design"
-		]
+			"Design",
+		],
 	},
 	{
 		data: [
@@ -161,7 +167,7 @@ export const users = [
 			"keanu.reeves@mail.fr",
 			"1964-09-02",
 			"Straight",
-			
+
 			"M",
 			"Actor, martial artist, and humble soul. I believe in kindness and living in the present moment. Looking for someone who appreciates simplicity and authenticity.",
 			150,
@@ -176,8 +182,8 @@ export const users = [
 			"Travel",
 			"Meditation",
 			"Nature",
-			"Reading"
-		]
+			"Reading",
+		],
 	},
 	{
 		data: [
@@ -187,7 +193,7 @@ export const users = [
 			"rihanna.fenty@mail.fr",
 			"1988-02-20",
 			"Straight",
-			
+
 			"F",
 			"Singer, entrepreneur, and advocate. I’m passionate about empowering others and making an impact. Seeking someone who is confident, driven, and loves a good challenge.",
 			220,
@@ -202,8 +208,8 @@ export const users = [
 			"Social Media",
 			"Design",
 			"Travel",
-			"Philosophy"
-		]
+			"Philosophy",
+		],
 	},
 	{
 		data: [
@@ -213,7 +219,7 @@ export const users = [
 			"chris.hemsworth@mail.fr",
 			"1983-08-11",
 			"Straight",
-			
+
 			"M",
 			"Actor, fitness enthusiast, and adventure lover. Always looking to push my limits and embrace new experiences. Looking for someone who shares a love for life and adventure.",
 			210,
@@ -221,14 +227,7 @@ export const users = [
 			300,
 			75,
 		],
-		tags: [
-			"Movies",
-			"Sports",
-			"Adventure",
-			"Travel",
-			"Nature",
-			"Running"
-		]
+		tags: ["Movies", "Sports", "Adventure", "Travel", "Nature", "Running"],
 	},
 	{
 		data: [
@@ -238,7 +237,7 @@ export const users = [
 			"emma.stone@mail.fr",
 			"1988-11-06",
 			"Straight",
-			
+
 			"F",
 			"Actress with a passion for comedy and quirky roles. I’m someone who values laughter, creativity, and authenticity. Looking for someone who isn’t afraid to be themselves.",
 			170,
@@ -253,8 +252,8 @@ export const users = [
 			"Art",
 			"Photography",
 			"Reading",
-			"Social Media"
-		]
+			"Social Media",
+		],
 	},
 	{
 		data: [
@@ -264,7 +263,7 @@ export const users = [
 			"will.smith@mail.fr",
 			"1968-09-25",
 			"Straight",
-			
+
 			"M",
 			"Actor, entrepreneur, and motivator. Always pushing for growth and believing in the power of positivity. Looking for someone who is ambitious, optimistic, and loves to have fun.",
 			250,
@@ -279,7 +278,7 @@ export const users = [
 			"Philosophy",
 			"Sports",
 			"Comedy",
-		]
+		],
 	},
 	{
 		data: [
@@ -289,7 +288,7 @@ export const users = [
 			"natalie.portman@mail.fr",
 			"1981-06-09",
 			"Straight",
-			
+
 			"F",
 			"Actress, activist, and proud feminist. I’m passionate about human rights, education, and film. Looking for someone who values intelligence, empathy, and social change.",
 			190,
@@ -297,13 +296,7 @@ export const users = [
 			350,
 			120,
 		],
-		tags: [
-			"Movies",
-			"Philosophy",
-			"Art",
-			"Reading",
-			"Social Media"
-		]
+		tags: ["Movies", "Philosophy", "Art", "Reading", "Social Media"],
 	},
 	{
 		data: [
@@ -313,7 +306,7 @@ export const users = [
 			"zac.efron@mail.fr",
 			"1987-10-18",
 			"Straight",
-			
+
 			"M",
 			"Actor, fitness enthusiast, and adventurer. I love exploring new places and challenging myself. Looking for someone who shares a passion for adventure, health, and enjoying life.",
 			230,
@@ -321,14 +314,7 @@ export const users = [
 			400,
 			175,
 		],
-		tags: [
-			"Movies",
-			"Sports",
-			"Adventure",
-			"Travel",
-			"Music",
-			"Nature"
-		]
+		tags: ["Movies", "Sports", "Adventure", "Travel", "Music", "Nature"],
 	},
 	{
 		data: [
@@ -338,7 +324,7 @@ export const users = [
 			"ariana.grande@mail.fr",
 			"1993-06-26",
 			"Straight",
-			
+
 			"F",
 			"Singer, actress, and lover of all things pink. Passionate about music, kindness, and spreading love. Looking for someone who has a good heart, is down-to-earth, and appreciates the little things.",
 			260,
@@ -353,8 +339,8 @@ export const users = [
 			"Art",
 			"Photography",
 			"Comedy",
-			"Books"
-		]
+			"Books",
+		],
 	},
 	{
 		data: [
@@ -364,7 +350,7 @@ export const users = [
 			"leonardo.dicaprio@mail.fr",
 			"1974-11-11",
 			"Straight",
-			
+
 			"M",
 			"Actor, environmental activist, and passionate about saving the planet. I love nature, traveling, and supporting causes that make a difference. Looking for someone who shares my commitment to sustainability and the environment.",
 			240,
@@ -378,8 +364,8 @@ export const users = [
 			"Nature",
 			"Social Media",
 			"Philosophy",
-			"Sustainability"
-		]
+			"Sustainability",
+		],
 	},
 	{
 		data: [
@@ -389,7 +375,7 @@ export const users = [
 			"scarlett.johansson@mail.fr",
 			"1984-11-22",
 			"Straight",
-			
+
 			"F",
 			"Actress, philanthropist, and traveler. Passionate about making a positive impact. Seeking someone who values kindness and adventure.",
 			160,
@@ -397,13 +383,7 @@ export const users = [
 			500,
 			120,
 		],
-		tags: [
-			"Movies",
-			"Travel",
-			"Social Media",
-			"Adventure",
-			"Music"
-		]
+		tags: ["Movies", "Travel", "Social Media", "Adventure", "Music"],
 	},
 	{
 		data: [
@@ -413,7 +393,7 @@ export const users = [
 			"mila.kunis@mail.fr",
 			"1983-08-14",
 			"Straight",
-			
+
 			"F",
 			"Actress and lover of books, art, and spending time outdoors. Looking for someone who enjoys deep conversations and a simple life.",
 			165,
@@ -421,14 +401,7 @@ export const users = [
 			300,
 			50,
 		],
-		tags: [
-			"Movies",
-			"Books",
-			"Art",
-			"Nature",
-			"Yoga",
-			"Reading"
-		]
+		tags: ["Movies", "Books", "Art", "Nature", "Yoga", "Reading"],
 	},
 	{
 		data: [
@@ -438,7 +411,7 @@ export const users = [
 			"will.ferrell@mail.fr",
 			"1967-07-16",
 			"Straight",
-			
+
 			"M",
 			"Actor, comedian, and all-around goofball. Passionate about making people laugh and spreading joy. Looking for someone who can match my sense of humor and fun.",
 			180,
@@ -452,9 +425,9 @@ export const users = [
 			"Sports",
 			"Social Media",
 			"Adventure",
-			"Writing"
-		]
-	},	
+			"Writing",
+		],
+	},
 	{
 		data: [
 			"Emily",
@@ -463,7 +436,7 @@ export const users = [
 			"emily.blunt@mail.fr",
 			"1983-02-23",
 			"Straight",
-			
+
 			"F",
 			"Actress and lover of nature. I believe in leading with integrity and exploring the world. Seeking someone who shares my appreciation for simplicity and depth.",
 			170,
@@ -471,14 +444,7 @@ export const users = [
 			500,
 			175,
 		],
-		tags: [
-			"Movies",
-			"Nature",
-			"Travel",
-			"Art",
-			"Hiking",
-			"Yoga"
-		]
+		tags: ["Movies", "Nature", "Travel", "Art", "Hiking", "Yoga"],
 	},
 	{
 		data: [
@@ -488,7 +454,7 @@ export const users = [
 			"robert.downey@mail.fr",
 			"1965-04-04",
 			"Straight",
-			
+
 			"M",
 			"Actor, inventor, and philosopher. Passionate about making a difference and challenging myself every day. Looking for someone who thinks outside the box and loves to innovate.",
 			200,
@@ -502,8 +468,8 @@ export const users = [
 			"Philosophy",
 			"Entrepreneurship",
 			"Adventure",
-			"Social Media"
-		]
+			"Social Media",
+		],
 	},
 	{
 		data: [
@@ -513,7 +479,7 @@ export const users = [
 			"margot.robbie@mail.fr",
 			"1990-07-02",
 			"Straight",
-			
+
 			"F",
 			"Actress and lover of the arts. I believe in creativity and exploration. Looking for someone who shares my curiosity and zest for life.",
 			160,
@@ -521,14 +487,7 @@ export const users = [
 			400,
 			150,
 		],
-		tags: [
-			"Movies",
-			"Art",
-			"Fashion",
-			"Social Media",
-			"Travel",
-			"Photography"
-		]
+		tags: ["Movies", "Art", "Fashion", "Social Media", "Travel", "Photography"],
 	},
 	{
 		data: [
@@ -538,7 +497,7 @@ export const users = [
 			"tom.hanks@mail.fr",
 			"1956-07-09",
 			"Straight",
-			
+
 			"M",
 			"Actor, filmmaker, and philanthropist. Passionate about telling stories and making a positive difference in the world. Looking for someone who enjoys good company and great conversation.",
 			185,
@@ -546,13 +505,7 @@ export const users = [
 			600,
 			180,
 		],
-		tags: [
-			"Movies",
-			"Social Media",
-			"Writing",
-			"History",
-			"Volunteering"
-		]
+		tags: ["Movies", "Social Media", "Writing", "History", "Volunteering"],
 	},
 	{
 		data: [
@@ -562,7 +515,7 @@ export const users = [
 			"blake.lively@mail.fr",
 			"1987-08-25",
 			"Straight",
-			
+
 			"F",
 			"Actress, entrepreneur, and mother. Passionate about family, fashion, and making the world a better place. Looking for someone who values authenticity and kindness.",
 			170,
@@ -570,13 +523,7 @@ export const users = [
 			500,
 			200,
 		],
-		tags: [
-			"Movies",
-			"Fashion",
-			"Entrepreneurship",
-			"Social Media",
-			"Cooking"
-		]
+		tags: ["Movies", "Fashion", "Entrepreneurship", "Social Media", "Cooking"],
 	},
 	{
 		data: [
@@ -586,7 +533,7 @@ export const users = [
 			"borat.sagdiyev@mail.fr",
 			"1972-02-14",
 			"Straight",
-			
+
 			"M",
 			"Journalist, provocateur, and cultural explorer. I enjoy shocking people with my unique worldview. Looking for someone who can handle my humor and adventurous spirit.",
 			185,
@@ -594,13 +541,7 @@ export const users = [
 			200,
 			100,
 		],
-		tags: [
-			"Comedy",
-			"Adventure",
-			"Social Media",
-			"Travel",
-			"Philosophy"
-		]
+		tags: ["Comedy", "Adventure", "Social Media", "Travel", "Philosophy"],
 	},
 	{
 		data: [
@@ -610,7 +551,7 @@ export const users = [
 			"walter.white@mail.fr",
 			"1958-09-07",
 			"Straight",
-			
+
 			"M",
 			"Former teacher turned chemistry kingpin. Passionate about control, power, and precision. Looking for someone who appreciates strategy and intelligence.",
 			180,
@@ -623,8 +564,8 @@ export const users = [
 			"Entrepreneurship",
 			"Philosophy",
 			"Technology",
-			"Social Media"
-		]
+			"Social Media",
+		],
 	},
 	{
 		data: [
@@ -634,7 +575,7 @@ export const users = [
 			"booba.elie@mail.fr",
 			"1976-12-09",
 			"Straight",
-			
+
 			"M",
 			"Rapper, businessman, and artist. Passionate about music, fashion, and influence. Seeking someone who shares my drive and passion for success.",
 			175,
@@ -648,8 +589,8 @@ export const users = [
 			"Social Media",
 			"Entrepreneurship",
 			"Sports",
-			"Technology"
-		]
+			"Technology",
+		],
 	},
 	{
 		data: [
@@ -659,7 +600,7 @@ export const users = [
 			"xavier.niel@mail.fr",
 			"1967-08-25",
 			"Straight",
-			
+
 			"M",
 			"Entrepreneur and philanthropist. Passionate about technology, innovation, and changing the world. Looking for someone who shares my entrepreneurial mindset and love for technology.",
 			180,
@@ -672,8 +613,8 @@ export const users = [
 			"Entrepreneurship",
 			"Startups",
 			"Social Media",
-			"Design"
-		]
+			"Design",
+		],
 	},
 	{
 		data: [
@@ -683,7 +624,7 @@ export const users = [
 			"kylian.mbappe@mail.fr",
 			"1998-12-20",
 			"Straight",
-			
+
 			"M",
 			"Football player, philanthropist, and sports icon. Passionate about giving back to the community and achieving greatness. Looking for someone who shares my love for sports and making a difference.",
 			175,
@@ -691,12 +632,7 @@ export const users = [
 			750,
 			500,
 		],
-		tags: [
-			"Sports",
-			"Social Media",
-			"Volunteering",
-			"Adventure"
-		]
+		tags: ["Sports", "Social Media", "Volunteering", "Adventure"],
 	},
 	{
 		data: [
@@ -706,7 +642,7 @@ export const users = [
 			"khabib.nurmagomedov@mail.fr",
 			"1988-09-20",
 			"Straight",
-			
+
 			"M",
 			"Former MMA fighter, champion, and family man. Passionate about discipline, hard work, and living a life of integrity. Seeking someone who values respect and consistency.",
 			178,
@@ -714,12 +650,7 @@ export const users = [
 			500,
 			200,
 		],
-		tags: [
-			"Sports",
-			"Philosophy",
-			"Adventure",
-			"Meditation"
-		]
+		tags: ["Sports", "Philosophy", "Adventure", "Meditation"],
 	},
 	{
 		data: [
@@ -729,7 +660,7 @@ export const users = [
 			"albert.einstein@mail.fr",
 			"1879-03-14",
 			"Straight",
-			
+
 			"M",
 			"Physicist, innovator, and philosopher. Passionate about science, curiosity, and the search for truth. Looking for someone who appreciates deep thinking and intellectual pursuits.",
 			175,
@@ -737,12 +668,7 @@ export const users = [
 			600,
 			250,
 		],
-		tags: [
-			"Philosophy",
-			"Technology",
-			"History",
-			"Books"
-		]
+		tags: ["Philosophy", "Technology", "History", "Books"],
 	},
 	{
 		data: [
@@ -752,7 +678,7 @@ export const users = [
 			"serena.williams@mail.fr",
 			"1981-09-26",
 			"Straight",
-			
+
 			"F",
 			"Tennis player, entrepreneur, and activist. Passionate about breaking barriers and empowering women. Looking for someone who shares my commitment to success and social impact.",
 			175,
@@ -765,8 +691,8 @@ export const users = [
 			"Entrepreneurship",
 			"Volunteering",
 			"Social Media",
-			"Adventure"
-		]
+			"Adventure",
+		],
 	},
 	{
 		data: [
@@ -776,7 +702,7 @@ export const users = [
 			"mahatma.gandhi@mail.fr",
 			"1869-10-02",
 			"Asexual",
-			
+
 			"M",
 			"Political leader, philosopher, and advocate of nonviolence. Passionate about justice, peace, and human rights. Seeking someone who shares my commitment to integrity and compassion.",
 			170,
@@ -784,12 +710,7 @@ export const users = [
 			500,
 			300,
 		],
-		tags: [
-			"Philosophy",
-			"Social Media",
-			"History",
-			"Volunteering",
-		]
+		tags: ["Philosophy", "Social Media", "History", "Volunteering"],
 	},
 	{
 		data: [
@@ -799,7 +720,7 @@ export const users = [
 			"steve.jobs@mail.fr",
 			"1955-02-24",
 			"Straight",
-			
+
 			"M",
 			"Tech visionary, entrepreneur, and innovator. Passionate about design, simplicity, and changing the world. Looking for someone who shares my vision for the future.",
 			180,
@@ -812,8 +733,8 @@ export const users = [
 			"Entrepreneurship",
 			"Design",
 			"Startups",
-			"Social Media"
-		]
+			"Social Media",
+		],
 	},
 	{
 		data: [
@@ -823,7 +744,7 @@ export const users = [
 			"albert.camus@mail.fr",
 			"1913-11-07",
 			"Straight",
-			
+
 			"M",
 			"Philosopher, writer, and existentialist. Passionate about exploring life's meaning and confronting the absurd. Looking for someone who appreciates literature and deep conversations.",
 			175,
@@ -831,12 +752,7 @@ export const users = [
 			500,
 			300,
 		],
-		tags: [
-			"Philosophy",
-			"Books",
-			"History",
-			"Social Media",
-		]
+		tags: ["Philosophy", "Books", "History", "Social Media"],
 	},
 	{
 		data: [
@@ -846,7 +762,7 @@ export const users = [
 			"pablo.picasso@mail.fr",
 			"1881-10-25",
 			"Bisexual",
-			
+
 			"M",
 			"Artist and revolutionary of modern art. Passionate about creating new forms of expression and breaking artistic boundaries. Looking for someone who embraces avant-garde creativity.",
 			170,
@@ -860,8 +776,8 @@ export const users = [
 			"Photography",
 			"History",
 			"Design",
-			"Social Media"
-		]
+			"Social Media",
+		],
 	},
 	{
 		data: [
@@ -871,7 +787,7 @@ export const users = [
 			"muhammad.ali@mail.fr",
 			"1942-01-17",
 			"Straight",
-			
+
 			"M",
 			"Boxing legend, activist, and philanthropist. Passionate about fighting for justice, equality, and freedom. Looking for someone who shares my commitment to making a difference in the world.",
 			190,
@@ -879,13 +795,7 @@ export const users = [
 			700,
 			400,
 		],
-		tags: [
-			"Sports",
-			"Social Media",
-			"Volunteering",
-			"History",
-			"Philosophy"
-		]
+		tags: ["Sports", "Social Media", "Volunteering", "History", "Philosophy"],
 	},
 	{
 		data: [
@@ -895,7 +805,7 @@ export const users = [
 			"rosa.parks@mail.fr",
 			"1913-02-04",
 			"Straight",
-			
+
 			"F",
 			"Civil rights activist and icon of the American struggle for justice. Passionate about equality, human rights, and social change. Looking for someone who believes in fighting for what’s right.",
 			160,
@@ -903,12 +813,7 @@ export const users = [
 			500,
 			250,
 		],
-		tags: [
-			"Social Media",
-			"History",
-			"Volunteering",
-			"Philosophy"
-		]
+		tags: ["Social Media", "History", "Volunteering", "Philosophy"],
 	},
 	{
 		data: [
@@ -918,7 +823,7 @@ export const users = [
 			"michael.jackson@mail.fr",
 			"1958-08-29",
 			"Straight",
-			
+
 			"M",
 			"King of Pop, performer, and philanthropist. Passionate about music, dance, and inspiring change through creativity. Looking for someone who loves the stage and embraces art.",
 			175,
@@ -926,12 +831,7 @@ export const users = [
 			800,
 			450,
 		],
-		tags: [
-			"Music",
-			"Social Media",
-			"Fashion",
-			"Art"
-		]
+		tags: ["Music", "Social Media", "Fashion", "Art"],
 	},
 	{
 		data: [
@@ -941,7 +841,7 @@ export const users = [
 			"nina.simone@mail.fr",
 			"1933-02-21",
 			"Bisexual",
-			
+
 			"F",
 			"Jazz musician, activist, and iconic figure in American music history. Passionate about freedom, equality, and soulful expression. Looking for someone who resonates with my drive for social justice.",
 			165,
@@ -949,12 +849,7 @@ export const users = [
 			500,
 			300,
 		],
-		tags: [
-			"Music",
-			"Social Media",
-			"Philosophy",
-			"History"
-		]
+		tags: ["Music", "Social Media", "Philosophy", "History"],
 	},
 	{
 		data: [
@@ -964,7 +859,7 @@ export const users = [
 			"bob.marley@mail.fr",
 			"1945-02-06",
 			"Straight",
-			
+
 			"M",
 			"Reggae musician, peace advocate, and cultural icon. Passionate about spreading love, unity, and music. Looking for someone who believes in peace and the power of song.",
 			175,
@@ -972,12 +867,7 @@ export const users = [
 			600,
 			350,
 		],
-		tags: [
-			"Music",
-			"Social Media",
-			"Philosophy",
-			"Travel"
-		]
+		tags: ["Music", "Social Media", "Philosophy", "Travel"],
 	},
 	{
 		data: [
@@ -987,7 +877,7 @@ export const users = [
 			"lara.croft@mail.fr",
 			"1968-02-14",
 			"Straight",
-			
+
 			"F",
 			"Adventurer, archaeologist, and survival expert. Passionate about uncovering ancient secrets and exploring the unknown. Looking for someone who shares my love for adventure and discovery.",
 			170,
@@ -1001,8 +891,8 @@ export const users = [
 			"Sports",
 			"Technology",
 			"Photography",
-			"Travel"
-		]
+			"Travel",
+		],
 	},
 	{
 		data: [
@@ -1012,7 +902,7 @@ export const users = [
 			"eren.yeager@mail.fr",
 			"1995-03-30",
 			"Straight",
-			
+
 			"M",
 			"Warrior, passionate about freedom and justice. Driven by the need to protect my people and destroy the Titans. Looking for someone who shares my unyielding determination and sense of duty.",
 			180,
@@ -1020,11 +910,7 @@ export const users = [
 			800,
 			500,
 		],
-		tags: [
-			"Anime",
-			"Adventure",
-			"Sports",
-		]
+		tags: ["Anime", "Adventure", "Sports"],
 	},
 	{
 		data: [
@@ -1034,7 +920,7 @@ export const users = [
 			"jon.snow@mail.fr",
 			"1982-12-03",
 			"Straight",
-			
+
 			"M",
 			"Knight, king in the North, and a protector of the realm. Passionate about duty, honor, and the survival of the people. Looking for someone who shares my loyalty and respect for tradition.",
 			185,
@@ -1042,10 +928,7 @@ export const users = [
 			750,
 			400,
 		],
-		tags: [
-			"Adventure",
-			"History",
-		]
+		tags: ["Adventure", "History"],
 	},
 	{
 		data: [
@@ -1055,7 +938,7 @@ export const users = [
 			"luffy.rosinante@mail.fr",
 			"1997-05-05",
 			"Straight",
-			
+
 			"M",
 			"Pirate, captain of the Straw Hat Pirates. Passionate about freedom, adventure, and friendship. Looking for someone who believes in dreams and never giving up on your goals.",
 			170,
@@ -1063,11 +946,7 @@ export const users = [
 			700,
 			400,
 		],
-		tags: [
-			"Anime",
-			"Adventure",
-			"Comedy",
-		]
+		tags: ["Anime", "Adventure", "Comedy"],
 	},
 	{
 		data: [
@@ -1077,7 +956,7 @@ export const users = [
 			"princess.leia@mail.fr",
 			"1981-06-12",
 			"Straight",
-			
+
 			"F",
 			"Princess, Rebel leader, and champion of freedom. Passionate about the fight against oppression and the protection of the galaxy. Looking for someone who shares my belief in justice and standing up for what’s right.",
 			165,
@@ -1085,10 +964,7 @@ export const users = [
 			700,
 			400,
 		],
-		tags: [
-			"Movies",
-			"Adventure",
-		]
+		tags: ["Movies", "Adventure"],
 	},
 	{
 		data: [
@@ -1098,7 +974,7 @@ export const users = [
 			"light.yagami@mail.fr",
 			"1986-02-28",
 			"Straight",
-			
+
 			"M",
 			"Student, mastermind behind the Death Note. Passionate about justice and eliminating corruption. Looking for someone who understands my ideals and my thirst for creating a perfect world.",
 			175,
@@ -1106,10 +982,7 @@ export const users = [
 			700,
 			450,
 		],
-		tags: [
-			"Anime",
-			"Philosophy",
-		]
+		tags: ["Anime", "Philosophy"],
 	},
 	{
 		data: [
@@ -1119,7 +992,7 @@ export const users = [
 			"mario.luigi@mail.fr",
 			"1981-09-13",
 			"Straight",
-			
+
 			"M",
 			"Plumber, adventurer, and hero of the Mushroom Kingdom. Passionate about saving princesses and exploring new worlds. Looking for someone who loves adventure and challenges.",
 			165,
@@ -1127,12 +1000,7 @@ export const users = [
 			700,
 			350,
 		],
-		tags: [
-			"Gaming",
-			"Adventure",
-			"Comedy",
-			"Sports"
-		]
+		tags: ["Gaming", "Adventure", "Comedy", "Sports"],
 	},
 	{
 		data: [
@@ -1142,7 +1010,7 @@ export const users = [
 			"donkey.shrek@mail.fr",
 			"2001-04-22",
 			"Straight",
-			
+
 			"M",
 			"Donkey, Shrek’s best friend, and lover of all things funny. Passionate about making people laugh and finding joy in life. Looking for someone who’s not afraid to embrace their quirks and have fun.",
 			160,
@@ -1150,11 +1018,7 @@ export const users = [
 			600,
 			250,
 		],
-		tags: [
-			"Comedy",
-			"Adventure",
-			"Movies",
-		]
+		tags: ["Comedy", "Adventure", "Movies"],
 	},
 	{
 		data: [
@@ -1164,7 +1028,7 @@ export const users = [
 			"woody.toy.story@mail.fr",
 			"1995-11-22",
 			"Straight",
-			
+
 			"M",
 			"Cowboy, leader of the Toy Story gang. Passionate about loyalty, friendship, and protecting my fellow toys. Looking for someone who values teamwork and adventure.",
 			170,
@@ -1172,11 +1036,7 @@ export const users = [
 			650,
 			300,
 		],
-		tags: [
-			"Movies",
-			"Adventure",
-			"Comedy",
-		]
+		tags: ["Movies", "Adventure", "Comedy"],
 	},
 	{
 		data: [
@@ -1186,7 +1046,7 @@ export const users = [
 			"homer.simpson@mail.fr",
 			"1960-05-12",
 			"Straight",
-			
+
 			"M",
 			"Father, husband, and donut enthusiast. Passionate about family, relaxation, and having a good time. Looking for someone who enjoys the simple pleasures of life and isn’t afraid to have a laugh.",
 			175,
@@ -1194,25 +1054,6 @@ export const users = [
 			700,
 			400,
 		],
-		tags: [
-			"Comedy",
-			"Movies",
-			"Social Media",
-		]
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-];
+		tags: ["Comedy", "Movies", "Social Media"],
+	},
+]

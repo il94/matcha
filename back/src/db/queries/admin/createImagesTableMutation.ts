@@ -4,6 +4,8 @@ export const createImagesTableMutation = `
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 		user_id UUID NOT NULL,
 		name VARCHAR NOT NULL,
-		CONSTRAINT fk_images_user FOREIGN KEY(user_id) REFERENCES users(id)
+		is_principal BOOLEAN NOT NULL DEFAULT FALSE,
+		
+		CONSTRAINT fk_images_user_id FOREIGN KEY(user_id) REFERENCES users(id)
 	);
 `

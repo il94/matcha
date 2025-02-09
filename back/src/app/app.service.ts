@@ -21,6 +21,14 @@ class appService {
 		return this.repository.getUser(userId)
 	}
 
+	getUserChats(userId: UserData["id"]) {
+		return this.repository.getUserChats(userId)
+	}
+
+	getChatMessages(chatId: ChatData["id"]) {
+		return this.repository.getChatMessages(chatId)
+	}
+
 	getTags() {
 		return this.repository.getTags()
 	}

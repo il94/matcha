@@ -33,3 +33,16 @@ type TagData = {
 	id: number
 	name: string
 }
+
+type ChatData = {
+	id: string
+	userId1: UserData["id"]
+	userId2: UserData["id"]
+}
+
+type MessageData = {
+	id: string
+	chatId: ChatData["id"]
+	authorId: UserData["id"]
+	content: string
+}

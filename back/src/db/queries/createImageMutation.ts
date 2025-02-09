@@ -1,7 +1,8 @@
 export const createImageMutation = `
 	INSERT INTO images (
 		user_id,
-		name
+		name,
+		is_principal
 	)
-	VALUES ($1, $2)
+	VALUES ($1, $2, $3)
 `

@@ -23,9 +23,31 @@ declare global {
 		dates: number
 	}
 
+	type Image = {
+		id: string
+		userId: User["id"]
+		name: string
+		isPrincipal: boolean
+	}
+
 	type Tag = {
 		id: number
 		name: string
+	}
+
+	type Chat = {
+		id: string
+		userId1: User["id"]
+		userId2: User["id"]
+	}
+
+	type Message = {
+		id: string
+		createdAt: string
+		chatId: Chat["id"]
+		authorId: User["id"]
+		content: string
+		avatar: Image["name"]
 	}
 }
 

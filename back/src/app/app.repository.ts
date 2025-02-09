@@ -3,7 +3,14 @@ import { BadRequestException } from "@/lib/HttpException"
 import { GetObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import convertObjectKeysToCamelCase from "@/lib/convertObjectKeysToCamelCase"
-import { createUserMutation, getTagsQuery, getUserQuery, getUsersQuery } from "@/db/queries"
+import {
+	createUserMutation,
+	getChatMessagesQuery,
+	getTagsQuery,
+	getUserQuery,
+	getUsersQuery,
+	getUserChatsQuery
+} from "@/db/queries"
 
 class appRepository {
 	private db
@@ -36,8 +43,11 @@ class appRepository {
 		}
 	}
 
-	async getUsers(page: number, limit: number): Promise<{
-		users: UserData[],
+	async getUsers(
+		page: number,
+		limit: number,
+	): Promise<{
+		users: UserData[]
 		nextPage: number | null
 	}> {
 		const result = await this.db.query(getUsersQuery, [page, limit])
@@ -45,14 +55,12 @@ class appRepository {
 		for (const user of result.rows) {
 			user.images = []
 			for (const imageName of user.image_names) {
-
 				// TODO Décommenter cette partie quand il y aura de vrais users
 				// const s3Url = await this.getS3Url(imageName)
 				// user.images.push(s3Url)
 
 				// TODO Temporaire pour fake users
 				user.images.push(imageName)
-
 			}
 			delete user.image_names
 		}
@@ -62,7 +70,7 @@ class appRepository {
 
 		return {
 			users,
-			nextPage
+			nextPage,
 		}
 	}
 
@@ -84,6 +92,24 @@ class appRepository {
 		return user
 	}
 
+	async getUserChats(userId: UserData["id"]): Promise<
+		(ChatData & {
+			title: UserData["firstName"]
+			lastMessage: MessageData["content"]
+		})[]
+	> {
+		const result = await this.db.query(getUserChatsQuery, [userId])
+
+		const chats = convertObjectKeysToCamelCase(result.rows)
+		return chats
+	}
+
+	async getChatMessages(chatId: UserData["id"]): Promise<MessageData[]> {
+		const result = await this.db.query(getChatMessagesQuery, [chatId])
+
+		const messages = convertObjectKeysToCamelCase(result.rows)
+		return messages
+	}
 
 	async getTags(): Promise<TagData[]> {
 		const result = await this.db.query(getTagsQuery)
@@ -104,7 +130,6 @@ class appRepository {
 
 		return s3Url
 	}
-
 }
 
 export default appRepository

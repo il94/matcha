@@ -32,18 +32,42 @@ const appController: FastifyPluginAsync = async (app, options) => {
 		},
 	}
 
-	app.get<{ Querystring: GetUsersQuery }>("/users", getUsersSchema, (request) => {
+	app.get<{ Querystring: GetUsersQuery }>(
+		"/users",
+		getUsersSchema,
+		(request) => {
+			const { page, limit } = request.query
 
-		const { page, limit } = request.query
+			return service.getUsers(page, limit)
+		},
+	)
 
-		return service.getUsers(page, limit)
-	})
+	app.get<{ Params: { userId: UserData["id"] } }>(
+		"/user/:userId",
+		(request) => {
+			const { userId } = request.params
 
-	app.get<{ Params: { userId: UserData["id"] } }>("/user/:userId", (request) => {
-		const { userId } = request.params
+			return service.getUser(userId)
+		},
+	)
 
-		return service.getUser(userId)
-	})
+	app.get<{ Params: { userId: UserData["id"] } }>(
+		"/user/:userId/chats",
+		(request) => {
+			const { userId } = request.params
+
+			return service.getUserChats(userId)
+		},
+	)
+
+	app.get<{ Params: { chatId: ChatData["id"] } }>(
+		"/chat/:chatId/messages",
+		(request) => {
+			const { chatId } = request.params
+
+			return service.getChatMessages(chatId)
+		},
+	)
 
 	app.get("/tags", () => {
 		return service.getTags()

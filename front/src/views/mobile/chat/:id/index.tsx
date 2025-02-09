@@ -3,14 +3,21 @@ import { ArrowLeftIcon, PhoneIcon, SendIcon, VideoIcon } from "lucide-react"
 import dayjs from "@/lib/dayjs"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useEffect, useRef } from "react"
+import { Fragment, useEffect, useRef } from "react"
+import useId from "@/hooks/useId"
+import { useQuery } from "@tanstack/react-query"
+import getChatMessages from "@/services/getChatMessages"
 
 type ChatDateProps = {
 	date: string
 }
 
 function ChatDate({ date }: ChatDateProps) {
-	return <p className="text-center text-xs opacity-70">{date}</p>
+	return (
+		<p className="text-center text-xs opacity-70">
+			{dayjs(date).format("DD/MM/YYYY - hh:mm A")}
+		</p>
+	)
 }
 
 type ChatUserProps = {
@@ -48,12 +55,26 @@ function ChatSender({ avatar, children }: ChatSenderProps) {
 }
 
 export default function ChatIdPage() {
+	const chatId = useId()
+
+	const {
+		data: messages,
+		isPending,
+		isError,
+		error,
+	} = useQuery({
+		queryKey: ["messages", { chatId }],
+		queryFn: () => getChatMessages({ chatId }),
+	})
+
 	const scrollAreaRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
 		if (!scrollAreaRef.current) return
 		scrollAreaRef.current.scrollIntoView(false)
 	}, [])
+
+	if (isError) throw error
 
 	return (
 		<div className="relative flex h-full flex-col items-center overflow-y-hidden">
@@ -69,45 +90,45 @@ export default function ChatIdPage() {
 				</div>
 			</div>
 
-			<ScrollArea className="overflow-y-scroll px-3">
-				<div className="relative space-y-2.5 py-2.5" ref={scrollAreaRef}>
-					<ChatDate date={dayjs().format("MM/DD/YYYY - hh:mm A")} />
-					<ChatUser>Salut tu es très beau quand même c'est vrai</ChatUser>
-					<ChatSender avatar="/model.JPG">
-						Salut tu es très beau quand même c'est vrai
-					</ChatSender>
-					<ChatUser>Salut tu es très beau quand</ChatUser>
-					<ChatSender avatar="/model.JPG">
-						Salut tu es très beau quand
-					</ChatSender>
-					<ChatDate date={dayjs().format("MM/DD/YYYY - hh:mm A")} />
-					<ChatUser>
-						Salut tu es très beau quand même c’est vraiSalut tu es très beau
-						quand même c’est vraiSalut tu es très beau quand même c’est
-						vraiSalut tu es très beau quand même c’est vrai
-					</ChatUser>
-					<ChatSender avatar="/model.JPG">
-						Salut tu es très beau quand même c’est vraiSalut tu es très beau
-						quand même c’est vraiSalut tu es très beau quand même c’est
-						vraiSalut tu es très beau quand même c’est vrai
-					</ChatSender>
-					<ChatUser>Salut tu es très beau quand même c’est vrai</ChatUser>
-					<ChatUser>Salut tu es très beau quand même c’est vrai</ChatUser>
-					<ChatUser>Salut tu es très beau quand même c’est vrai</ChatUser>
-					<ChatUser>Salut tu es très beau quand même c’est vrai</ChatUser>
+			<ScrollArea className="w-full overflow-y-scroll px-3">
+				<div className="relative space-y-2.5 py-2.5 pb-16" ref={scrollAreaRef}>
+					{isPending ? (
+						<p>load</p>
+					) : (
+						messages.map((message, index) => {
+							const previousDate =
+								index > 0 ? messages[index - 1].createdAt : null
+							const currentDate = message.createdAt
+							const diff = dayjs(currentDate).diff(previousDate, "hours")
+							const Date = !previousDate || diff > 8 ? ChatDate : null
 
-					<div className="sticky bottom-3 z-10 flex h-10 gap-2">
-						<Input
-							placeholder="Message..."
-							className="h-full rounded-xl bg-input"
-						/>
-						<Button className="h-full rounded-xl">
-							<SendIcon />
-						</Button>
-					</div>
+							return (
+								<Fragment key={message.id}>
+									{Date && <Date date={message.createdAt} />}
+									{message.authorId ===
+									"f09206cc-bac5-4f20-8df2-0abdacff9e57" ? (
+										<ChatUser>{message.content}</ChatUser>
+									) : (
+										<ChatSender avatar={message.avatar}>
+											{message.content}
+										</ChatSender>
+									)}
+								</Fragment>
+							)
+						})
+					)}
 				</div>
-				<div className="absolute bottom-0 h-12 w-full backdrop-blur-sm" />
 			</ScrollArea>
+			<div className="absolute bottom-3 z-10 flex h-10 w-full gap-2 px-3">
+				<Input
+					placeholder="Message..."
+					className="h-full rounded-xl bg-input"
+				/>
+				<Button className="h-full rounded-xl">
+					<SendIcon />
+				</Button>
+			</div>
+			<div className="backdrop absolute bottom-0 h-12 w-full backdrop-blur-sm" />
 		</div>
 	)
 }
