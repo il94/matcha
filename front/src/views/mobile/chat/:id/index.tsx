@@ -7,6 +7,8 @@ import { Fragment, useEffect, useRef } from "react"
 import useId from "@/hooks/useId"
 import { useQuery } from "@tanstack/react-query"
 import getChatMessages from "@/services/getChatMessages"
+import { useNavigate } from "react-router"
+import getUserChat from "@/services/getUserChat"
 
 type ChatDateProps = {
 	date: string
@@ -58,14 +60,28 @@ export default function ChatIdPage() {
 	const chatId = useId()
 
 	const {
+		data: chat,
+		isPending: chatIsPending,
+		isError: chatIsError,
+		error: chatError,
+	} = useQuery({
+		queryKey: ["chat", { chatId }],
+		queryFn: () => getUserChat({ chatId }),
+	})
+
+	const {
 		data: messages,
-		isPending,
-		isError,
-		error,
+		isPending: messagesIsPending,
+		isError: messagesIsError,
+		error: messagesError,
 	} = useQuery({
 		queryKey: ["messages", { chatId }],
 		queryFn: () => getChatMessages({ chatId }),
 	})
+
+	const isPending = chatIsPending || messagesIsPending
+	const isError = chatIsError || messagesIsError
+	const error = chatError || messagesError
 
 	const scrollAreaRef = useRef<HTMLDivElement>(null)
 
@@ -74,15 +90,22 @@ export default function ChatIdPage() {
 		scrollAreaRef.current.scrollIntoView(false)
 	}, [])
 
+	const navigate = useNavigate()
+
 	if (isError) throw error
 
 	return (
 		<div className="relative flex h-full flex-col items-center overflow-y-hidden">
 			<div className="flex w-full items-center border-b border-b-button p-3">
-				<ArrowLeftIcon className="size-9" />
+				<Button onClick={() => navigate(-1)} variant="ghost" size="icon">
+					<ArrowLeftIcon className="size-9" />
+				</Button>
 				<div className="ml-3 flex grow items-center gap-x-1.5">
-					<img src="/model.JPG" className="size-9 rounded-full object-cover" />
-					<p className="text-lg font-bold">Loremosowddsd</p>
+					<img
+						src={chat?.avatar}
+						className="size-9 rounded-full object-cover"
+					/>
+					<p className="text-lg font-bold">{chat?.title}</p>
 				</div>
 				<div className="flex items-center gap-x-3">
 					<PhoneIcon className="size-7" />

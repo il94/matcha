@@ -2,27 +2,28 @@ import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import getUserChats from "@/services/getUserChats"
 import { useQuery } from "@tanstack/react-query"
+import dayjs from "@/lib/dayjs"
 import { Calendar, MapPinned } from "lucide-react"
 import { Link } from "react-router"
 
 type ChatProps = {
-	title: User["firstName"]
-	avatar: Image["name"]
-	lastMessage: Message["content"]
+	chat: Chat
 }
 
-function Chat({ title, avatar, lastMessage }: ChatProps) {
+function Chat({ chat }: ChatProps) {
 	return (
 		<div className="flex items-center gap-x-2.5 py-2">
 			<img
-				src={avatar}
+				src={chat.avatar}
 				className="size-14 shrink-0 rounded-full object-cover"
 			/>
 			<div className="w-full overflow-hidden text-sm">
-				<p className="font-bold">{title}</p>
+				<p className="font-bold">{chat.title}</p>
 				<div className="flex">
-					<p className="truncate">{lastMessage}</p>
-					<p className="shrink-0">&nbsp;·&nbsp;3d</p>
+					<p className="truncate">{chat.lastMessage.content}</p>
+					<p className="shrink-0">
+						&nbsp;·&nbsp;{dayjs(chat.lastMessage.createdAt).fromNow()}
+					</p>
 				</div>
 			</div>
 		</div>
@@ -37,8 +38,7 @@ export default function ChatPage() {
 		error,
 	} = useQuery({
 		queryKey: ["chats"],
-		queryFn: () =>
-			getUserChats({ userId: "f09206cc-bac5-4f20-8df2-0abdacff9e57" }),
+		queryFn: getUserChats,
 	})
 
 	if (isPending) return <div>Loading...</div> // TODO
@@ -60,11 +60,7 @@ export default function ChatPage() {
 				{chats.map((chat) => {
 					return (
 						<Link to={`/chat/${chat.id}`} key={chat.id}>
-							<Chat
-								title={chat.title}
-								avatar={chat.avatar}
-								lastMessage={chat.lastMessage}
-							/>
+							<Chat chat={chat} />
 						</Link>
 					)
 				})}

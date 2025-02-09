@@ -9,7 +9,8 @@ import {
 	getTagsQuery,
 	getUserQuery,
 	getUsersQuery,
-	getUserChatsQuery
+	getUserChatsQuery,
+	getUserChatQuery,
 } from "@/db/queries"
 
 class appRepository {
@@ -93,15 +94,38 @@ class appRepository {
 	}
 
 	async getUserChats(userId: UserData["id"]): Promise<
-		(ChatData & {
+		{
+			id: ChatData["id"]
 			title: UserData["firstName"]
-			lastMessage: MessageData["content"]
-		})[]
+			lastMessage: {
+				content: MessageData["content"]
+				createdAt: MessageData["createdAt"]
+			}
+			avatar: ImageData["data"]
+		}[]
 	> {
 		const result = await this.db.query(getUserChatsQuery, [userId])
 
 		const chats = convertObjectKeysToCamelCase(result.rows)
 		return chats
+	}
+
+	async getUserChat(
+		userId: UserData["id"],
+		chatId: ChatData["id"],
+	): Promise<{
+		id: ChatData["id"]
+		title: UserData["firstName"]
+		lastMessage: {
+			content: MessageData["content"]
+			createdAt: MessageData["createdAt"]
+		}
+		avatar: ImageData["data"]
+	}> {
+		const result = await this.db.query(getUserChatQuery, [userId, chatId])
+
+		const [chat] = convertObjectKeysToCamelCase(result.rows)
+		return chat
 	}
 
 	async getChatMessages(chatId: UserData["id"]): Promise<MessageData[]> {

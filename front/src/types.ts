@@ -37,8 +37,12 @@ declare global {
 
 	type Chat = {
 		id: string
-		userId1: User["id"]
-		userId2: User["id"]
+		title: User["firstName"]
+		avatar: Image["name"]
+		lastMessage: {
+			content: Message["content"]
+			createdAt: Message["createdAt"]
+		}
 	}
 
 	type Message = {

@@ -42,6 +42,8 @@ type ChatData = {
 
 type MessageData = {
 	id: string
+	createdAt: string
+
 	chatId: ChatData["id"]
 	authorId: UserData["id"]
 	content: string

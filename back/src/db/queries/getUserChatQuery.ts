@@ -1,5 +1,5 @@
-export const getUserChatsQuery = `
-	SELECT DISTINCT ON (id)
+export const getUserChatQuery = `
+	SELECT
 		chats.id,
 		users.first_name AS title,
 		images.name AS avatar,
@@ -7,5 +7,5 @@ export const getUserChatsQuery = `
 	FROM chats
 	LEFT JOIN users ON users.id = user_id_1 OR users.id = user_id_2 AND users.id != $1
 	LEFT JOIN images ON users.id = images.user_id AND images.is_principal = true
-	WHERE user_id_1 = $1 OR user_id_2 = $1;
+	WHERE chats.id = $2;
 `

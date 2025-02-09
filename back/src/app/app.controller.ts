@@ -51,12 +51,19 @@ const appController: FastifyPluginAsync = async (app, options) => {
 		},
 	)
 
-	app.get<{ Params: { userId: UserData["id"] } }>(
-		"/user/:userId/chats",
-		(request) => {
-			const { userId } = request.params
+	app.get("/chats", () => {
+		const userId = "f09206cc-bac5-4f20-8df2-0abdacff9e57"
 
-			return service.getUserChats(userId)
+		return service.getUserChats(userId)
+	})
+
+	app.get<{ Params: { chatId: ChatData["id"] } }>(
+		"/chat/:chatId",
+		(request) => {
+			const userId = "f09206cc-bac5-4f20-8df2-0abdacff9e57"
+			const { chatId } = request.params
+
+			return service.getUserChat(userId, chatId)
 		},
 	)
 

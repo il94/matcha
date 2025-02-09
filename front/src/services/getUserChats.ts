@@ -1,26 +1,10 @@
 import axios from "axios"
 
-type getUserChatsParams = {
-	userId: User["id"]
-}
-
-export default async function getUserChats({
-	userId,
-}: getUserChatsParams): Promise<
-	(Chat & {
-		title: User["firstName"]
-		avatar: Image["name"]
-		lastMessage: Message["content"]
-	})[]
-> {
+export default async function getUserChats() {
 	// TODO Gestion d'erreur
-	const response = await axios.get<
-		(Chat & {
-			title: User["firstName"]
-			avatar: Image["name"]
-			lastMessage: Message["content"]
-		})[]
-	>(`${import.meta.env.VITE_API_BACK_URL}/user/${userId}/chats`)
+	const response = await axios.get<Chat[]>(
+		`${import.meta.env.VITE_API_BACK_URL}/chats`,
+	)
 
 	return response.data
 }
