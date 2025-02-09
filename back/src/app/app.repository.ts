@@ -13,6 +13,14 @@ import {
 	getUserChatQuery,
 } from "@/db/queries"
 
+/*
+	TODO
+
+	- Envoyer url signee pour les images
+	- Rechecker les types
+	- Rechecker les modeles
+*/
+
 class appRepository {
 	private db
 	private s3
