@@ -2,6 +2,15 @@ version: '3.8'
 
 services:
 
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+    restart: always
+
   db:
     image: postgres:15-alpine
     env_file: .env
@@ -39,5 +48,6 @@ services:
 
 volumes:
   db_data:
+  redis_data:
   node_modules_back:
   node_modules_front:
