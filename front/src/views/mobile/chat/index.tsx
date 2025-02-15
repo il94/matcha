@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import getUserChats from "@/services/getUserChats"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "@/lib/dayjs"
 import { Calendar, MapPinned } from "lucide-react"
 import { Link } from "react-router"
+import getUserChats from "@/services/getUserChats"
 
 type ChatProps = {
 	chat: Chat

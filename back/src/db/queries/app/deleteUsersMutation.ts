@@ -1,3 +1,3 @@
 export const deleteUsersMutation = `
-	DELETE FROM users
+	DELETE FROM users;
 `

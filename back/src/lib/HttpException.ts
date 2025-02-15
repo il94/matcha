@@ -19,6 +19,12 @@ export class UnauthorizedException extends HttpException {
 	}
 }
 
+export class ForbiddenException extends HttpException {
+	constructor(message?: string) {
+		super(403, message ?? "FORBIDDEN")
+	}
+}
+
 export class NotFoundException extends HttpException {
 	constructor(message?: string) {
 		super(404, message ?? "NOT_FOUND")

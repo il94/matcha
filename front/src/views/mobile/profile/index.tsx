@@ -36,7 +36,7 @@ export default function ProfilePage() {
 
 			<div className="flex h-full w-full flex-col items-center justify-evenly">
 				<img
-					src={user.images[0]}
+					src={user.pictures[0]}
 					className="size-32 rounded-full object-cover"
 				/>
 				<div className="flex w-full justify-evenly">

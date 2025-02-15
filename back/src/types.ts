@@ -36,8 +36,12 @@ declare global {
 		matchs: number
 		dates: number
 
-		images: string[]
+		pictures: string[]
 		tags: TagData[]
+	}
+
+	type PictureData = {
+		name: string
 	}
 
 	type TagData = {
@@ -49,14 +53,18 @@ declare global {
 		id: string
 		userId1: UserData["id"]
 		userId2: UserData["id"]
+
+		title: UserData["firstName"]
+		avatar: PictureData["name"]
+		messages: MessageData[]
+		lastMessage: MessageData
 	}
 
 	type MessageData = {
-		id: string
 		createdAt: string
-
 		chatId: ChatData["id"]
 		authorId: UserData["id"]
+
 		content: string
 	}
 }

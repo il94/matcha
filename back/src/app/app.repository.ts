@@ -1,24 +1,18 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
-import { BadRequestException } from "@/lib/HttpException"
+import { BadRequestException, ForbiddenException } from "@/lib/HttpException"
 import { GetObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import convertObjectKeysToCamelCase from "@/lib/convertObjectKeysToCamelCase"
-import {
-	createUserMutation,
-	getChatMessagesQuery,
-	getTagsQuery,
-	getUserQuery,
-	getUsersQuery,
-	getUserChatsQuery,
-	getUserChatQuery,
-	getUserByUsernameQuery,
-} from "@/db/queries"
-import { updateUserSessionIdMutation } from "@/db/queries/updateUserMutationSessionIdMutation"
+
+import { updateUserSessionIdMutation } from "@/db/queries/app/updateUserMutationSessionIdMutation"
+
+import * as appQueries from "@/db/queries/app"
+import { isPGError, PGException } from "@/lib/PGException"
 
 /*
 	TODO
 
-	- Envoyer url signee pour les images
+	- Envoyer url signee pour les photos
 	- Rechecker les types
 	- Rechecker les modeles
 */
@@ -32,24 +26,30 @@ class appRepository {
 		this.s3 = app.s3
 	}
 
+	/* ============ Users ============ */
+
 	async createUser(
-		userData: Omit<UserData, "id" | "createdAt">,
-	): Promise<UserData[]> {
-		if (!userData.bio) userData.bio = undefined
-		if (!userData.elo) userData.elo = 0
-		if (!userData.views) userData.views = 0
-		if (!userData.matchs) userData.matchs = 0
-		if (!userData.dates) userData.dates = 0
-
+		userData: Omit<UserData, "id" | "createdAt" | "pictures" | "tags">,
+	) {
 		try {
-			const result = await this.db.query(
-				createUserMutation,
-				Object.values(userData),
-			)
-
-			const [user] = result.rows
-			return user
+			await this.db.query(appQueries.createUserMutation, [
+				userData.password,
+				userData.firstName,
+				userData.lastName,
+				userData.username,
+				userData.email,
+				userData.birthDate,
+				userData.sexualOrientation,
+				userData.gender,
+				userData.bio,
+				userData.elo,
+				userData.views,
+				userData.matchs,
+				userData.dates,
+			])
 		} catch (error) {
+			if (isPGError(error))
+				throw new PGException(error.message, error.constraint)
 			throw new BadRequestException((error as Error).message)
 		}
 	}
@@ -61,19 +61,19 @@ class appRepository {
 		users: UserData[]
 		nextPage: number | null
 	}> {
-		const result = await this.db.query(getUsersQuery, [page, limit])
+		const result = await this.db.query(appQueries.getUsersQuery, [page, limit])
 
 		for (const user of result.rows) {
-			user.images = []
-			for (const imageName of user.image_names) {
+			user.pictures = []
+			for (const pictureName of user.picture_names) {
 				// TODO Décommenter cette partie quand il y aura de vrais users
-				// const s3Url = await this.getS3Url(imageName)
-				// user.images.push(s3Url)
+				// const s3Url = await this.getS3Url(pictureName)
+				// user.pictures.push(s3Url)
 
 				// TODO Temporaire pour fake users
-				user.images.push(imageName)
+				user.pictures.push(pictureName)
 			}
-			delete user.image_names
+			delete user.picture_names
 		}
 
 		const users = convertObjectKeysToCamelCase(result.rows)
@@ -86,18 +86,18 @@ class appRepository {
 	}
 
 	async getUser(userId: UserData["id"]): Promise<UserData> {
-		const result = await this.db.query(getUserQuery, [userId])
+		const result = await this.db.query(appQueries.getUserQuery, [userId])
 
-		result.rows[0].images = []
-		for (const imageName of result.rows[0].image_names) {
+		result.rows[0].pictures = []
+		for (const pictureName of result.rows[0].picture_names) {
 			// TODO Décommenter cette partie quand il y aura de vrais users
-			// const s3Url = await this.getS3Url(imageName)
-			// result.rows[0].images.push(imageName)
+			// const s3Url = await this.getS3Url(pictureName)
+			// result.rows[0].pictures.push(pictureName)
 
 			// TODO Temporaire pour fake users
-			result.rows[0].images.push(imageName)
+			result.rows[0].pictures.push(pictureName)
 		}
-		delete result.rows[0].image_names
+		delete result.rows[0].picture_names
 
 		const [user] = convertObjectKeysToCamelCase(result.rows)
 		return user
@@ -106,42 +106,29 @@ class appRepository {
 	async getUserByUsername(
 		username: UserData["username"],
 	): Promise<Pick<UserData, "id" | "password">> {
-		const result = await this.db.query(getUserByUsernameQuery, [username])
+		const result = await this.db.query(appQueries.getUserByUsernameQuery, [
+			username,
+		])
 
 		const [user] = convertObjectKeysToCamelCase(result.rows)
 		return user
 	}
 
-	async getUserChats(userId: UserData["id"]): Promise<
-		{
-			id: ChatData["id"]
-			title: UserData["firstName"]
-			lastMessage: {
-				content: MessageData["content"]
-				createdAt: MessageData["createdAt"]
-			}
-			avatar: ImageData["data"]
-		}[]
-	> {
-		const result = await this.db.query(getUserChatsQuery, [userId])
+	async getUserChats(userId: UserData["id"]): Promise<ChatData[]> {
+		const result = await this.db.query(appQueries.getUserChatsQuery, [userId])
 
 		const chats = convertObjectKeysToCamelCase(result.rows)
 		return chats
 	}
 
-	async getUserChat(
+	async getUserChatConversation(
 		userId: UserData["id"],
 		chatId: ChatData["id"],
-	): Promise<{
-		id: ChatData["id"]
-		title: UserData["firstName"]
-		lastMessage: {
-			content: MessageData["content"]
-			createdAt: MessageData["createdAt"]
-		}
-		avatar: ImageData["data"]
-	}> {
-		const result = await this.db.query(getUserChatQuery, [userId, chatId])
+	): Promise<ChatData> {
+		const result = await this.db.query(
+			appQueries.getUserChatConversationQuery,
+			[userId, chatId],
+		)
 
 		const [chat] = convertObjectKeysToCamelCase(result.rows)
 		return chat
@@ -160,26 +147,19 @@ class appRepository {
 		return user
 	}
 
-	async getChatMessages(chatId: UserData["id"]): Promise<MessageData[]> {
-		const result = await this.db.query(getChatMessagesQuery, [chatId])
-
-		const messages = convertObjectKeysToCamelCase(result.rows)
-		return messages
-	}
-
 	async getTags(): Promise<TagData[]> {
-		const result = await this.db.query(getTagsQuery)
+		const result = await this.db.query(appQueries.getTagsQuery)
 
 		const tags = convertObjectKeysToCamelCase(result.rows)
 		return tags
 	}
 
-	async getS3Url(imageName: string) {
+	async getS3Url(pictureName: string) {
 		const s3Url = await getSignedUrl(
 			this.s3,
 			new GetObjectCommand({
 				Bucket: process.env.AWS_BUCKET_NAME,
-				Key: imageName,
+				Key: pictureName,
 			}),
 			{ expiresIn: 15 * 60 },
 		)

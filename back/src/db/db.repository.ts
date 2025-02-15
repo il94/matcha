@@ -1,11 +1,5 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
-import {
-	createImagesTableMutation,
-	createTagsTableMutation,
-	createUsersTableMutation,
-	createUserTagsTableMutation,
-	createUuidExtensionMutation,
-} from "./queries"
+import * as adminQueries from "@/db/queries/admin"
 
 class dbRepository {
 	private db
@@ -15,11 +9,11 @@ class dbRepository {
 	}
 
 	async initDb() {
-		await this.db.query(createUuidExtensionMutation)
-		await this.db.query(createUsersTableMutation)
-		await this.db.query(createImagesTableMutation)
-		await this.db.query(createTagsTableMutation)
-		await this.db.query(createUserTagsTableMutation)
+		await this.db.query(adminQueries.createUuidExtensionMutation)
+		await this.db.query(adminQueries.createUsersTableMutation)
+		await this.db.query(adminQueries.createPicturesTableMutation)
+		await this.db.query(adminQueries.createTagsTableMutation)
+		await this.db.query(adminQueries.createUserTagsTableMutation)
 	}
 }
 

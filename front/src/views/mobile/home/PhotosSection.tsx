@@ -77,7 +77,7 @@ export default forwardRef(function PhotosSection(
 						age={age}
 						location={location}
 						status={status}
-						images={user.images}
+						pictures={user.pictures}
 						setNextCard={setNextCard}
 						parentWidth={cardContainerSize.width}
 						ref={cardRefs[Math.abs(index - users.length) - 1]}

@@ -1,4 +1,4 @@
-export const images = [
+export const pictures = [
 	[
 		"https://cdn.unitycms.io/images/1jCSsnEuKcAA7SJ6HlE_1w.jpg?op=ocroped&val=1200,630,1000,1000,0,0&sum=0tK5TrmiW0I",
 		"https://www.francetvinfo.fr/pictures/FueoRx-3GUstex_LINqJEn2itFg/198x0:1722x857/432x243/2025/02/02/europe-comment-exister-face-a-donald-trump-679f27ceb50bc923987374.jpg",

@@ -3,5 +3,5 @@ export const getUserByUsernameQuery = `
 		id,
 		password
 	FROM users
-	WHERE username = $1
+	WHERE username = $1;
 `

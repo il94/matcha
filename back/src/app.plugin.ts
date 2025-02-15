@@ -7,17 +7,21 @@ import adminController from "./admin/admin.controller"
 import s3Plugin from "./s3/s3.plugin"
 import redisPlugin from "./redis/redis.plugin"
 import appPublicController from "./app/app.public-controller"
+import appConfig from "./app.config"
 
-const build: FastifyPluginAsync = async (app, options) => {
+const appPlugin: FastifyPluginAsync = async (app, options) => {
+	app.register(fastifyPlugin(appConfig))
+
 	app.register(fastifyPlugin(dbPlugin))
 	app.register(fastifyPlugin(s3Plugin))
 	app.register(fastifyPlugin(redisPlugin))
 
+	app.register(adminController, { prefix: "/admin" }) // TODO Supprimer le plugin entier à la fin
+
 	app.register(appController)
 	app.register(appPublicController)
-	app.register(adminController, { prefix: "/admin" })
 
 	app.setErrorHandler(appErrorHandler)
 }
 
-export default build
+export default appPlugin

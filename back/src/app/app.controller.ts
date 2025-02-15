@@ -1,40 +1,29 @@
 import { FastifyPluginAsync } from "fastify"
 import appService from "@/app/app.service"
+import * as schemas from "@/app/app.schemas"
+import { InferSchema } from "@/types"
 import { BadRequestException } from "@/lib/HttpException"
 
 const appController: FastifyPluginAsync = async (app, options) => {
 	const service = new appService(app, options)
 
-	app.addHook("preValidation", async (request, reply) => {
-		switch (request.method) {
-			case "POST":
-				if (!request.body || !Object.keys(request.body).length) {
-					throw new BadRequestException("MISSING_BODY")
-				}
-		}
-	})
+	// TODO auth
 
-	app.post<{ Body: PostUserBody }>("/user", (request) => {
-		const userData = request.body
+	/* ============ Users ============ */
 
-		return service.createUser(userData)
-	})
+	app.post<InferSchema<typeof schemas.postUser>>(
+		"/user",
+		{ schema: schemas.postUser },
+		(request) => {
+			const userData = request.body
 
-	const getUsersSchema = {
-		schema: {
-			querystring: {
-				type: "object",
-				properties: {
-					page: { type: "number", default: 1 },
-					limit: { type: "number", default: 5 },
-				},
-			},
+			return service.createUser(userData)
 		},
-	}
+	)
 
-	app.get<{ Querystring: GetUsersQuery }>(
+	app.get<InferSchema<typeof schemas.getUsers>>(
 		"/users",
-		getUsersSchema,
+		{ schema: schemas.getUsers },
 		(request) => {
 			const { page, limit } = request.query
 
@@ -42,43 +31,39 @@ const appController: FastifyPluginAsync = async (app, options) => {
 		},
 	)
 
-	app.get<{ Params: { userId: UserData["id"] } }>(
-		"/user/:userId",
-		(request) => {
-			const { userId } = request.params
+	// app.get<InferSchema<typeof schemas.userIdParam>>(
+	// 	"/user/:userId",
+	// 	{ schema: schemas.userIdParam },
+	// 	(request) => {
+	// 		const { userId } = request.params
 
-			return service.getUser(userId)
-		},
-	)
+	// 		return service.getUser(userId)
+	// 	},
+	// )
 
 	app.get("/user/me", () => {
+		// TODO Recup l'id par l'auth
 		const userId = process.env.VITE_USER_ID_TEST as string
 
 		return service.getUser(userId)
 	})
 
-	app.get("/chats", () => {
+	app.get("/user/chats", () => {
+		// TODO Recup l'id par l'auth
 		const userId = process.env.VITE_USER_ID_TEST as string
 
 		return service.getUserChats(userId)
 	})
 
-	app.get<{ Params: { chatId: ChatData["id"] } }>(
-		"/chat/:chatId",
+	app.get<InferSchema<typeof schemas.chatIdParam>>(
+		"/chat/:chatId/conversation",
+		{ schema: schemas.chatIdParam },
 		(request) => {
+			// TODO Recup l'id par l'auth
 			const userId = process.env.VITE_USER_ID_TEST as string
 			const { chatId } = request.params
 
-			return service.getUserChat(userId, chatId)
-		},
-	)
-
-	app.get<{ Params: { chatId: ChatData["id"] } }>(
-		"/chat/:chatId/messages",
-		(request) => {
-			const { chatId } = request.params
-
-			return service.getChatMessages(chatId)
+			return service.getUserChatConversation(userId, chatId)
 		},
 	)
 

@@ -1,5 +1,5 @@
 import "dotenv/config"
-import build from "./app"
+import appPlugin from "./app.plugin"
 import fastify, { FastifyInstance } from "fastify"
 import path from "path"
 import fs from "fs"
@@ -33,21 +33,7 @@ export const init = (): FastifyInstance => {
 		},
 	})
 
-	app.register(fastifyCors, {
-		origin: process.env.API_FRONT_URL,
-		credentials: true,
-	})
-	app.register(fastifyCookie)
-	app.register(fastifyMultipart, {
-		limits: {
-			fileSize: 50 * 1024 * 1024,
-			files: 1,
-		},
-	})
-
-	app.register(fp(appLogger), { env: process.env.NODE_ENV })
-
-	app.register(build)
+	app.register(appPlugin)
 
 	return app
 }

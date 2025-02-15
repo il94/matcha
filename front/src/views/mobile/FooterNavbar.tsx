@@ -6,7 +6,7 @@ export default function FooterNavbar() {
 	return (
 		<nav className="flex h-14 shrink-0 items-center justify-evenly bg-secondary">
 			<Button asChild size="icon" variant="secondary">
-				<Link to="/">
+				<Link to="/home">
 					<HouseIcon className="size-8 text-black" />
 				</Link>
 			</Button>

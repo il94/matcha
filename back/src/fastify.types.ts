@@ -1,11 +1,6 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import "fastify"
-import {
-	FastifyError,
-	FastifyPluginOptions,
-	FastifyReply,
-	FastifyRequest,
-} from "fastify"
+import { FastifyError, FastifyReply, FastifyRequest } from "fastify"
 import { JSONSchema } from "json-schema-to-ts"
 
 declare module "fastify" {
@@ -18,10 +13,6 @@ export type FastifyRouteSchema = {
 	body?: JSONSchema
 	querystring?: JSONSchema
 	params?: JSONSchema
-}
-
-export type AppLoggerOptions = FastifyPluginOptions & {
-	mode?: string
 }
 
 export type FastifyErrorHandler = (

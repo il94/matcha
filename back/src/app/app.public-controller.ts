@@ -16,9 +16,9 @@ const appPublicController: FastifyPluginAsync = async (app, options) => {
 	// 	}
 	// })
 
-	app.post<InferSchema<typeof schemas.loginSchema>>(
+	app.post<InferSchema<typeof schemas.login>>(
 		"/login",
-		{ schema: schemas.loginSchema },
+		{ schema: schemas.login },
 		async (request) => {
 			const { username, password } = request.body
 

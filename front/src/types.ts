@@ -1,5 +1,10 @@
 import { PanInfo } from "motion/react"
 
+export type FramerCallback = (
+	_: globalThis.MouseEvent | TouchEvent | PointerEvent,
+	info: PanInfo,
+) => void
+
 declare global {
 	type User = {
 		id: string
@@ -13,7 +18,7 @@ declare global {
 		gender?: string
 
 		bio?: string
-		images: string[]
+		pictures: string[]
 
 		tags: Tag[]
 
@@ -23,7 +28,7 @@ declare global {
 		dates: number
 	}
 
-	type Image = {
+	type Picture = {
 		id: string
 		userId: User["id"]
 		name: string
@@ -38,24 +43,15 @@ declare global {
 	type Chat = {
 		id: string
 		title: User["firstName"]
-		avatar: Image["name"]
-		lastMessage: {
-			content: Message["content"]
-			createdAt: Message["createdAt"]
-		}
+		avatar: Picture["name"]
+		messages: Message[]
+		lastMessage: Message
 	}
 
 	type Message = {
-		id: string
 		createdAt: string
-		chatId: Chat["id"]
 		authorId: User["id"]
 		content: string
-		avatar: Image["name"]
+		avatar: Picture["name"]
 	}
 }
-
-export type FramerCallback = (
-	_: globalThis.MouseEvent | TouchEvent | PointerEvent,
-	info: PanInfo,
-) => void

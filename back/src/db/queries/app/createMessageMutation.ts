@@ -3,5 +3,5 @@ export const createMessageMutation = `
 		chat_id,
 		author_id,
 		content
-	) VALUES ($1, $2, $3) RETURNING *
+	) VALUES ($1, $2, $3) RETURNING *;
 `

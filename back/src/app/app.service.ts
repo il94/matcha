@@ -34,8 +34,12 @@ class appService {
 
 	/* ============= PRIVATE CONTROLLER ============= */
 
-	createUser(userData: Omit<UserData, "id" | "createdAt">) {
-		this.repository.createUser(userData)
+	/* ============ Users ============ */
+
+	async createUser(
+		userData: Omit<UserData, "id" | "createdAt" | "pictures" | "tags">,
+	) {
+		await this.repository.createUser(userData)
 	}
 
 	getUsers(page: number, limit: number) {
@@ -50,12 +54,8 @@ class appService {
 		return this.repository.getUserChats(userId)
 	}
 
-	getUserChat(userId: UserData["id"], chatId: ChatData["id"]) {
-		return this.repository.getUserChat(userId, chatId)
-	}
-
-	getChatMessages(chatId: ChatData["id"]) {
-		return this.repository.getChatMessages(chatId)
+	getUserChatConversation(userId: UserData["id"], chatId: ChatData["id"]) {
+		return this.repository.getUserChatConversation(userId, chatId)
 	}
 
 	getTags() {

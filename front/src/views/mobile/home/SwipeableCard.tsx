@@ -12,16 +12,16 @@ import {
 import { motion } from "framer-motion"
 import { FramerCallback } from "@/types"
 
-function shuffleImages(images: string[]) {
-	const firstImage = images[0]
+function shufflePictures(pictures: string[]) {
+	const firstPicture = pictures[0]
 
-	const restImages = images.slice(1)
-	for (let i = restImages.length - 1; i > 0; i--) {
+	const restPictures = pictures.slice(1)
+	for (let i = restPictures.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1))
-		;[restImages[i], restImages[j]] = [restImages[j], restImages[i]]
+		;[restPictures[i], restPictures[j]] = [restPictures[j], restPictures[i]]
 	}
 
-	return [firstImage, ...restImages]
+	return [firstPicture, ...restPictures]
 }
 
 const dragElastic = 1
@@ -32,7 +32,7 @@ type SwipeableCardProps = {
 	age: number
 	location: string
 	status: string // TODO Definir
-	images: User["images"]
+	pictures: User["pictures"]
 	setNextCard: () => void
 	parentWidth: number
 }
@@ -43,7 +43,7 @@ export default forwardRef(function SwipeableCard(
 		age,
 		location,
 		status,
-		images,
+		pictures,
 		setNextCard,
 		parentWidth,
 	}: SwipeableCardProps,
@@ -88,30 +88,30 @@ export default forwardRef(function SwipeableCard(
 		[like, dislike, confrimThreshold, velocityThreshold],
 	)
 
-	const [displayedImage, setDisplayedImage] = useState(0)
+	const [displayedPicture, setDisplayedPicture] = useState(0)
 
-	const displayPreviousImage = useCallback(() => {
-		if (displayedImage <= 0) return
-		setDisplayedImage(displayedImage - 1)
-	}, [displayedImage])
+	const displayPreviousPicture = useCallback(() => {
+		if (displayedPicture <= 0) return
+		setDisplayedPicture(displayedPicture - 1)
+	}, [displayedPicture])
 
-	const displayNextImage = useCallback(() => {
-		if (displayedImage >= images.length - 1) return
-		setDisplayedImage(displayedImage + 1)
-	}, [displayedImage, images])
+	const displayNextPicture = useCallback(() => {
+		if (displayedPicture >= pictures.length - 1) return
+		setDisplayedPicture(displayedPicture + 1)
+	}, [displayedPicture, pictures])
 
-	const handleImageClick = useCallback(
+	const handlePictureClick = useCallback(
 		(event: MouseEvent<HTMLDivElement>) => {
 			const { clientX, currentTarget } = event
 			const clickPosition = clientX / currentTarget.offsetWidth
 
-			if (clickPosition < 0.5) displayPreviousImage()
-			else displayNextImage()
+			if (clickPosition < 0.5) displayPreviousPicture()
+			else displayNextPicture()
 		},
-		[displayPreviousImage, displayNextImage],
+		[displayPreviousPicture, displayNextPicture],
 	)
 
-	const imagesShuffled = useMemo(() => shuffleImages(images), [images])
+	const picturesShuffled = useMemo(() => shufflePictures(pictures), [pictures])
 
 	return (
 		<motion.div
@@ -128,28 +128,28 @@ export default forwardRef(function SwipeableCard(
 			onAnimationComplete={(latest: { x: number }) => {
 				if (latest.x) setNextCard()
 			}}
-			onClick={handleImageClick}
+			onClick={handlePictureClick}
 			className="absolute h-full w-full overflow-hidden rounded-xl"
 		>
-			{imagesShuffled.map((image, index) => (
+			{picturesShuffled.map((picture, index) => (
 				<img
 					key={`test_${index}`}
-					src={image}
+					src={picture}
 					className={cn(
 						"absolute hidden size-full bg-background object-cover",
-						index === displayedImage && "block",
+						index === displayedPicture && "block",
 					)}
 				/>
 			))}
 
-			{imagesShuffled.length > 1 && (
+			{picturesShuffled.length > 1 && (
 				<div className="absolute top-2 flex h-1 w-full bg-background/20">
-					{imagesShuffled.map((_, index) => (
+					{picturesShuffled.map((_, index) => (
 						<div
-							key={`image_${index}`}
+							key={`picture_${index}`}
 							className={cn(
 								"mx-0.5 h-full grow rounded-full bg-foreground",
-								index !== displayedImage && "opacity-20",
+								index !== displayedPicture && "opacity-20",
 							)}
 						/>
 					))}

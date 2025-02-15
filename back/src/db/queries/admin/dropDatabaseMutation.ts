@@ -1,4 +1,4 @@
-export const dropDatabase = `
+export const dropDatabaseMutation = `
 	DO $$ 
 	DECLARE 
 			r RECORD;

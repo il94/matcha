@@ -3,6 +3,7 @@ export const createMessagesTableMutation = `
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 		chat_id UUID NOT NULL,
 		author_id UUID NOT NULL,
+		
 		content TEXT NOT NULL,
 
 		PRIMARY KEY (chat_id, author_id),

@@ -6,9 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Fragment, useEffect, useRef } from "react"
 import useId from "@/hooks/useId"
 import { useQuery } from "@tanstack/react-query"
-import getChatMessages from "@/services/getChatMessages"
 import { useNavigate } from "react-router"
-import getUserChat from "@/services/getUserChat"
+import getUserChatConversation from "@/services/getUserChatConversation"
 
 type ChatDateProps = {
 	date: string
@@ -61,27 +60,13 @@ export default function ChatIdPage() {
 
 	const {
 		data: chat,
-		isPending: chatIsPending,
-		isError: chatIsError,
-		error: chatError,
+		isPending,
+		isError,
+		error,
 	} = useQuery({
 		queryKey: ["chat", { chatId }],
-		queryFn: () => getUserChat({ chatId }),
+		queryFn: () => getUserChatConversation({ chatId }),
 	})
-
-	const {
-		data: messages,
-		isPending: messagesIsPending,
-		isError: messagesIsError,
-		error: messagesError,
-	} = useQuery({
-		queryKey: ["messages", { chatId }],
-		queryFn: () => getChatMessages({ chatId }),
-	})
-
-	const isPending = chatIsPending || messagesIsPending
-	const isError = chatIsError || messagesIsError
-	const error = chatError || messagesError
 
 	const scrollAreaRef = useRef<HTMLDivElement>(null)
 
@@ -118,20 +103,20 @@ export default function ChatIdPage() {
 					{isPending ? (
 						<p>load</p>
 					) : (
-						messages.map((message, index) => {
+						chat.messages.map((message, index) => {
 							const previousDate =
-								index > 0 ? messages[index - 1].createdAt : null
+								index > 0 ? chat.messages[index - 1].createdAt : null
 							const currentDate = message.createdAt
 							const diff = dayjs(currentDate).diff(previousDate, "hours")
 							const Date = !previousDate || diff > 8 ? ChatDate : null
 
 							return (
-								<Fragment key={message.id}>
+								<Fragment key={index}>
 									{Date && <Date date={message.createdAt} />}
 									{message.authorId === import.meta.env.VITE_USER_ID_TEST ? (
 										<ChatUser>{message.content}</ChatUser>
 									) : (
-										<ChatSender avatar={message.avatar}>
+										<ChatSender avatar={chat.avatar}>
 											{message.content}
 										</ChatSender>
 									)}

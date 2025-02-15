@@ -1,6 +1,5 @@
 import { FastifyPluginAsync } from "fastify"
 import { HttpException } from "./lib/HttpException"
-import { AppLoggerOptions } from "./fastify.types"
 
 const RED = "\x1b[31m"
 const GREEN = "\x1b[32m"
@@ -12,10 +11,7 @@ const print = (color: string, message: string) => {
 	return `${color}${message}${END}`
 }
 
-const appLogger: FastifyPluginAsync<AppLoggerOptions> = async (
-	app,
-	options,
-) => {
+const appLogger: FastifyPluginAsync = async (app, options) => {
 	app.addHook("onRequest", async (request, reply) => {
 		request.log.info(
 			print(BLUE, `(${request.ip}) ${request.method} ${request.url}`),
@@ -38,7 +34,7 @@ const appLogger: FastifyPluginAsync<AppLoggerOptions> = async (
 			const httpError = error as HttpException
 
 			request.log.error(
-				process.env.NODE_ENV === "development" ? error : null,
+				error,
 				print(
 					RED,
 					`(${request.ip}) ${httpError.code} ${request.method} ${request.url}`,
@@ -46,7 +42,7 @@ const appLogger: FastifyPluginAsync<AppLoggerOptions> = async (
 			)
 		} else {
 			request.log.error(
-				process.env.NODE_ENV === "development" ? error : null,
+				error,
 				print(RED, `(${request.ip}) ${500} ${request.method} ${request.url}`),
 			)
 		}
