@@ -1,50 +1,62 @@
-type ID<Entity extends { id?: any }> = NonNullable<Entity["id"]>
+import { FromSchema, JSONSchema } from "json-schema-to-ts"
 
-type PostUserBody = Omit<UserData, "id" | "createdAt">
-
-type GetUsersQuery = {
-	page: number
-	limit: number
+export type InferSchema<S extends Record<string, JSONSchema>> = {
+	Params: S["params"] extends JSONSchema ? FromSchema<S["params"]> : never
+	Body: S["body"] extends JSONSchema ? FromSchema<S["body"]> : never
+	Querystring: S["querystring"] extends JSONSchema
+		? FromSchema<S["querystring"]>
+		: never
 }
 
-type UserData = {
-	id: string
-	createdAt: string
-	firstName: string
-	lastName: string
-	userName: string
-	email: string
-	birthDate: string
-	sexualOrientation: string
-	gender?: string
+declare global {
+	type PostUserBody = Omit<UserData, "id" | "createdAt">
 
-	bio?: string
-	images: string[]
+	type GetUsersQuery = {
+		page: number
+		limit: number
+	}
 
-	tags: TagData[]
+	type UserData = {
+		id: string
+		createdAt: string
+		password: string
+		sessionId?: string
 
-	elo: number
-	views: number
-	matchs: number
-	dates: number
-}
+		firstName: string
+		lastName: string
+		username: string
+		email: string
+		birthDate: string
+		sexualOrientation: string
 
-type TagData = {
-	id: number
-	name: string
-}
+		gender?: string
+		bio?: string
+		elo: number
+		views: number
+		matchs: number
+		dates: number
 
-type ChatData = {
-	id: string
-	userId1: UserData["id"]
-	userId2: UserData["id"]
-}
+		images: string[]
+		tags: TagData[]
+	}
 
-type MessageData = {
-	id: string
-	createdAt: string
+	type TagData = {
+		id: number
+		name: string
+	}
 
-	chatId: ChatData["id"]
-	authorId: UserData["id"]
-	content: string
+	type ChatData = {
+		id: string
+		userId1: UserData["id"]
+		userId2: UserData["id"]
+	}
+
+	type MessageData = {
+		id: string
+		createdAt: string
+
+		chatId: ChatData["id"]
+		authorId: UserData["id"]
+		content: string
+	}
 }

@@ -2,9 +2,12 @@ export const createUsersTableMutation = `
 	CREATE TABLE IF NOT EXISTS users (
 		id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+		password VARCHAR NOT NULL,
+		session_id VARCHAR,
+
 		first_name VARCHAR NOT NULL,
 		last_name VARCHAR NOT NULL,
-		user_name VARCHAR NOT NULL UNIQUE,
+		username VARCHAR NOT NULL UNIQUE,
 		email VARCHAR NOT NULL UNIQUE,
 		birth_date VARCHAR NOT NULL,
 		sexual_orientation VARCHAR NOT NULL,

@@ -11,7 +11,7 @@ import {
 type EssentialsSectionProps = {
 	firstName: User["firstName"]
 	lastName: User["lastName"]
-	userName: User["lastName"]
+	username: User["lastName"]
 	age: number
 	gender: User["gender"]
 	sexualOrientation: User["sexualOrientation"]
@@ -22,7 +22,7 @@ type EssentialsSectionProps = {
 export default function EssentialsSection({
 	firstName,
 	lastName,
-	userName,
+	username,
 	age,
 	gender,
 	sexualOrientation,
@@ -44,7 +44,7 @@ export default function EssentialsSection({
 				</div>
 				<div className="flex items-center space-x-2">
 					<AtSignIcon />
-					<p className="text-sm">{userName}</p>
+					<p className="text-sm">{username}</p>
 				</div>
 				<div className="flex items-center space-x-2">
 					<UserIcon />

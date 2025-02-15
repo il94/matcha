@@ -98,7 +98,7 @@ export default function HomePage() {
 						<EssentialsSection
 							firstName={users[currentCardIndex].firstName}
 							lastName={users[currentCardIndex].lastName}
-							userName={users[currentCardIndex].userName}
+							username={users[currentCardIndex].username}
 							age={today.diff(users[currentCardIndex].birthDate, "year")}
 							gender={users[currentCardIndex].gender}
 							sexualOrientation={users[currentCardIndex].sexualOrientation}

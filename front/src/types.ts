@@ -6,7 +6,7 @@ declare global {
 		createdAt: string
 		firstName: string
 		lastName: string
-		userName: string
+		username: string
 		email: string
 		birthDate: string
 		sexualOrientation: string

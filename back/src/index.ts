@@ -1,13 +1,13 @@
 import "dotenv/config"
 import build from "./app"
 import fastify, { FastifyInstance } from "fastify"
-import fastifyCookie from "fastify-cookie"
 import path from "path"
 import fs from "fs"
 import fp from "fastify-plugin"
 import appLogger from "./app.logger"
-import fastifyMultipart from "fastify-multipart"
 import fastifyCors from "@fastify/cors"
+import fastifyCookie from "@fastify/cookie"
+import fastifyMultipart from "@fastify/multipart"
 
 const setup = () => {
 	const uploadDir = path.resolve(__dirname, "uploads")

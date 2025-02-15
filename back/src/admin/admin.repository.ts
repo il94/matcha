@@ -17,6 +17,7 @@ import {
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
 import { images } from "./data/images"
 import { users } from "./data/users"
+import bcrypt from "bcrypt"
 
 class adminRepository {
 	private db
@@ -59,7 +60,10 @@ class adminRepository {
 				const { tags, data } = users[i]
 
 				console.log("DB: Create user")
-				const createUserResult = await transact.query(createUserMutation, data)
+				const createUserResult = await transact.query(createUserMutation, [
+					await bcrypt.hash(data[0] as string, 10),
+					...data.splice(1),
+				])
 				const userCreated = createUserResult.rows[0]
 				userIds.push(userCreated.id)
 				for (let j = 0; j < images[i].length; j++) {

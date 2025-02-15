@@ -11,7 +11,9 @@ import {
 	getUsersQuery,
 	getUserChatsQuery,
 	getUserChatQuery,
+	getUserByUsernameQuery,
 } from "@/db/queries"
+import { updateUserSessionIdMutation } from "@/db/queries/updateUserMutationSessionIdMutation"
 
 /*
 	TODO
@@ -101,6 +103,15 @@ class appRepository {
 		return user
 	}
 
+	async getUserByUsername(
+		username: UserData["username"],
+	): Promise<Pick<UserData, "id" | "password">> {
+		const result = await this.db.query(getUserByUsernameQuery, [username])
+
+		const [user] = convertObjectKeysToCamelCase(result.rows)
+		return user
+	}
+
 	async getUserChats(userId: UserData["id"]): Promise<
 		{
 			id: ChatData["id"]
@@ -134,6 +145,19 @@ class appRepository {
 
 		const [chat] = convertObjectKeysToCamelCase(result.rows)
 		return chat
+	}
+
+	async updateUserSessionId(
+		userId: UserData["id"],
+		sessionId: UserData["sessionId"],
+	) {
+		const result = await this.db.query(updateUserSessionIdMutation, [
+			userId,
+			sessionId,
+		])
+
+		const [user] = result.rows
+		return user
 	}
 
 	async getChatMessages(chatId: UserData["id"]): Promise<MessageData[]> {
