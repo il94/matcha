@@ -4,11 +4,11 @@ export const createUsersTableMutation = `
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 		session_id VARCHAR,
 		
-		password VARCHAR NOT NULL,
-		first_name VARCHAR NOT NULL,
-		last_name VARCHAR NOT NULL,
-		username VARCHAR NOT NULL UNIQUE,
-		email VARCHAR NOT NULL UNIQUE,
+		password VARCHAR(128) NOT NULL,
+		first_name VARCHAR(64) NOT NULL,
+		last_name VARCHAR(64) NOT NULL,
+		username VARCHAR(32) NOT NULL UNIQUE,
+		email VARCHAR(256) NOT NULL UNIQUE,
 		birth_date VARCHAR NOT NULL,
 		sexual_orientation VARCHAR NOT NULL,
 		
@@ -20,3 +20,6 @@ export const createUsersTableMutation = `
 		dates INT DEFAULT 0 NOT NULL
 	);
 `
+
+// username: { type: "string", minLength: 1, maxLength: 32 },
+// password: { type: "string", minLength: 1, maxLength: 128 },

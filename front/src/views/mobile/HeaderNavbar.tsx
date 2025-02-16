@@ -1,6 +1,10 @@
+import { Button } from "@/components/ui/button"
+import useAuth from "@/hooks/useAuth"
 import { BellIcon, LogOutIcon, Settings2Icon } from "lucide-react"
 
 export default function HeaderNavbar() {
+	const { logout } = useAuth()
+
 	return (
 		<nav className="flex h-12 shrink-0 items-center justify-between bg-primary px-3">
 			<div className="flex items-center gap-1.5">
@@ -8,9 +12,20 @@ export default function HeaderNavbar() {
 				<p className="text-lg text-text">matcha</p>
 			</div>
 			<div className="flex gap-3">
-				<BellIcon className="text-black" />
-				<Settings2Icon className="text-black" />
-				<LogOutIcon className="text-black" />
+				<Button size="icon" variant="ghost" className="size-6">
+					<BellIcon className="text-black" />
+				</Button>
+				<Button size="icon" variant="ghost" className="size-6">
+					<Settings2Icon className="text-black" />
+				</Button>
+				<Button
+					onClick={() => logout()}
+					size="icon"
+					variant="ghost"
+					className="size-6"
+				>
+					<LogOutIcon className="text-black" />
+				</Button>
 			</div>
 		</nav>
 	)

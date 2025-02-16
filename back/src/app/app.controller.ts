@@ -9,6 +9,15 @@ const appController: FastifyPluginAsync = async (app, options) => {
 
 	app.addHook("preHandler", appGuard)
 
+	/* ============ Auth ============ */
+
+	app.delete("/logout", async (request, reply) => {
+		const { sessionId, userId } = request
+
+		await service.logout(sessionId, userId)
+		return reply.clearCookie("sessionId").send()
+	})
+
 	/* ============ Users ============ */
 
 	app.post<InferSchema<typeof schemas.postUser>>(

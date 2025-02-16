@@ -1,6 +1,8 @@
+import logout from "@/services/logout"
 import verify from "@/services/verify"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
+// TODO On error
 export default function useAuth() {
 	const { data: isAuthenticated, isPending } = useQuery({
 		queryKey: ["verify"],
@@ -8,8 +10,16 @@ export default function useAuth() {
 		retry: false,
 	})
 
+	const { mutate: logoutMutation } = useMutation({
+		mutationFn: logout,
+		onSuccess: () => {
+			window.location.reload()
+		},
+	})
+
 	return {
 		isAuthenticated,
 		isPending,
+		logout: logoutMutation,
 	}
 }
