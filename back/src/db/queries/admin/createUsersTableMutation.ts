@@ -9,17 +9,14 @@ export const createUsersTableMutation = `
 		last_name VARCHAR(64) NOT NULL,
 		username VARCHAR(32) NOT NULL UNIQUE,
 		email VARCHAR(256) NOT NULL UNIQUE,
-		birth_date VARCHAR NOT NULL,
-		sexual_orientation VARCHAR NOT NULL,
 		
+		birth_date VARCHAR,
+		sexual_orientation VARCHAR,
 		gender VARCHAR,
 		bio TEXT,
-		elo INT DEFAULT 0 NOT NULL CHECK (elo >= 0 AND elo <= 1000),
-		views INT DEFAULT 0 NOT NULL,
-		matchs INT DEFAULT 0 NOT NULL,
-		dates INT DEFAULT 0 NOT NULL
+		elo SMALLINT DEFAULT 0 NOT NULL CHECK (elo >= 0 AND elo <= 1000),
+		views SMALLINT DEFAULT 0 NOT NULL CHECK (views >= 0),
+		matchs SMALLINT DEFAULT 0 NOT NULL CHECK (views >= 0),
+		dates SMALLINT DEFAULT 0 NOT NULL CHECK (views >= 0)
 	);
 `
-
-// username: { type: "string", minLength: 1, maxLength: 32 },
-// password: { type: "string", minLength: 1, maxLength: 128 },

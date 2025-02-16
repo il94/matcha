@@ -10,7 +10,14 @@ const appConfig: FastifyPluginAsync = async (app, options) => {
 		origin: process.env.API_FRONT_URL,
 		credentials: true,
 	})
-	app.register(fastifyCookie)
+	app.register(fastifyCookie, {
+		parseOptions: {
+			httpOnly: true,
+			sameSite: "none",
+			maxAge: 3600,
+			secure: true,
+		},
+	})
 	app.register(fastifyMultipart, {
 		limits: {
 			fileSize: 50 * 1024 * 1024,

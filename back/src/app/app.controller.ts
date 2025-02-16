@@ -20,16 +20,6 @@ const appController: FastifyPluginAsync = async (app, options) => {
 
 	/* ============ Users ============ */
 
-	app.post<InferSchema<typeof schemas.postUser>>(
-		"/user",
-		{ schema: schemas.postUser },
-		(request) => {
-			const userData = request.body
-
-			return service.createUser(userData)
-		},
-	)
-
 	app.get<InferSchema<typeof schemas.getUsers>>(
 		"/users",
 		{ schema: schemas.getUsers },
@@ -39,16 +29,6 @@ const appController: FastifyPluginAsync = async (app, options) => {
 			return service.getUsers(page, limit)
 		},
 	)
-
-	// app.get<InferSchema<typeof schemas.userIdParam>>(
-	// 	"/user/:userId",
-	// 	{ schema: schemas.userIdParam },
-	// 	(request) => {
-	// 		const { userId } = request.params
-
-	// 		return service.getUser(userId)
-	// 	},
-	// )
 
 	app.get("/user/me", () => {
 		// TODO Recup l'id par l'auth

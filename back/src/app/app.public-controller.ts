@@ -24,14 +24,19 @@ const appPublicController: FastifyPluginAsync = async (app, options) => {
 
 			const sessionId = await service.login(username, password)
 
-			return reply
-				.setCookie("sessionId", sessionId, {
-					httpOnly: true,
-					sameSite: "none",
-					maxAge: 3600,
-					secure: true,
-				})
-				.send({ message: "Login successful" })
+			return reply.setCookie("sessionId", sessionId).send()
+		},
+	)
+
+	app.post<InferSchema<typeof schemas.register>>(
+		"/register",
+		{ schema: schemas.register },
+		async (request, reply) => {
+			const userData = request.body
+
+			const sessionId = await service.register(userData)
+
+			return reply.setCookie("sessionId", sessionId).send()
 		},
 	)
 

@@ -8,6 +8,7 @@ import { updateUserSessionIdMutation } from "@/db/queries/app/updateUserMutation
 
 import * as appQueries from "@/db/queries/app"
 import { isPGError, PGException } from "@/lib/PGException"
+import { PoolClient } from "pg"
 
 /*
 	TODO
@@ -21,6 +22,8 @@ class appRepository {
 	private db
 	private s3
 
+	private S3_IMAGES_DURATION = 15 * 60
+
 	constructor(app: FastifyInstance, options: FastifyPluginOptions) {
 		this.db = app.pg
 		this.s3 = app.s3
@@ -33,9 +36,12 @@ class appRepository {
 			UserData,
 			"id" | "createdAt" | "sessionId" | "pictures" | "tags"
 		>,
-	) {
+		transact?: PoolClient,
+	): Promise<UserData["id"]> {
 		try {
-			await this.db.query(appQueries.createUserMutation, [
+			const executor = transact || this.db
+
+			const result = await executor.query(appQueries.createUserMutation, [
 				userData.password,
 				userData.firstName,
 				userData.lastName,
@@ -50,6 +56,9 @@ class appRepository {
 				userData.matchs,
 				userData.dates,
 			])
+
+			const [user] = convertObjectKeysToCamelCase(result.rows)
+			return user.id
 		} catch (error) {
 			if (isPGError(error))
 				throw new PGException(error.message, error.constraint)
@@ -117,6 +126,15 @@ class appRepository {
 		return user
 	}
 
+	async getUserByEmail(
+		email: UserData["email"],
+	): Promise<Pick<UserData, "id" | "password" | "sessionId">> {
+		const result = await this.db.query(appQueries.getUserByEmailQuery, [email])
+
+		const [user] = convertObjectKeysToCamelCase(result.rows)
+		return user
+	}
+
 	async getUserChats(userId: UserData["id"]): Promise<ChatData[]> {
 		const result = await this.db.query(appQueries.getUserChatsQuery, [userId])
 
@@ -140,8 +158,11 @@ class appRepository {
 	async updateUserSessionId(
 		userId: UserData["id"],
 		sessionId: UserData["sessionId"],
+		transact?: PoolClient,
 	) {
-		await this.db.query(updateUserSessionIdMutation, [userId, sessionId])
+		const executor = transact || this.db
+
+		await executor.query(updateUserSessionIdMutation, [userId, sessionId])
 	}
 
 	async getTags(): Promise<TagData[]> {
@@ -158,7 +179,7 @@ class appRepository {
 				Bucket: process.env.AWS_BUCKET_NAME,
 				Key: pictureName,
 			}),
-			{ expiresIn: 15 * 60 },
+			{ expiresIn: this.S3_IMAGES_DURATION },
 		)
 
 		return s3Url

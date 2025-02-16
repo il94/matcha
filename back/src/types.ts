@@ -19,16 +19,16 @@ declare global {
 	type UserData = {
 		id: string
 		createdAt: string
-		password: string
 		sessionId: string | null
 
+		password: string
 		firstName: string
 		lastName: string
 		username: string
 		email: string
-		birthDate: string
-		sexualOrientation: string
 
+		birthDate?: string
+		sexualOrientation?: string
 		gender?: string
 		bio?: string
 		elo: number

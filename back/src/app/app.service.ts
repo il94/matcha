@@ -7,10 +7,14 @@ import bcrypt from "bcrypt"
 
 class appService {
 	private repository
+	private db
 	private redis
+
+	private REDIS_SESSION_DURATION = 3600 * 24 * 30
 
 	constructor(app: FastifyInstance, options: FastifyPluginOptions) {
 		this.repository = new appRepository(app, options)
+		this.db = app.pg
 		this.redis = app.redis
 	}
 
@@ -30,10 +34,62 @@ class appService {
 		if (user.sessionId) await this.redis.del(user.sessionId)
 
 		const sessionId = randomUUID()
-		await this.redis.set(sessionId, user.id, "EX", 3600 * 24 * 30)
-		await this.repository.updateUserSessionId(user.id, sessionId)
 
-		return sessionId
+		try {
+			await this.redis.set(
+				sessionId,
+				user.id,
+				"EX",
+				this.REDIS_SESSION_DURATION,
+			)
+			await this.repository.updateUserSessionId(user.id, sessionId)
+
+			return sessionId
+		} catch (error) {
+			await this.redis.del(sessionId)
+
+			throw error
+		}
+	}
+
+	async register(
+		userData: Omit<
+			UserData,
+			"id" | "createdAt" | "sessionId" | "pictures" | "tags"
+		>,
+	): Promise<NonNullable<UserData["sessionId"]>> {
+		if (await this.repository.getUserByEmail(userData.email))
+			throw new ForbiddenException("EMAIL_ALREADY_TAKEN")
+
+		if (await this.repository.getUserByUsername(userData.username))
+			throw new ForbiddenException("USERNAME_ALREADY_TAKEN")
+
+		const sessionId = randomUUID()
+
+		return this.db.transact(async (transact) => {
+			try {
+				const userId = await this.repository.createUser(
+					{
+						...userData,
+						password: await bcrypt.hash(userData.password, 10),
+					},
+					transact,
+				)
+
+				await this.redis.set(
+					sessionId,
+					userId,
+					"EX",
+					this.REDIS_SESSION_DURATION,
+				)
+				await this.repository.updateUserSessionId(userId, sessionId, transact)
+
+				return sessionId
+			} catch (error) {
+				await this.redis.del(sessionId)
+				throw error
+			}
+		})
 	}
 
 	async verify(sessionId?: UserData["sessionId"]): Promise<boolean> {
@@ -57,15 +113,6 @@ class appService {
 	}
 
 	/* ============ Users ============ */
-
-	async createUser(
-		userData: Omit<
-			UserData,
-			"id" | "createdAt" | "sessionId" | "pictures" | "tags"
-		>,
-	) {
-		await this.repository.createUser(userData)
-	}
 
 	getUsers(page: number, limit: number) {
 		return this.repository.getUsers(page, limit)

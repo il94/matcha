@@ -7,8 +7,10 @@ import {
 	FormLabel,
 } from "./ui/form"
 import { Input } from "./ui/input"
-import { InputHTMLAttributes } from "react"
+import { InputHTMLAttributes, useState } from "react"
 import { cn } from "@/lib/utils"
+import { EyeClosedIcon, EyeIcon } from "lucide-react"
+import { Button } from "./ui/button"
 
 type FieldProps<T extends FieldValues> =
 	InputHTMLAttributes<HTMLInputElement> & {
@@ -25,6 +27,8 @@ export default function Field<T extends FieldValues>({
 	description,
 	...props
 }: FieldProps<T>) {
+	const [showPassword, setShowPassword] = useState(false)
+
 	return (
 		<FormField
 			control={control}
@@ -33,14 +37,39 @@ export default function Field<T extends FieldValues>({
 				<FormItem>
 					{label && <FormLabel>{label}</FormLabel>}
 					<FormControl>
-						<Input
-							{...field}
-							{...props}
-							className={cn(
-								props.className,
-								fieldState.invalid && "bg-destructive/50",
+						<div className="relative">
+							<Input
+								{...field}
+								{...props}
+								type={
+									props.type === "password" && showPassword
+										? "text"
+										: props.type
+								}
+								className={cn(
+									props.className,
+									fieldState.invalid && "bg-destructive/50",
+									props.type === "password" && "relative",
+								)}
+							/>
+							{props.type === "password" && (
+								<Button
+									onClick={() => setShowPassword(!showPassword)}
+									type="button"
+									variant={fieldState.invalid ? "destructive" : "ghost"}
+									className={cn(
+										"absolute right-0 top-0 h-full rounded-l-none px-3",
+										fieldState.invalid ? "bg-destructive/30" : "bg-accent/70",
+									)}
+								>
+									{showPassword ? (
+										<EyeClosedIcon className="size-6" />
+									) : (
+										<EyeIcon className="size-6" />
+									)}
+								</Button>
 							)}
-						/>
+						</div>
 					</FormControl>
 					{description && <FormDescription>{description}</FormDescription>}
 					{/* <FormMessage /> */}
