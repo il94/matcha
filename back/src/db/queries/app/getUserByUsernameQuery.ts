@@ -1,7 +1,8 @@
 export const getUserByUsernameQuery = `
 	SELECT
 		id,
-		password
+		password,
+		session_id
 	FROM users
 	WHERE username = $1;
 `

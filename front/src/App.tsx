@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router"
 import MobileLayout from "./views/mobile/MobileLayout"
 import { ThemeProvider } from "./providers/ThemeProvider"
 import HomePage from "./views/mobile/home"
@@ -8,6 +8,8 @@ import ChatIdPage from "./views/mobile/chat/:id"
 import ReactQueryProvider from "./providers/ReactQueryProvider"
 import LoginPage from "./views/mobile/login"
 import RegisterPage from "./views/mobile/register"
+import PublicRoute from "./PublicRoute"
+import ProtectedRoute from "./ProtectedRoute"
 
 /*
 	TODO
@@ -25,15 +27,20 @@ function App() {
 			<ReactQueryProvider>
 				<BrowserRouter>
 					<Routes>
-						<Route index element={<LoginPage />} />
-						<Route path="login" element={<LoginPage />} />
-						<Route path="register" element={<RegisterPage />} />
-						<Route element={<MobileLayout />}>
-							<Route path="home" element={<HomePage />} />
-							<Route path="profile" element={<ProfilePage />} />
-							<Route path="chat" element={<ChatPage />} />
-							<Route path="chat/:id" element={<ChatIdPage />} />
+						<Route element={<PublicRoute />}>
+							<Route path="login" element={<LoginPage />} />
+							<Route path="register" element={<RegisterPage />} />
+							<Route index element={<LoginPage />} />
 						</Route>
+						<Route element={<ProtectedRoute />}>
+							<Route element={<MobileLayout />}>
+								<Route path="home" element={<HomePage />} />
+								<Route path="profile" element={<ProfilePage />} />
+								<Route path="chat" element={<ChatPage />} />
+								<Route path="chat/:id" element={<ChatIdPage />} />
+							</Route>
+						</Route>
+						<Route path="*" element={<Navigate to="/" replace />} />
 					</Routes>
 				</BrowserRouter>
 			</ReactQueryProvider>

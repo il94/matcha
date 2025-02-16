@@ -51,8 +51,8 @@ export const login = {
 	body: {
 		type: "object",
 		properties: {
-			username: { type: "string" },
-			password: { type: "string" },
+			username: { type: "string", minLength: 1, maxLength: 128 },
+			password: { type: "string", minLength: 1, maxLength: 128 },
 		},
 		required: ["username", "password"],
 	},

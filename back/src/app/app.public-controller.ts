@@ -19,12 +19,25 @@ const appPublicController: FastifyPluginAsync = async (app, options) => {
 	app.post<InferSchema<typeof schemas.login>>(
 		"/login",
 		{ schema: schemas.login },
-		async (request) => {
+		async (request, reply) => {
 			const { username, password } = request.body
 
-			return service.login(username, password)
+			const sessionId = await service.login(username, password)
+
+			return reply
+				.setCookie("sessionId", sessionId, {
+					httpOnly: true,
+					sameSite: "none",
+					maxAge: 3600,
+					secure: true,
+				})
+				.send({ message: "Login successful" })
 		},
 	)
+
+	app.get("/verify", async (request, reply) => {
+		return await service.verify(request.cookies.sessionId)
+	})
 }
 
 export default appPublicController

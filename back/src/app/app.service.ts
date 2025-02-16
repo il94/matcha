@@ -2,7 +2,10 @@ import { randomUUID } from "crypto"
 import appRepository from "./app.repository"
 
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
-import { NotFoundException, UnauthorizedException } from "@/lib/HttpException"
+import {
+	ForbiddenException,
+	UnauthorizedException,
+} from "@/lib/HttpException"
 import bcrypt from "bcrypt"
 
 class appService {
@@ -16,20 +19,34 @@ class appService {
 
 	/* ============= PUBLIC CONTROLLER ============= */
 
-	async login(username: UserData["username"], password: string) {
+	async login(
+		username: UserData["username"],
+		password: string,
+	): Promise<NonNullable<UserData["sessionId"]>> {
 		const user = await this.repository.getUserByUsername(username)
 
-		if (!user) throw new NotFoundException()
+		if (!user) throw new ForbiddenException()
 
 		if (!(await bcrypt.compare(password, user.password)))
-			throw new UnauthorizedException()
+			throw new ForbiddenException()
+
+		if (user.sessionId) await this.redis.del(user.sessionId)
 
 		const sessionId = randomUUID()
-		const created = await this.redis.set(sessionId, user.id, "EX", 3600) // TODO checker les cas d'erreur
-
+		await this.redis.set(sessionId, user.id, "EX", 3600)
 		await this.repository.updateUserSessionId(user.id, sessionId)
 
-		return user
+		return sessionId
+	}
+
+	async verify(sessionId?: UserData["sessionId"]): Promise<boolean> {
+		if (!sessionId) throw new UnauthorizedException()
+
+		const userId = await this.redis.get(sessionId)
+
+		if (!userId) throw new UnauthorizedException()
+
+		return true
 	}
 
 	/* ============= PRIVATE CONTROLLER ============= */

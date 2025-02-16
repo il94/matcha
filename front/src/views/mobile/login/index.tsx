@@ -1,24 +1,65 @@
 import Field from "@/components/Field"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form } from "@/components/ui/form"
+import { Form, FormMessage } from "@/components/ui/form"
+import login from "@/services/login"
+import { useMutation } from "@tanstack/react-query"
+import { AxiosError } from "axios"
+import { useCallback } from "react"
 
 const formSchema = z.object({
-	username: z.string(),
-	password: z.string().min(8),
+	username: z
+		.string()
+		.min(1, "How will your future match find you if you don't have a name ?"),
+	password: z
+		.string()
+		.min(
+			1,
+			"A password can be crucial for maintaining some... privacy in your love life.",
+		),
 })
 
 export default function LoginPage() {
-	function onSubmit(values: z.infer<typeof formSchema>) {
-		console.log(values)
-	}
-
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
+		defaultValues: {
+			username: "",
+			password: "",
+		},
 	})
+
+	const navigate = useNavigate()
+
+	const { mutate: loginMutation } = useMutation({
+		mutationFn: login,
+		onSuccess: () => {
+			navigate("/home")
+		},
+		onError: (error: AxiosError) => {
+			if (error.response?.status === 403)
+				form.setError("password", {
+					message:
+						"Oops ! The password you entered didn't work. Let's try that again !",
+				})
+			else
+				form.setError("root", {
+					message:
+						"Looks like something went wrong. Don't worry, we're on it try again shortly.",
+				})
+		},
+	})
+
+	const onSubmit = useCallback(
+		(values: z.infer<typeof formSchema>) => {
+			loginMutation(values)
+		},
+		[loginMutation],
+	)
+
+	const error = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
 
 	return (
 		<main className="h-dvh">
@@ -41,6 +82,7 @@ export default function LoginPage() {
 							placeholder="Password"
 							className="h-12"
 						/>
+						<FormMessage className="h-5 px-1">{error}</FormMessage>
 					</div>
 
 					<div className="flex w-full flex-col items-center gap-6">
@@ -49,6 +91,7 @@ export default function LoginPage() {
 							size="lg"
 							className="font-semibold"
 							type="submit"
+							disabled={!form.formState.isValid}
 						>
 							Login
 						</Button>

@@ -105,7 +105,7 @@ class appRepository {
 
 	async getUserByUsername(
 		username: UserData["username"],
-	): Promise<Pick<UserData, "id" | "password">> {
+	): Promise<Pick<UserData, "id" | "password" | "sessionId">> {
 		const result = await this.db.query(appQueries.getUserByUsernameQuery, [
 			username,
 		])
@@ -138,13 +138,7 @@ class appRepository {
 		userId: UserData["id"],
 		sessionId: UserData["sessionId"],
 	) {
-		const result = await this.db.query(updateUserSessionIdMutation, [
-			userId,
-			sessionId,
-		])
-
-		const [user] = result.rows
-		return user
+		await this.db.query(updateUserSessionIdMutation, [userId, sessionId])
 	}
 
 	async getTags(): Promise<TagData[]> {

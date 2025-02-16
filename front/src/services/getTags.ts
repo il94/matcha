@@ -1,10 +1,8 @@
-import axios from "axios"
+import axios from "@/lib/axios"
 
-export default async function getTags(): Promise<Tag[]> {
+export default async function getTags() {
 	// TODO Gestion d'erreur
-	const response = await axios.get<Tag[]>(
-		`${import.meta.env.VITE_API_BACK_URL}/tags`,
-	)
+	const response = await axios.get<Tag[]>(`/tags`)
 
 	return response.data
 }

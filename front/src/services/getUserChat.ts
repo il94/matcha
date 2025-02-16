@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "@/lib/axios"
 
 type getUserChatParams = {
 	chatId: Chat["id"]
@@ -6,9 +6,7 @@ type getUserChatParams = {
 
 export default async function getUserChat({ chatId }: getUserChatParams) {
 	// TODO Gestion d'erreur
-	const response = await axios.get<Chat>(
-		`${import.meta.env.VITE_API_BACK_URL}/chat/${chatId}`,
-	)
+	const response = await axios.get<Chat>(`/chat/${chatId}`)
 
 	return response.data
 }

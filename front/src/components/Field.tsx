@@ -5,10 +5,10 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
-	FormMessage,
 } from "./ui/form"
 import { Input } from "./ui/input"
 import { InputHTMLAttributes } from "react"
+import { cn } from "@/lib/utils"
 
 type FieldProps<T extends FieldValues> =
 	InputHTMLAttributes<HTMLInputElement> & {
@@ -29,14 +29,21 @@ export default function Field<T extends FieldValues>({
 		<FormField
 			control={control}
 			name={name}
-			render={({ field }) => (
+			render={({ field, fieldState }) => (
 				<FormItem>
 					{label && <FormLabel>{label}</FormLabel>}
 					<FormControl>
-						<Input {...field} {...props} />
+						<Input
+							{...field}
+							{...props}
+							className={cn(
+								props.className,
+								fieldState.invalid && "bg-destructive/50",
+							)}
+						/>
 					</FormControl>
 					{description && <FormDescription>{description}</FormDescription>}
-					<FormMessage />
+					{/* <FormMessage /> */}
 				</FormItem>
 			)}
 		/>
