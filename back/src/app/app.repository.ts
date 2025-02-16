@@ -29,7 +29,10 @@ class appRepository {
 	/* ============ Users ============ */
 
 	async createUser(
-		userData: Omit<UserData, "id" | "createdAt" | "pictures" | "tags">,
+		userData: Omit<
+			UserData,
+			"id" | "createdAt" | "sessionId" | "pictures" | "tags"
+		>,
 	) {
 		try {
 			await this.db.query(appQueries.createUserMutation, [

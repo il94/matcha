@@ -2,10 +2,7 @@ import { randomUUID } from "crypto"
 import appRepository from "./app.repository"
 
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
-import {
-	ForbiddenException,
-	UnauthorizedException,
-} from "@/lib/HttpException"
+import { ForbiddenException, UnauthorizedException } from "@/lib/HttpException"
 import bcrypt from "bcrypt"
 
 class appService {
@@ -33,7 +30,7 @@ class appService {
 		if (user.sessionId) await this.redis.del(user.sessionId)
 
 		const sessionId = randomUUID()
-		await this.redis.set(sessionId, user.id, "EX", 3600)
+		await this.redis.set(sessionId, user.id, "EX", 3600 * 24 * 30)
 		await this.repository.updateUserSessionId(user.id, sessionId)
 
 		return sessionId
@@ -51,10 +48,21 @@ class appService {
 
 	/* ============= PRIVATE CONTROLLER ============= */
 
+	async logout(
+		sessionId: NonNullable<UserData["sessionId"]>,
+		userId: UserData["id"],
+	) {
+		await this.repository.updateUserSessionId(userId, null)
+		await this.redis.del(sessionId)
+	}
+
 	/* ============ Users ============ */
 
 	async createUser(
-		userData: Omit<UserData, "id" | "createdAt" | "pictures" | "tags">,
+		userData: Omit<
+			UserData,
+			"id" | "createdAt" | "sessionId" | "pictures" | "tags"
+		>,
 	) {
 		await this.repository.createUser(userData)
 	}

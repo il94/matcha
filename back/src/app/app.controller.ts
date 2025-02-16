@@ -2,12 +2,12 @@ import { FastifyPluginAsync } from "fastify"
 import appService from "@/app/app.service"
 import * as schemas from "@/app/app.schemas"
 import { InferSchema } from "@/types"
-import { BadRequestException } from "@/lib/HttpException"
+import appGuard from "./app.guard"
 
 const appController: FastifyPluginAsync = async (app, options) => {
 	const service = new appService(app, options)
 
-	// TODO auth
+	app.addHook("preHandler", appGuard)
 
 	/* ============ Users ============ */
 

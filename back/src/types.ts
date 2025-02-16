@@ -20,7 +20,7 @@ declare global {
 		id: string
 		createdAt: string
 		password: string
-		sessionId?: string
+		sessionId: string | null
 
 		firstName: string
 		lastName: string

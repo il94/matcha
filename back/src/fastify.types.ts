@@ -4,6 +4,11 @@ import { FastifyError, FastifyReply, FastifyRequest } from "fastify"
 import { JSONSchema } from "json-schema-to-ts"
 
 declare module "fastify" {
+	interface FastifyRequest {
+		sessionId: string
+		userId: string
+	}
+
 	interface FastifyInstance {
 		s3: S3Client
 	}
