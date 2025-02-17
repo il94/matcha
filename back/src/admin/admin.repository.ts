@@ -47,7 +47,7 @@ class adminRepository {
 				console.log("DB: Create user")
 				const createUserResult = await transact.query(
 					appQueries.createUserMutation,
-					[await bcrypt.hash(data[0] as string, 10), ...data.splice(1)],
+					[await bcrypt.hash(data[0] as string, 10), ...[...data].splice(1)],
 				)
 				const userCreated = createUserResult.rows[0]
 				userIds.push(userCreated.id)
