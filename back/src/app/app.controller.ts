@@ -30,16 +30,14 @@ const appController: FastifyPluginAsync = async (app, options) => {
 		},
 	)
 
-	app.get("/user/me", () => {
-		// TODO Recup l'id par l'auth
-		const userId = process.env.VITE_USER_ID_TEST as string
+	app.get("/user/me", (request) => {
+		const userId = request.userId
 
 		return service.getUser(userId)
 	})
 
-	app.get("/user/chats", () => {
-		// TODO Recup l'id par l'auth
-		const userId = process.env.VITE_USER_ID_TEST as string
+	app.get("/user/chats", (request) => {
+		const userId = request.userId
 
 		return service.getUserChats(userId)
 	})
@@ -48,8 +46,7 @@ const appController: FastifyPluginAsync = async (app, options) => {
 		"/chat/:chatId/conversation",
 		{ schema: schemas.chatIdParam },
 		(request) => {
-			// TODO Recup l'id par l'auth
-			const userId = process.env.VITE_USER_ID_TEST as string
+			const userId = request.userId
 			const { chatId } = request.params
 
 			return service.getUserChatConversation(userId, chatId)

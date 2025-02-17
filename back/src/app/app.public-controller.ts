@@ -38,7 +38,7 @@ const appPublicController: FastifyPluginAsync = async (app, options) => {
 		},
 	)
 
-	app.get("/verify", async (request, reply) => {
+	app.get("/verify", async (request) => {
 		return service.verify(request.cookies.sessionId)
 	})
 

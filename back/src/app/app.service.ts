@@ -82,6 +82,8 @@ class appService {
 					{
 						...userData,
 						password: await bcrypt.hash(userData.password, 10),
+						firstName: capitalize(userData.firstName),
+						lastName: capitalize(userData.lastName),
 					},
 					transact,
 				)
@@ -109,14 +111,14 @@ class appService {
 		})
 	}
 
-	async verify(sessionId?: UserData["sessionId"]): Promise<boolean> {
+	async verify(sessionId?: UserData["sessionId"]): Promise<UserData["id"]> {
 		if (!sessionId) throw new UnauthorizedException()
 
 		const userId = await this.redis.get(`session:${sessionId}`)
 
 		if (!userId) throw new UnauthorizedException()
 
-		return true
+		return userId
 	}
 
 	async activate(token: string) {

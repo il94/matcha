@@ -8,6 +8,7 @@ import useId from "@/hooks/useId"
 import { useQuery } from "@tanstack/react-query"
 import { useNavigate } from "react-router"
 import getUserChatConversation from "@/services/getUserChatConversation"
+import useAuth from "@/hooks/useAuth"
 
 type ChatDateProps = {
 	date: string
@@ -56,6 +57,7 @@ function ChatSender({ avatar, children }: ChatSenderProps) {
 }
 
 export default function ChatIdPage() {
+	const { userId } = useAuth()
 	const chatId = useId()
 
 	const {
@@ -113,7 +115,7 @@ export default function ChatIdPage() {
 							return (
 								<Fragment key={index}>
 									{Date && <Date date={message.createdAt} />}
-									{message.authorId === import.meta.env.VITE_USER_ID_TEST ? (
+									{message.authorId === userId ? (
 										<ChatUser>{message.content}</ChatUser>
 									) : (
 										<ChatSender avatar={chat.avatar}>

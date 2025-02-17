@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 
 // TODO On error
 export default function useAuth() {
-	const { data: isAuthenticated, isPending } = useQuery({
+	const { data, isPending } = useQuery({
 		queryKey: ["verify"],
 		queryFn: verify,
 		retry: false,
@@ -18,7 +18,8 @@ export default function useAuth() {
 	})
 
 	return {
-		isAuthenticated,
+		isAuthenticated: !!data,
+		userId: data,
 		isPending,
 		logout: logoutMutation,
 	}

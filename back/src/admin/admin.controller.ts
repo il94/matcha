@@ -20,7 +20,7 @@ const adminController: FastifyPluginAsync = async (app, options) => {
 	app.delete("/", async () => {
 		await repository.dropDb()
 		await app.redis.flushall()
-		
+
 		return "Db dropped"
 	})
 }
