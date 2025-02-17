@@ -55,7 +55,19 @@ export const register = {
 			views: { type: "number", minimum: 0, default: 0 },
 			matchs: { type: "number", minimum: 0, default: 0 },
 			dates: { type: "number", minimum: 0, default: 0 },
+
+			activated: { type: "boolean", default: false },
 		},
 		required: ["email", "firstName", "lastName", "username", "password"],
+	},
+} as const satisfies FastifyRouteSchema
+
+export const activate = {
+	querystring: {
+		type: "object",
+		properties: {
+			token: { type: "string" },
+		},
+		required: ["token"],
 	},
 } as const satisfies FastifyRouteSchema

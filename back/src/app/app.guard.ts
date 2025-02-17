@@ -6,7 +6,7 @@ const appGuard: preHandlerAsyncHookHandler = async (request, reply) => {
 
 	if (!sessionId) throw new UnauthorizedException()
 
-	const userId = await request.server.redis.get(sessionId)
+	const userId = await request.server.redis.get(`session:${sessionId}`)
 
 	if (!userId) throw new UnauthorizedException()
 

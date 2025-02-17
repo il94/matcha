@@ -36,6 +36,8 @@ declare global {
 		matchs: number
 		dates: number
 
+		activated: boolean
+
 		pictures: string[]
 		tags: TagData[]
 	}

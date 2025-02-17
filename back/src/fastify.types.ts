@@ -2,6 +2,7 @@ import { S3Client } from "@aws-sdk/client-s3"
 import "fastify"
 import { FastifyError, FastifyReply, FastifyRequest } from "fastify"
 import { JSONSchema } from "json-schema-to-ts"
+import { Transporter } from "nodemailer"
 
 declare module "fastify" {
 	interface FastifyRequest {
@@ -11,6 +12,7 @@ declare module "fastify" {
 
 	interface FastifyInstance {
 		s3: S3Client
+		mailer: Transporter
 	}
 }
 

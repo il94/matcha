@@ -12,7 +12,7 @@ const print = (color: string, message: string) => {
 }
 
 const appLogger: FastifyPluginAsync = async (app, options) => {
-	app.addHook("onRequest", async (request, reply) => {
+	app.addHook("onRequest", async (request) => {
 		request.log.info(
 			print(BLUE, `(${request.ip}) ${request.method} ${request.url}`),
 		)

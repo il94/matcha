@@ -3,9 +3,6 @@ import { BadRequestException, ForbiddenException } from "@/lib/HttpException"
 import { GetObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import convertObjectKeysToCamelCase from "@/lib/convertObjectKeysToCamelCase"
-
-import { updateUserSessionIdMutation } from "@/db/queries/app/updateUserMutationSessionIdMutation"
-
 import * as appQueries from "@/db/queries/app"
 import { isPGError, PGException } from "@/lib/PGException"
 import { PoolClient } from "pg"
@@ -155,16 +152,6 @@ class appRepository {
 		return chat
 	}
 
-	async updateUserSessionId(
-		userId: UserData["id"],
-		sessionId: UserData["sessionId"],
-		transact?: PoolClient,
-	) {
-		const executor = transact || this.db
-
-		await executor.query(updateUserSessionIdMutation, [userId, sessionId])
-	}
-
 	async getTags(): Promise<TagData[]> {
 		const result = await this.db.query(appQueries.getTagsQuery)
 
@@ -183,6 +170,20 @@ class appRepository {
 		)
 
 		return s3Url
+	}
+
+	async activateUser(userId: UserData["id"], sessionId: UserData["sessionId"]) {
+		await this.db.query(appQueries.activateUserMutation, [userId, sessionId])
+	}
+
+	async updateUserSessionId(
+		userId: UserData["id"],
+		sessionId: UserData["sessionId"],
+	) {
+		await this.db.query(appQueries.updateUserSessionIdMutation, [
+			userId,
+			sessionId,
+		])
 	}
 }
 

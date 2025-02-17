@@ -31,18 +31,31 @@ const appPublicController: FastifyPluginAsync = async (app, options) => {
 	app.post<InferSchema<typeof schemas.register>>(
 		"/register",
 		{ schema: schemas.register },
-		async (request, reply) => {
+		async (request) => {
 			const userData = request.body
 
-			const sessionId = await service.register(userData)
-
-			return reply.setCookie("sessionId", sessionId).send()
+			return service.register(userData)
 		},
 	)
 
 	app.get("/verify", async (request, reply) => {
-		return await service.verify(request.cookies.sessionId)
+		return service.verify(request.cookies.sessionId)
 	})
+
+	app.put<InferSchema<typeof schemas.activate>>(
+		"/activate",
+		{ schema: schemas.activate },
+		async (request, reply) => {
+			const { token } = request.query
+
+			const sessionId = await service.activate(token)
+
+			return reply
+				.setCookie("sessionId", sessionId)
+				.redirect(process.env.API_FRONT_URL!)
+				.send()
+		},
+	)
 }
 
 export default appPublicController

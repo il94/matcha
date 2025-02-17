@@ -1,14 +1,21 @@
 import Field from "@/components/Field"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
-import { Link, useNavigate } from "react-router"
+import { Link } from "react-router"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormMessage } from "@/components/ui/form"
-import { useCallback } from "react"
+import { useCallback, useState } from "react"
 import register from "@/services/register"
 import { useMutation } from "@tanstack/react-query"
 import { AxiosError } from "axios"
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+} from "@/components/ui/dialog"
 
 // TODO voir si besoin d'interdire des chars
 const formSchema = z.object({
@@ -62,6 +69,8 @@ const formSchema = z.object({
 })
 
 export default function RegisterPage() {
+	const [isRegistered, setIsRegistered] = useState("")
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -74,12 +83,10 @@ export default function RegisterPage() {
 		mode: "onTouched",
 	})
 
-	const navigate = useNavigate()
-
 	const { mutate: registerMutation } = useMutation({
 		mutationFn: register,
 		onSuccess: () => {
-			navigate("/home")
+			setIsRegistered(form.getValues().email)
 		},
 		onError: (error: AxiosError<{ message: string }>) => {
 			if (error.response?.status === 403)
@@ -174,6 +181,23 @@ export default function RegisterPage() {
 					</div>
 				</form>
 			</Form>
+			<Dialog open={!!isRegistered} onOpenChange={() => setIsRegistered("")}>
+				<DialogContent>
+					<DialogHeader>Check Your Inbox, Cupid's Calling !</DialogHeader>
+					<DialogDescription>
+						We've sent a little something to{" "}
+						<span className="font-semibold text-secondary">{isRegistered}</span>
+						. It's waiting for you in your inbox (or hiding in your spam folder,
+						because emails can be shy sometimes). Don't keep us waiting too
+						long, okay ?
+					</DialogDescription>
+					<DialogFooter>
+						<Button asChild>
+							<Link to="/login">Back to login</Link>
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
 		</main>
 	)
 }
