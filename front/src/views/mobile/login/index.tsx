@@ -8,7 +8,9 @@ import { Form, FormMessage } from "@/components/ui/form"
 import login from "@/services/login"
 import { useMutation } from "@tanstack/react-query"
 import { AxiosError } from "axios"
-import { useCallback } from "react"
+import { useCallback, useState } from "react"
+
+import ForgotPasswordDialog from "./ForgotPasswordDialog"
 
 const formSchema = z.object({
 	username: z
@@ -23,6 +25,8 @@ const formSchema = z.object({
 })
 
 export default function LoginPage() {
+	const [isForgotPassword, setIsForgotPassword] = useState(false)
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -76,12 +80,23 @@ export default function LoginPage() {
 							placeholder="Username"
 							className="h-12"
 						/>
-						<InputTextField
-							control={form.control}
-							name="password"
-							placeholder="Password"
-							className="h-12"
-						/>
+						<div>
+							<InputTextField
+								control={form.control}
+								name="password"
+								placeholder="Password"
+								className="h-12"
+							/>
+							<Button
+								onClick={() => setIsForgotPassword(true)}
+								type="button"
+								variant="link"
+								className="p-0 pl-1 hover:no-underline"
+							>
+								Forgot password ?
+							</Button>
+						</div>
+
 						<FormMessage className="h-5 px-1">{error}</FormMessage>
 					</div>
 
@@ -104,6 +119,10 @@ export default function LoginPage() {
 					</div>
 				</form>
 			</Form>
+			<ForgotPasswordDialog
+				open={!!isForgotPassword}
+				onOpenChange={setIsForgotPassword}
+			/>
 		</main>
 	)
 }

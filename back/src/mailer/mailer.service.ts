@@ -10,7 +10,7 @@ class mailerService {
 		this.mailer = app.mailer
 	}
 
-	async sendActivationTokenEmail(
+	async sendActivationEmail(
 		to: UserData["email"],
 		firstName: UserData["firstName"],
 		token: string,
@@ -23,15 +23,24 @@ class mailerService {
 		})
 	}
 
+	async sendResetPasswordEmail(to: UserData["email"], token: string) {
+		await this.mailer.sendMail({
+			to,
+			subject: "Reset Your Password",
+			from: this.MAILER_FROM,
+			html: this.getResetPasswordEmailTemplate(token),
+		})
+	}
+
 	/* ============ Templates ============ */
 
 	getActivationTokenEmailTemplate(
-		firstname: UserData["firstName"],
-		activationToken: string,
+		firstName: UserData["firstName"],
+		token: string,
 	) {
 		const body = `
 			<div class="container">
-				<h1 class="title">Hi, ${firstname}</h1>
+				<h1 class="title">Hi, ${firstName}</h1>
 				<p>
 					Welcome to Matcha, where exciting connections happen ! We're thrilled to have you on board.
 				</p>
@@ -39,10 +48,29 @@ class mailerService {
 					Before you dive into your Matcha experience, you'll need to activate your account. Let's get you started!
 				</p>
 				<p>
-					<a class="button" href="${process.env.API_BACK_URL}/activate?token=${activationToken}">Activate Your Account</a>
+					<a class="button" href="${process.env.API_BACK_URL}/activate?token=${token}">Activate Your Account</a>
 				</p>
 				<p class="footer">
 					If this email wasn't meant for you, please feel free to ignore it.
+				</p>
+			</div>
+		`
+
+		return this.getEmailTemplate(body)
+	}
+
+	getResetPasswordEmailTemplate(token: string) {
+		const body = `
+			<div class="container">
+				<h1 class="title">Hey there,</h1>
+				<p>
+					Forgot your password ? No worries, it happens ! You can reset it with the link below.
+				</p>
+				<p>
+					<a class="button" href="${process.env.API_BACK_URL}/reset?token=${token}">Reset Your Password</a>
+				</p>
+				<p class="footer">
+					If you didn't request this, you can safely ignore this email.
 				</p>
 			</div>
 		`

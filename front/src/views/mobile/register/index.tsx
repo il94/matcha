@@ -9,14 +9,7 @@ import { useCallback, useState } from "react"
 import register from "@/services/register"
 import { useMutation } from "@tanstack/react-query"
 import { AxiosError } from "axios"
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog"
+import ActivationDialog from "./ActivationDialog"
 
 // TODO voir si besoin d'interdire des chars
 const formSchema = z.object({
@@ -181,25 +174,11 @@ export default function RegisterPage() {
 					</div>
 				</form>
 			</Form>
-			<Dialog open={!!isRegistered} onOpenChange={() => setIsRegistered("")}>
-				<DialogContent>
-					<DialogHeader>
-						<DialogTitle>Check Your Inbox, Cupid's Calling !</DialogTitle>
-					</DialogHeader>
-					<DialogDescription>
-						We've sent a little something to{" "}
-						<span className="font-semibold text-secondary">{isRegistered}</span>
-						. It's waiting for you in your inbox (or hiding in your spam folder,
-						because emails can be shy sometimes). Don't keep us waiting too
-						long, okay ?
-					</DialogDescription>
-					<DialogFooter>
-						<Button asChild>
-							<Link to="/login">Back to login</Link>
-						</Button>
-					</DialogFooter>
-				</DialogContent>
-			</Dialog>
+			<ActivationDialog
+				open={!!isRegistered}
+				onOpenChange={() => setIsRegistered("")}
+				email={isRegistered}
+			/>
 		</main>
 	)
 }

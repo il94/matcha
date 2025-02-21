@@ -53,6 +53,16 @@ export const register = {
 	},
 } as const satisfies FastifyRouteSchema
 
+export const forgotPassword = {
+	body: {
+		type: "object",
+		properties: {
+			email: { type: "string", minLength: 1, maxLength: 256, format: "email" },
+		},
+		required: ["email"],
+	},
+} as const satisfies FastifyRouteSchema
+
 export const activate = {
 	querystring: {
 		type: "object",

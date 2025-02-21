@@ -43,6 +43,16 @@ const appPublicController: FastifyPluginAsync = async (app, options) => {
 		},
 	)
 
+	app.post<InferSchema<typeof schemas.forgotPassword>>(
+		"/forgot-password",
+		{ schema: schemas.forgotPassword },
+		async (request) => {
+			const { email } = request.body
+
+			return service.forgotPassword(email)
+		},
+	)
+
 	app.get("/verify", async (request) => {
 		const { sessionId, tempSessionId } = request.cookies
 

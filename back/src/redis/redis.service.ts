@@ -5,7 +5,7 @@ class redisService {
 	private redis
 
 	private SESSION_DURATION = 3600 * 24 * 30
-	private ACTIVATION_TOKEN_DURATION = 3600 * 24
+	private TOKEN_DURATION = 3600 * 24
 
 	constructor(app: FastifyInstance, options: FastifyPluginOptions) {
 		this.redis = app.redis
@@ -50,7 +50,23 @@ class redisService {
 			`activation:${token}`,
 			userId,
 			"EX",
-			this.ACTIVATION_TOKEN_DURATION,
+			this.TOKEN_DURATION,
+		)
+
+		return token
+	}
+
+	async createResetPasswordToken(
+		userId: UserData["id"],
+		defaultToken?: string,
+	) {
+		const token = defaultToken ?? this.getRandomToken()
+
+		await this.redis.set(
+			`resetPassword:${token}`,
+			userId,
+			"EX",
+			this.TOKEN_DURATION,
 		)
 
 		return token
@@ -83,6 +99,10 @@ class redisService {
 
 	async deleteActivationToken(token: string) {
 		await this.redis.del(`activation:${token}`)
+	}
+
+	async deleteResetPasswordToken(token: string) {
+		await this.redis.del(`resetPassword:${token}`)
 	}
 
 	/* ============ Utils ============ */

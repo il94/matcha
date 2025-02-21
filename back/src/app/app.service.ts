@@ -87,7 +87,7 @@ class appService {
 			})
 
 			await this.redisService.createActivationToken(userId, token)
-			await this.mailerService.sendActivationTokenEmail(
+			await this.mailerService.sendActivationEmail(
 				userData.email,
 				userData.firstName,
 				token,
@@ -95,6 +95,21 @@ class appService {
 		} catch (error) {
 			if (userId) await this.repository.deleteUser(userId)
 			await this.redisService.deleteActivationToken(token)
+			throw error
+		}
+	}
+
+	async forgotPassword(email: UserData["email"]) {
+		const user = await this.repository.getUserByEmail(email)
+
+		if (!user) return
+
+		const token = this.getRandomToken()
+		try {
+			await this.redisService.createResetPasswordToken(user.id, token)
+			await this.mailerService.sendResetPasswordEmail(email, token)
+		} catch (error) {
+			await this.redisService.deleteResetPasswordToken(token)
 			throw error
 		}
 	}
