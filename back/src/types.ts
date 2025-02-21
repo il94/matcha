@@ -39,12 +39,13 @@ declare global {
 		activated: boolean
 		completed: boolean
 
-		pictures: PictureData["name"][]
+		pictures: PictureData[]
 		tags: TagData["id"][]
 	}
 
 	type PictureData = {
 		name: string
+		isPrincipal: boolean
 	}
 
 	type TagData = {

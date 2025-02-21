@@ -152,9 +152,9 @@ class appRepository {
 			| "gender"
 			| "sexualOrientation"
 			| "bio"
-			| "pictures"
 			| "tags"
 		>,
+		pictureNames: PictureData["name"][],
 	) {
 		await this.db.transact(async (transact) => {
 			await transact.query(appQueries.completeUserMutation, [
@@ -166,15 +166,13 @@ class appRepository {
 				userData.bio,
 			])
 
-			await transact.query(appQueries.createPicturesMutation, [
-				userData.id,
-				userData.pictures,
-			])
-
-			await transact.query(appQueries.createUserTagsMutation, [
-				userData.id,
-				userData.tags,
-			])
+			for (let i = 0; i < pictureNames.length; i++) {
+				await transact.query(appQueries.createPictureMutation, [
+					userData.id,
+					pictureNames[i],
+					i === 0,
+				])
+			}
 		})
 	}
 

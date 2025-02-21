@@ -166,11 +166,13 @@ class appService {
 			await this.redisService.createSession(userData.id, sessionId)
 			const pictureNames = await this.s3Service.uploadFiles(picturesBuffer)
 
-			await this.repository.completeUser({
-				...userData,
-				sessionId,
-				pictures: pictureNames,
-			})
+			await this.repository.completeUser(
+				{
+					...userData,
+					sessionId,
+				},
+				pictureNames,
+			)
 			await this.redisService.deleteTempSession(userData.sessionId)
 
 			return sessionId
@@ -198,15 +200,16 @@ class appService {
 
 		for (const user of users.users) {
 			const pictures = []
-			for (const pictureName of user.pictures) {
+			for (let i = 0; i < user.pictures.length; i++) {
 				// TODO Retirer condition temporaire
-				if (user.firstName === "Ok") {
-					const signedUrl = await this.s3Service.getSignedURL(pictureName)
-					pictures.push(signedUrl)
+				if (user.firstName === "Ilyes") {
+					const signedUrl = await this.s3Service.getSignedURL(
+						user.pictures[i].name,
+					)
+					user.pictures[i].name = signedUrl
 				} // TODO Temporaire pour fake users
-				else pictures.push(pictureName)
+				else pictures.push(user.pictures[i].name)
 			}
-			user.pictures = pictures
 		}
 
 		return users

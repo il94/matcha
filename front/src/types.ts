@@ -18,7 +18,7 @@ declare global {
 		gender?: string
 
 		bio?: string
-		pictures: string[]
+		pictures: Picture[]
 
 		tags: Tag[]
 

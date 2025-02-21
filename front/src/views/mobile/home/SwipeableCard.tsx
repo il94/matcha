@@ -12,10 +12,10 @@ import {
 import { motion } from "framer-motion"
 import { FramerCallback } from "@/types"
 
-function shufflePictures(pictures: string[]) {
-	const firstPicture = pictures[0]
+function shufflePictures(pictures: Picture[]) {
+	const firstPicture = pictures.filter((picture) => picture.isPrincipal)[0]
+	const restPictures = pictures.filter((picture) => !picture.isPrincipal)
 
-	const restPictures = pictures.slice(1)
 	for (let i = restPictures.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1))
 		;[restPictures[i], restPictures[j]] = [restPictures[j], restPictures[i]]
@@ -134,7 +134,7 @@ export default forwardRef(function SwipeableCard(
 			{picturesShuffled.map((picture, index) => (
 				<img
 					key={`test_${index}`}
-					src={picture}
+					src={picture.name}
 					className={cn(
 						"absolute hidden size-full bg-background object-cover",
 						index === displayedPicture && "block",

@@ -9,7 +9,9 @@ export const getUsersQuery = `
 		users.gender,
 		users.bio,
 		users.elo,
-		JSON_AGG(DISTINCT pictures.name) AS pictures,
+		JSON_AGG(DISTINCT 
+			JSONB_BUILD_OBJECT('name', pictures.name, 'isPrincipal', pictures.is_principal)
+		) AS pictures,
 		COALESCE(JSON_AGG(DISTINCT tags) FILTER (WHERE tags IS NOT NULL), '[]') AS tags
 	FROM users
 	LEFT JOIN pictures ON pictures.user_id = users.id
