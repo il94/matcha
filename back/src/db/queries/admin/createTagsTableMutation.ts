@@ -1,8 +1,8 @@
 export const createTagsTableMutation = `
 	CREATE TABLE IF NOT EXISTS tags (
-		id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+		id SERIAL PRIMARY KEY,
 		
-		name VARCHAR(32) UNIQUE NOT NULL
+		name TEXT NOT NULL UNIQUE
 	);
 
 	INSERT INTO tags (name)

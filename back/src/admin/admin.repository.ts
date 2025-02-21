@@ -18,6 +18,12 @@ class adminRepository {
 			console.log("DB: Create uuid extension")
 			await transact.query(adminQueries.createUuidExtensionMutation)
 
+			console.log("DB: Create gender enum")
+			await transact.query(adminQueries.createGenderEnumMutation)
+
+			console.log("DB: Create sexualOrientation enum")
+			await transact.query(adminQueries.createSexualOrientationEnumMutation)
+
 			console.log("DB: Create user table")
 			await transact.query(adminQueries.createUsersTableMutation)
 
@@ -46,7 +52,7 @@ class adminRepository {
 
 				console.log("DB: Create user")
 				const createUserResult = await transact.query(
-					appQueries.createUserMutation,
+					adminQueries.createUserMutation,
 					[await bcrypt.hash(data[0] as string, 10), ...[...data].splice(1)],
 				)
 				const userCreated = createUserResult.rows[0]

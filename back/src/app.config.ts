@@ -2,6 +2,8 @@ import fastifyCookie from "@fastify/cookie"
 import fastifyCors from "@fastify/cors"
 import fastifyMultipart from "@fastify/multipart"
 import { FastifyPluginAsync } from "fastify"
+import { BadRequestException } from "./lib/HttpException"
+import sharp from "sharp"
 
 const appConfig: FastifyPluginAsync = async (app, options) => {
 	app.register(fastifyCors, {
@@ -17,9 +19,23 @@ const appConfig: FastifyPluginAsync = async (app, options) => {
 		},
 	})
 	app.register(fastifyMultipart, {
+		attachFieldsToBody: "keyValues",
 		limits: {
 			fileSize: parseInt(process.env.MULTIPART_FILE_SIZE!),
 			files: parseInt(process.env.MULTIPART_FILES!),
+		},
+		onFile: async (part) => {
+			if (!part.mimetype.startsWith("image/")) throw new BadRequestException()
+
+			try {
+				const buffer = await part.toBuffer()
+
+				await sharp(buffer).metadata()
+			} catch (error) {
+				throw new BadRequestException()
+			}
+
+			await part.toBuffer()
 		},
 	})
 }

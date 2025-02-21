@@ -7,6 +7,6 @@ export const createPicturesTableMutation = `
 		name VARCHAR NOT NULL,
 		is_principal BOOLEAN NOT NULL DEFAULT FALSE,
 		
-		CONSTRAINT fk_pictures_user_id FOREIGN KEY(user_id) REFERENCES users(id)
+		CONSTRAINT fk_pictures_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 	);
 `

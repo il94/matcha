@@ -8,7 +8,7 @@ export const users = [
 			"donald.trump@mail.fr",
 			"1946-06-14",
 			"Straight",
-			"M",
+			"Male",
 			"I'm a successful businessman who built an empire. I know how to get things done and always aim for the best. Looking for someone ambitious and ready to take on new challenges. Together, we can make great things happen.",
 			100,
 			500,
@@ -26,7 +26,7 @@ export const users = [
 			"thimothee.chalamet@mail.fr",
 			"1995-12-27",
 			"Straight",
-			"M",
+			"Male",
 			"Actor, artist, and a bit of a dreamer. I believe in creativity, deep connections, and the beauty of the unexpected. I love exploring new perspectives, whether it's through film, art, or great conversation. Let’s share a moment that feels real.",
 			100,
 			1000,
@@ -44,7 +44,7 @@ export const users = [
 			"kate.winslet@mail.fr",
 			"1975-10-05",
 			"Straight",
-			"F",
+			"Female",
 			"Actress, storyteller, and passionate about living authentically. I believe in kindness, adventure, and meaningful connections. Life’s too short for anything less than real moments—let’s create one together.",
 			100,
 			700,
@@ -62,7 +62,7 @@ export const users = [
 			"elon.musk@mail.fr",
 			"1971-06-28",
 			"Straight",
-			"M",
+			"Male",
 			"Entrepreneur, innovator, and always looking to push the boundaries of what’s possible. I believe in changing the world through technology and bold ideas. If you're passionate about the future and love a challenge, let's talk.",
 			100,
 			600,
@@ -86,7 +86,7 @@ export const users = [
 			"taylor.swift@mail.fr",
 			"1989-12-13",
 			"Straight",
-			"F",
+			"Female",
 			"Singer-songwriter, storyteller, and lover of all things real. I find beauty in both the highs and the lows of life. Looking for someone who’s open to new chapters and believes in love, laughter, and a little bit of magic.",
 			100,
 			1000,
@@ -104,7 +104,7 @@ export const users = [
 			"tom.holland@mail.fr",
 			"1996-06-01",
 			"Straight",
-			"M",
+			"Male",
 			"Actor, adventurer, and always up for a challenge. I love making people smile, whether it's through a role or just a good conversation. Looking for someone who shares a sense of fun, adventure, and a big heart.",
 			100,
 			1000,
@@ -123,7 +123,7 @@ export const users = [
 			"1990-04-15",
 			"Straight",
 
-			"F",
+			"Female",
 			"Actress, activist, and lover of knowledge. Passionate about gender equality, literature, and the arts. Looking for someone who values deep conversations, curiosity, and making the world a better place.",
 			120,
 			850,
@@ -150,7 +150,7 @@ export const users = [
 			"1996-09-01",
 			"Straight",
 
-			"F",
+			"Female",
 			"Actress, singer, and fashion icon. I love creativity, self-expression, and challenging the status quo. Looking for someone who appreciates individuality and loves to explore new ideas.",
 			180,
 			900,
@@ -177,7 +177,7 @@ export const users = [
 			"1964-09-02",
 			"Straight",
 
-			"M",
+			"Male",
 			"Actor, martial artist, and humble soul. I believe in kindness and living in the present moment. Looking for someone who appreciates simplicity and authenticity.",
 			150,
 			750,
@@ -204,7 +204,7 @@ export const users = [
 			"1988-02-20",
 			"Straight",
 
-			"F",
+			"Female",
 			"Singer, entrepreneur, and advocate. I’m passionate about empowering others and making an impact. Seeking someone who is confident, driven, and loves a good challenge.",
 			220,
 			1000,
@@ -231,7 +231,7 @@ export const users = [
 			"1983-08-11",
 			"Straight",
 
-			"M",
+			"Male",
 			"Actor, fitness enthusiast, and adventure lover. Always looking to push my limits and embrace new experiences. Looking for someone who shares a love for life and adventure.",
 			210,
 			850,
@@ -250,7 +250,7 @@ export const users = [
 			"1988-11-06",
 			"Straight",
 
-			"F",
+			"Female",
 			"Actress with a passion for comedy and quirky roles. I’m someone who values laughter, creativity, and authenticity. Looking for someone who isn’t afraid to be themselves.",
 			170,
 			950,
@@ -277,7 +277,7 @@ export const users = [
 			"1968-09-25",
 			"Straight",
 
-			"M",
+			"Male",
 			"Actor, entrepreneur, and motivator. Always pushing for growth and believing in the power of positivity. Looking for someone who is ambitious, optimistic, and loves to have fun.",
 			250,
 			1100,
@@ -303,7 +303,7 @@ export const users = [
 			"1981-06-09",
 			"Straight",
 
-			"F",
+			"Female",
 			"Actress, activist, and proud feminist. I’m passionate about human rights, education, and film. Looking for someone who values intelligence, empathy, and social change.",
 			190,
 			800,
@@ -322,7 +322,7 @@ export const users = [
 			"1987-10-18",
 			"Straight",
 
-			"M",
+			"Male",
 			"Actor, fitness enthusiast, and adventurer. I love exploring new places and challenging myself. Looking for someone who shares a passion for adventure, health, and enjoying life.",
 			230,
 			950,
@@ -341,7 +341,7 @@ export const users = [
 			"1993-06-26",
 			"Straight",
 
-			"F",
+			"Female",
 			"Singer, actress, and lover of all things pink. Passionate about music, kindness, and spreading love. Looking for someone who has a good heart, is down-to-earth, and appreciates the little things.",
 			260,
 			1050,
@@ -368,7 +368,7 @@ export const users = [
 			"1974-11-11",
 			"Straight",
 
-			"M",
+			"Male",
 			"Actor, environmental activist, and passionate about saving the planet. I love nature, traveling, and supporting causes that make a difference. Looking for someone who shares my commitment to sustainability and the environment.",
 			240,
 			980,
@@ -394,7 +394,7 @@ export const users = [
 			"1984-11-22",
 			"Straight",
 
-			"F",
+			"Female",
 			"Actress, philanthropist, and traveler. Passionate about making a positive impact. Seeking someone who values kindness and adventure.",
 			160,
 			800,
@@ -413,7 +413,7 @@ export const users = [
 			"1983-08-14",
 			"Straight",
 
-			"F",
+			"Female",
 			"Actress and lover of books, art, and spending time outdoors. Looking for someone who enjoys deep conversations and a simple life.",
 			165,
 			720,
@@ -432,7 +432,7 @@ export const users = [
 			"1967-07-16",
 			"Straight",
 
-			"M",
+			"Male",
 			"Actor, comedian, and all-around goofball. Passionate about making people laugh and spreading joy. Looking for someone who can match my sense of humor and fun.",
 			180,
 			950,
@@ -458,7 +458,7 @@ export const users = [
 			"1983-02-23",
 			"Straight",
 
-			"F",
+			"Female",
 			"Actress and lover of nature. I believe in leading with integrity and exploring the world. Seeking someone who shares my appreciation for simplicity and depth.",
 			170,
 			850,
@@ -477,7 +477,7 @@ export const users = [
 			"1965-04-04",
 			"Straight",
 
-			"M",
+			"Male",
 			"Actor, inventor, and philosopher. Passionate about making a difference and challenging myself every day. Looking for someone who thinks outside the box and loves to innovate.",
 			200,
 			950,
@@ -503,7 +503,7 @@ export const users = [
 			"1990-07-02",
 			"Straight",
 
-			"F",
+			"Female",
 			"Actress and lover of the arts. I believe in creativity and exploration. Looking for someone who shares my curiosity and zest for life.",
 			160,
 			950,
@@ -522,7 +522,7 @@ export const users = [
 			"1956-07-09",
 			"Straight",
 
-			"M",
+			"Male",
 			"Actor, filmmaker, and philanthropist. Passionate about telling stories and making a positive difference in the world. Looking for someone who enjoys good company and great conversation.",
 			185,
 			800,
@@ -541,7 +541,7 @@ export const users = [
 			"1987-08-25",
 			"Straight",
 
-			"F",
+			"Female",
 			"Actress, entrepreneur, and mother. Passionate about family, fashion, and making the world a better place. Looking for someone who values authenticity and kindness.",
 			170,
 			900,
@@ -560,7 +560,7 @@ export const users = [
 			"1972-02-14",
 			"Straight",
 
-			"M",
+			"Male",
 			"Journalist, provocateur, and cultural explorer. I enjoy shocking people with my unique worldview. Looking for someone who can handle my humor and adventurous spirit.",
 			185,
 			700,
@@ -579,7 +579,7 @@ export const users = [
 			"1958-09-07",
 			"Straight",
 
-			"M",
+			"Male",
 			"Former teacher turned chemistry kingpin. Passionate about control, power, and precision. Looking for someone who appreciates strategy and intelligence.",
 			180,
 			800,
@@ -604,7 +604,7 @@ export const users = [
 			"1976-12-09",
 			"Straight",
 
-			"M",
+			"Male",
 			"Rapper, businessman, and artist. Passionate about music, fashion, and influence. Seeking someone who shares my drive and passion for success.",
 			175,
 			950,
@@ -630,7 +630,7 @@ export const users = [
 			"1967-08-25",
 			"Straight",
 
-			"M",
+			"Male",
 			"Entrepreneur and philanthropist. Passionate about technology, innovation, and changing the world. Looking for someone who shares my entrepreneurial mindset and love for technology.",
 			180,
 			900,
@@ -655,7 +655,7 @@ export const users = [
 			"1998-12-20",
 			"Straight",
 
-			"M",
+			"Male",
 			"Football player, philanthropist, and sports icon. Passionate about giving back to the community and achieving greatness. Looking for someone who shares my love for sports and making a difference.",
 			175,
 			950,
@@ -674,7 +674,7 @@ export const users = [
 			"1988-09-20",
 			"Straight",
 
-			"M",
+			"Male",
 			"Former MMA fighter, champion, and family man. Passionate about discipline, hard work, and living a life of integrity. Seeking someone who values respect and consistency.",
 			178,
 			950,
@@ -693,7 +693,7 @@ export const users = [
 			"1879-03-14",
 			"Straight",
 
-			"M",
+			"Male",
 			"Physicist, innovator, and philosopher. Passionate about science, curiosity, and the search for truth. Looking for someone who appreciates deep thinking and intellectual pursuits.",
 			175,
 			850,
@@ -712,7 +712,7 @@ export const users = [
 			"1981-09-26",
 			"Straight",
 
-			"F",
+			"Female",
 			"Tennis player, entrepreneur, and activist. Passionate about breaking barriers and empowering women. Looking for someone who shares my commitment to success and social impact.",
 			175,
 			950,
@@ -735,9 +735,9 @@ export const users = [
 			"gandhi",
 			"mahatma.gandhi@mail.fr",
 			"1869-10-02",
-			"Asexual",
+			"Other",
 
-			"M",
+			"Male",
 			"Political leader, philosopher, and advocate of nonviolence. Passionate about justice, peace, and human rights. Seeking someone who shares my commitment to integrity and compassion.",
 			170,
 			650,
@@ -756,7 +756,7 @@ export const users = [
 			"1955-02-24",
 			"Straight",
 
-			"M",
+			"Male",
 			"Tech visionary, entrepreneur, and innovator. Passionate about design, simplicity, and changing the world. Looking for someone who shares my vision for the future.",
 			180,
 			950,
@@ -781,7 +781,7 @@ export const users = [
 			"1913-11-07",
 			"Straight",
 
-			"M",
+			"Male",
 			"Philosopher, writer, and existentialist. Passionate about exploring life's meaning and confronting the absurd. Looking for someone who appreciates literature and deep conversations.",
 			175,
 			700,
@@ -798,9 +798,9 @@ export const users = [
 			"picasso",
 			"pablo.picasso@mail.fr",
 			"1881-10-25",
-			"Bisexual",
+			"Other",
 
-			"M",
+			"Male",
 			"Artist and revolutionary of modern art. Passionate about creating new forms of expression and breaking artistic boundaries. Looking for someone who embraces avant-garde creativity.",
 			170,
 			800,
@@ -826,7 +826,7 @@ export const users = [
 			"1942-01-17",
 			"Straight",
 
-			"M",
+			"Male",
 			"Boxing legend, activist, and philanthropist. Passionate about fighting for justice, equality, and freedom. Looking for someone who shares my commitment to making a difference in the world.",
 			190,
 			950,
@@ -845,7 +845,7 @@ export const users = [
 			"1913-02-04",
 			"Straight",
 
-			"F",
+			"Female",
 			"Civil rights activist and icon of the American struggle for justice. Passionate about equality, human rights, and social change. Looking for someone who believes in fighting for what’s right.",
 			160,
 			600,
@@ -864,7 +864,7 @@ export const users = [
 			"1958-08-29",
 			"Straight",
 
-			"M",
+			"Male",
 			"King of Pop, performer, and philanthropist. Passionate about music, dance, and inspiring change through creativity. Looking for someone who loves the stage and embraces art.",
 			175,
 			900,
@@ -881,9 +881,9 @@ export const users = [
 			"nina",
 			"nina.simone@mail.fr",
 			"1933-02-21",
-			"Bisexual",
+			"Other",
 
-			"F",
+			"Female",
 			"Jazz musician, activist, and iconic figure in American music history. Passionate about freedom, equality, and soulful expression. Looking for someone who resonates with my drive for social justice.",
 			165,
 			700,
@@ -902,7 +902,7 @@ export const users = [
 			"1945-02-06",
 			"Straight",
 
-			"M",
+			"Male",
 			"Reggae musician, peace advocate, and cultural icon. Passionate about spreading love, unity, and music. Looking for someone who believes in peace and the power of song.",
 			175,
 			850,
@@ -921,7 +921,7 @@ export const users = [
 			"1968-02-14",
 			"Straight",
 
-			"F",
+			"Female",
 			"Adventurer, archaeologist, and survival expert. Passionate about uncovering ancient secrets and exploring the unknown. Looking for someone who shares my love for adventure and discovery.",
 			170,
 			850,
@@ -947,7 +947,7 @@ export const users = [
 			"1995-03-30",
 			"Straight",
 
-			"M",
+			"Male",
 			"Warrior, passionate about freedom and justice. Driven by the need to protect my people and destroy the Titans. Looking for someone who shares my unyielding determination and sense of duty.",
 			180,
 			900,
@@ -966,7 +966,7 @@ export const users = [
 			"1982-12-03",
 			"Straight",
 
-			"M",
+			"Male",
 			"Knight, king in the North, and a protector of the realm. Passionate about duty, honor, and the survival of the people. Looking for someone who shares my loyalty and respect for tradition.",
 			185,
 			900,
@@ -985,7 +985,7 @@ export const users = [
 			"1997-05-05",
 			"Straight",
 
-			"M",
+			"Male",
 			"Pirate, captain of the Straw Hat Pirates. Passionate about freedom, adventure, and friendship. Looking for someone who believes in dreams and never giving up on your goals.",
 			170,
 			800,
@@ -1004,7 +1004,7 @@ export const users = [
 			"1981-06-12",
 			"Straight",
 
-			"F",
+			"Female",
 			"Princess, Rebel leader, and champion of freedom. Passionate about the fight against oppression and the protection of the galaxy. Looking for someone who shares my belief in justice and standing up for what’s right.",
 			165,
 			800,
@@ -1023,7 +1023,7 @@ export const users = [
 			"1986-02-28",
 			"Straight",
 
-			"M",
+			"Male",
 			"Student, mastermind behind the Death Note. Passionate about justice and eliminating corruption. Looking for someone who understands my ideals and my thirst for creating a perfect world.",
 			175,
 			850,
@@ -1042,7 +1042,7 @@ export const users = [
 			"1981-09-13",
 			"Straight",
 
-			"M",
+			"Male",
 			"Plumber, adventurer, and hero of the Mushroom Kingdom. Passionate about saving princesses and exploring new worlds. Looking for someone who loves adventure and challenges.",
 			165,
 			800,
@@ -1061,7 +1061,7 @@ export const users = [
 			"2001-04-22",
 			"Straight",
 
-			"M",
+			"Male",
 			"Donkey, Shrek’s best friend, and lover of all things funny. Passionate about making people laugh and finding joy in life. Looking for someone who’s not afraid to embrace their quirks and have fun.",
 			160,
 			700,
@@ -1080,7 +1080,7 @@ export const users = [
 			"1995-11-22",
 			"Straight",
 
-			"M",
+			"Male",
 			"Cowboy, leader of the Toy Story gang. Passionate about loyalty, friendship, and protecting my fellow toys. Looking for someone who values teamwork and adventure.",
 			170,
 			750,
@@ -1099,7 +1099,7 @@ export const users = [
 			"1960-05-12",
 			"Straight",
 
-			"M",
+			"Male",
 			"Father, husband, and donut enthusiast. Passionate about family, relaxation, and having a good time. Looking for someone who enjoys the simple pleasures of life and isn’t afraid to have a laugh.",
 			175,
 			800,

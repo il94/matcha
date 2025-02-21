@@ -3,6 +3,7 @@ import appService from "@/app/app.service"
 import * as schemas from "@/app/app.schemas"
 import { InferSchema } from "@/types"
 import appGuard from "./app.guard"
+import { BadRequestException } from "@/lib/HttpException"
 
 const appController: FastifyPluginAsync = async (app, options) => {
 	const service = new appService(app, options)
@@ -11,11 +12,57 @@ const appController: FastifyPluginAsync = async (app, options) => {
 
 	/* ============ Auth ============ */
 
-	app.delete("/logout", async (request, reply) => {
-		const { sessionId, userId } = request
+	app.put<InferSchema<typeof schemas.complete>>(
+		"/complete",
+		{ schema: schemas.complete },
+		async (request, reply) => {
+			if (!request.isMultipart) throw new BadRequestException()
 
-		await service.logout(sessionId, userId)
-		return reply.clearCookie("sessionId").send()
+			const { tempSessionId, userId } = request
+			const {
+				birthDate,
+				gender,
+				sexualOrientation,
+				tags,
+				bio,
+				principalPicture,
+				secondaryPicture1,
+				secondaryPicture2,
+				secondaryPicture3,
+				secondaryPicture4,
+			} = request.body
+
+			const sessionId = await service.complete(
+				{
+					id: userId,
+					sessionId: tempSessionId,
+					birthDate,
+					gender,
+					sexualOrientation,
+					bio,
+					tags: JSON.parse(tags),
+				},
+				[
+					principalPicture as unknown as Buffer,
+					secondaryPicture1 as unknown as Buffer,
+					secondaryPicture2 as unknown as Buffer,
+					secondaryPicture3 as unknown as Buffer,
+					secondaryPicture4 as unknown as Buffer,
+				].filter(Boolean),
+			)
+
+			return reply
+				.setCookie("sessionId", sessionId)
+				.clearCookie("tempSessionId")
+				.send()
+		},
+	)
+
+	app.delete("/logout", async (request, reply) => {
+		const { sessionId, tempSessionId, userId } = request
+
+		await service.logout(sessionId, tempSessionId, userId)
+		return reply.clearCookie("sessionId").clearCookie("tempSessionId").send()
 	})
 
 	/* ============ Users ============ */

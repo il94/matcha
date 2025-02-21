@@ -1,4 +1,4 @@
-import Field from "@/components/Field"
+import InputTextField from "@/components/FormFields/InputTextField"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router"
@@ -70,13 +70,13 @@ export default function LoginPage() {
 				>
 					<h1 className="text-6xl">Login</h1>
 					<div className="flex w-full flex-col gap-6">
-						<Field
+						<InputTextField
 							control={form.control}
 							name="username"
 							placeholder="Username"
 							className="h-12"
 						/>
-						<Field
+						<InputTextField
 							control={form.control}
 							name="password"
 							placeholder="Password"

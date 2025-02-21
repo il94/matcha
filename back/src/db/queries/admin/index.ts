@@ -6,3 +6,7 @@ export * from "./createPicturesTableMutation"
 export * from "./createTagsTableMutation"
 export * from "./createChatsTableMutation"
 export * from "./dropDatabaseMutation"
+export * from "./createGenderEnumMutation"
+export * from "./createSexualOrientationEnumMutation"
+
+export * from "./createUserMutation"

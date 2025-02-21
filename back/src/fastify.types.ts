@@ -7,6 +7,7 @@ import { Transporter } from "nodemailer"
 declare module "fastify" {
 	interface FastifyRequest {
 		sessionId: string
+		tempSessionId: string
 		userId: string
 	}
 
@@ -17,7 +18,13 @@ declare module "fastify" {
 }
 
 export type FastifyRouteSchema = {
-	body?: JSONSchema
+	body?: JSONSchema & {
+		properties: JSONSchema & {
+			birthDate?: JSONSchema & {
+				adult?: boolean
+			}
+		}
+	}
 	querystring?: JSONSchema
 	params?: JSONSchema
 }

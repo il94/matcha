@@ -10,6 +10,8 @@ class dbRepository {
 
 	async initDb() {
 		await this.db.query(adminQueries.createUuidExtensionMutation)
+		await this.db.query(adminQueries.createGenderEnumMutation)
+		await this.db.query(adminQueries.createSexualOrientationEnumMutation)
 		await this.db.query(adminQueries.createUsersTableMutation)
 		await this.db.query(adminQueries.createPicturesTableMutation)
 		await this.db.query(adminQueries.createTagsTableMutation)

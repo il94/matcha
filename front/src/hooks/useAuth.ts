@@ -18,8 +18,10 @@ export default function useAuth() {
 	})
 
 	return {
-		isAuthenticated: !!data,
-		userId: data,
+		userId: data?.userId,
+		isAuthenticated: data?.isAuthenticated,
+		isCompleting: data?.isCompleting,
+
 		isPending,
 		logout: logoutMutation,
 	}

@@ -10,6 +10,8 @@ import LoginPage from "./views/mobile/login"
 import RegisterPage from "./views/mobile/register"
 import PublicRoute from "./PublicRoute"
 import ProtectedRoute from "./ProtectedRoute"
+import CompletePage from "./views/mobile/complete"
+import TempProtectedRoute from "./TempProtectedRoute"
 
 /*
 	TODO
@@ -31,6 +33,9 @@ function App() {
 							<Route path="login" element={<LoginPage />} />
 							<Route path="register" element={<RegisterPage />} />
 							<Route index element={<LoginPage />} />
+						</Route>
+						<Route element={<TempProtectedRoute />}>
+							<Route path="complete" element={<CompletePage />} />
 						</Route>
 						<Route element={<ProtectedRoute />}>
 							<Route element={<MobileLayout />}>

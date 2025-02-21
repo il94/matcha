@@ -3,11 +3,6 @@ import appPlugin from "./app.plugin"
 import fastify, { FastifyInstance } from "fastify"
 import path from "path"
 import fs from "fs"
-import fp from "fastify-plugin"
-import appLogger from "./app.logger"
-import fastifyCors from "@fastify/cors"
-import fastifyCookie from "@fastify/cookie"
-import fastifyMultipart from "@fastify/multipart"
 
 const setup = () => {
 	const uploadDir = path.resolve(__dirname, "uploads")
@@ -30,6 +25,27 @@ export const init = (): FastifyInstance => {
 		},
 		genReqId() {
 			return undefined as unknown as string
+		},
+		ajv: {
+			plugins: [
+				(ajv: any) => {
+					ajv.addKeyword({
+						keyword: "adult",
+						type: "string",
+						validate: (value: boolean, data: string) => {
+							if (!value) return true
+
+							const inputDate = new Date(data)
+							const today = new Date()
+							const minAdultDate = new Date()
+							minAdultDate.setFullYear(today.getFullYear() - 18)
+
+							return inputDate <= minAdultDate
+						},
+						errors: false,
+					})
+				},
+			],
 		},
 	})
 

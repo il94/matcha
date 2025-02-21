@@ -7,8 +7,8 @@ export const createMessagesTableMutation = `
 		content TEXT NOT NULL,
 
 		PRIMARY KEY (chat_id, author_id),
-		CONSTRAINT fk_messages_chat_id FOREIGN KEY(chat_id) REFERENCES chats(id),
-		CONSTRAINT fk_messages_author_id FOREIGN KEY(author_id) REFERENCES users(id)
+		CONSTRAINT fk_messages_chat_id FOREIGN KEY(chat_id) REFERENCES chats(id) ON DELETE CASCADE,
+		CONSTRAINT fk_messages_author_id FOREIGN KEY(author_id) REFERENCES users(id) ON DELETE CASCADE
 	);
 
 	CREATE INDEX IF NOT EXISTS idx_messages_chat_id ON messages(chat_id);

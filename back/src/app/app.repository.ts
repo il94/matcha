@@ -1,7 +1,5 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
 import { BadRequestException, ForbiddenException } from "@/lib/HttpException"
-import { GetObjectCommand } from "@aws-sdk/client-s3"
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import convertObjectKeysToCamelCase from "@/lib/convertObjectKeysToCamelCase"
 import * as appQueries from "@/db/queries/app"
 import { isPGError, PGException } from "@/lib/PGException"
@@ -17,21 +15,17 @@ import { PoolClient } from "pg"
 
 class appRepository {
 	private db
-	private s3
-
-	private S3_IMAGES_DURATION = 15 * 60
 
 	constructor(app: FastifyInstance, options: FastifyPluginOptions) {
 		this.db = app.pg
-		this.s3 = app.s3
 	}
 
 	/* ============ Users ============ */
 
 	async createUser(
-		userData: Omit<
+		userData: Pick<
 			UserData,
-			"id" | "createdAt" | "sessionId" | "pictures" | "tags"
+			"email" | "firstName" | "lastName" | "username" | "password"
 		>,
 		transact?: PoolClient,
 	): Promise<UserData["id"]> {
@@ -44,14 +38,6 @@ class appRepository {
 				userData.lastName,
 				userData.username,
 				userData.email,
-				userData.birthDate,
-				userData.sexualOrientation,
-				userData.gender,
-				userData.bio,
-				userData.elo,
-				userData.views,
-				userData.matchs,
-				userData.dates,
 			])
 
 			const [user] = convertObjectKeysToCamelCase(result.rows)
@@ -71,19 +57,6 @@ class appRepository {
 		nextPage: number | null
 	}> {
 		const result = await this.db.query(appQueries.getUsersQuery, [page, limit])
-
-		for (const user of result.rows) {
-			user.pictures = []
-			for (const pictureName of user.picture_names) {
-				// TODO Décommenter cette partie quand il y aura de vrais users
-				// const s3Url = await this.getS3Url(pictureName)
-				// user.pictures.push(s3Url)
-
-				// TODO Temporaire pour fake users
-				user.pictures.push(pictureName)
-			}
-			delete user.picture_names
-		}
 
 		const users = convertObjectKeysToCamelCase(result.rows)
 		const nextPage = result.rows.length >= limit ? page + 1 : null
@@ -114,7 +87,7 @@ class appRepository {
 
 	async getUserByUsername(
 		username: UserData["username"],
-	): Promise<Pick<UserData, "id" | "password" | "sessionId">> {
+	): Promise<Pick<UserData, "id" | "password" | "sessionId" | "completed">> {
 		const result = await this.db.query(appQueries.getUserByUsernameQuery, [
 			username,
 		])
@@ -152,6 +125,13 @@ class appRepository {
 		return chat
 	}
 
+	async isUserCompleted(userId: UserData["id"]): Promise<boolean> {
+		const result = await this.db.query(appQueries.isUserCompleted, [userId])
+
+		const [user] = result.rows
+		return user.completed
+	}
+
 	async getTags(): Promise<TagData[]> {
 		const result = await this.db.query(appQueries.getTagsQuery)
 
@@ -159,21 +139,43 @@ class appRepository {
 		return tags
 	}
 
-	async getS3Url(pictureName: string) {
-		const s3Url = await getSignedUrl(
-			this.s3,
-			new GetObjectCommand({
-				Bucket: process.env.AWS_BUCKET_NAME,
-				Key: pictureName,
-			}),
-			{ expiresIn: this.S3_IMAGES_DURATION },
-		)
-
-		return s3Url
-	}
-
 	async activateUser(userId: UserData["id"], sessionId: UserData["sessionId"]) {
 		await this.db.query(appQueries.activateUserMutation, [userId, sessionId])
+	}
+
+	async completeUser(
+		userData: Pick<
+			UserData,
+			| "id"
+			| "sessionId"
+			| "birthDate"
+			| "gender"
+			| "sexualOrientation"
+			| "bio"
+			| "pictures"
+			| "tags"
+		>,
+	) {
+		await this.db.transact(async (transact) => {
+			await transact.query(appQueries.completeUserMutation, [
+				userData.id,
+				userData.sessionId,
+				userData.birthDate,
+				userData.gender,
+				userData.sexualOrientation,
+				userData.bio,
+			])
+
+			await transact.query(appQueries.createPicturesMutation, [
+				userData.id,
+				userData.pictures,
+			])
+
+			await transact.query(appQueries.createUserTagsMutation, [
+				userData.id,
+				userData.tags,
+			])
+		})
 	}
 
 	async updateUserSessionId(
@@ -184,6 +186,10 @@ class appRepository {
 			userId,
 			sessionId,
 		])
+	}
+
+	async deleteUser(userId: UserData["id"]) {
+		await this.db.query(appQueries.deleteUserMutation, [userId])
 	}
 }
 

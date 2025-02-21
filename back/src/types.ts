@@ -37,9 +37,10 @@ declare global {
 		dates: number
 
 		activated: boolean
+		completed: boolean
 
-		pictures: string[]
-		tags: TagData[]
+		pictures: PictureData["name"][]
+		tags: TagData["id"][]
 	}
 
 	type PictureData = {

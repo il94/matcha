@@ -1,5 +1,7 @@
 import { FastifyRouteSchema } from "@/fastify.types"
 import { stringIdParam } from "./app.schemas-utils"
+import SexualOrientation from "@/data/SexualOrientation"
+import Gender from "@/data/Gender"
 
 // TODO check les params de validation
 
@@ -46,17 +48,6 @@ export const register = {
 			lastName: { type: "string", minLength: 1, maxLength: 64 },
 			username: { type: "string", minLength: 1, maxLength: 32 },
 			email: { type: "string", minLength: 1, maxLength: 256, format: "email" },
-
-			birthDate: { type: "string", format: "date" },
-			sexualOrientation: { type: "string" }, // TODO
-			gender: { type: "string", default: null }, // TODO
-			bio: { type: "string", default: null },
-			elo: { type: "number", minimum: 0, maximum: 1000, default: 0 },
-			views: { type: "number", minimum: 0, default: 0 },
-			matchs: { type: "number", minimum: 0, default: 0 },
-			dates: { type: "number", minimum: 0, default: 0 },
-
-			activated: { type: "boolean", default: false },
 		},
 		required: ["email", "firstName", "lastName", "username", "password"],
 	},
@@ -69,5 +60,27 @@ export const activate = {
 			token: { type: "string" },
 		},
 		required: ["token"],
+	},
+} as const satisfies FastifyRouteSchema
+
+export const complete = {
+	body: {
+		type: "object",
+		properties: {
+			birthDate: { type: "string", format: "date", adult: true },
+			gender: { type: "string", enum: Object.values(Gender) },
+			sexualOrientation: {
+				type: "string",
+				enum: Object.values(SexualOrientation),
+			},
+			tags: { type: "string", pattern: "^(\\[\\d+(?:,\\s*\\d+)*\\]|\\[\\])$" },
+			bio: { type: "string", maxLength: 256 },
+			principalPicture: { type: "object" },
+			secondaryPicture1: { type: "object" },
+			secondaryPicture2: { type: "object" },
+			secondaryPicture3: { type: "object" },
+			secondaryPicture4: { type: "object" },
+		},
+		required: ["birthDate", "gender", "sexualOrientation", "tags", "bio"],
 	},
 } as const satisfies FastifyRouteSchema

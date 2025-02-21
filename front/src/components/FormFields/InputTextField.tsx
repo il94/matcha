@@ -5,12 +5,12 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
-} from "./ui/form"
-import { Input } from "./ui/input"
+} from "../ui/form"
+import { Input } from "../ui/input"
 import { InputHTMLAttributes, useState } from "react"
 import { cn } from "@/lib/utils"
 import { EyeClosedIcon, EyeIcon } from "lucide-react"
-import { Button } from "./ui/button"
+import { Button } from "../ui/button"
 
 type FieldProps<T extends FieldValues> =
 	InputHTMLAttributes<HTMLInputElement> & {
@@ -20,7 +20,7 @@ type FieldProps<T extends FieldValues> =
 		description?: string
 	}
 
-export default function Field<T extends FieldValues>({
+export default function InputTextField<T extends FieldValues>({
 	control,
 	name,
 	label,

@@ -22,9 +22,14 @@ const appPublicController: FastifyPluginAsync = async (app, options) => {
 		async (request, reply) => {
 			const { username, password } = request.body
 
-			const sessionId = await service.login(username, password)
+			const { sessionId, isCompleting } = await service.login(
+				username,
+				password,
+			)
 
-			return reply.setCookie("sessionId", sessionId).send()
+			return reply
+				.setCookie(isCompleting ? "tempSessionId" : "sessionId", sessionId)
+				.send()
 		},
 	)
 
@@ -39,10 +44,12 @@ const appPublicController: FastifyPluginAsync = async (app, options) => {
 	)
 
 	app.get("/verify", async (request) => {
-		return service.verify(request.cookies.sessionId)
+		const { sessionId, tempSessionId } = request.cookies
+
+		return service.verify(sessionId, tempSessionId)
 	})
 
-	app.put<InferSchema<typeof schemas.activate>>(
+	app.get<InferSchema<typeof schemas.activate>>(
 		"/activate",
 		{ schema: schemas.activate },
 		async (request, reply) => {
@@ -51,7 +58,7 @@ const appPublicController: FastifyPluginAsync = async (app, options) => {
 			const sessionId = await service.activate(token)
 
 			return reply
-				.setCookie("sessionId", sessionId)
+				.setCookie("tempSessionId", sessionId)
 				.redirect(process.env.API_FRONT_URL!)
 				.send()
 		},

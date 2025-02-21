@@ -1,4 +1,4 @@
-import Field from "@/components/Field"
+import InputTextField from "@/components/FormFields/InputTextField"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { Link } from "react-router"
@@ -15,6 +15,7 @@ import {
 	DialogDescription,
 	DialogFooter,
 	DialogHeader,
+	DialogTitle,
 } from "@/components/ui/dialog"
 
 // TODO voir si besoin d'interdire des chars
@@ -110,7 +111,6 @@ export default function RegisterPage() {
 
 	const onSubmit = useCallback(
 		(values: z.infer<typeof formSchema>) => {
-			console.log({ values })
 			registerMutation(values)
 		},
 		[registerMutation],
@@ -127,32 +127,32 @@ export default function RegisterPage() {
 				>
 					<h1 className="text-6xl">Register</h1>
 					<div className="flex w-full flex-col gap-6">
-						<Field
+						<InputTextField
 							control={form.control}
 							type="email"
 							name="email"
 							placeholder="Email"
 							className="h-12"
 						/>
-						<Field
+						<InputTextField
 							control={form.control}
 							name="firstName"
 							placeholder="First name"
 							className="h-12"
 						/>
-						<Field
+						<InputTextField
 							control={form.control}
 							name="lastName"
 							placeholder="Last name"
 							className="h-12"
 						/>
-						<Field
+						<InputTextField
 							control={form.control}
 							name="username"
 							placeholder="Username"
 							className="h-12"
 						/>
-						<Field
+						<InputTextField
 							control={form.control}
 							type="password"
 							name="password"
@@ -183,7 +183,9 @@ export default function RegisterPage() {
 			</Form>
 			<Dialog open={!!isRegistered} onOpenChange={() => setIsRegistered("")}>
 				<DialogContent>
-					<DialogHeader>Check Your Inbox, Cupid's Calling !</DialogHeader>
+					<DialogHeader>
+						<DialogTitle>Check Your Inbox, Cupid's Calling !</DialogTitle>
+					</DialogHeader>
 					<DialogDescription>
 						We've sent a little something to{" "}
 						<span className="font-semibold text-secondary">{isRegistered}</span>
