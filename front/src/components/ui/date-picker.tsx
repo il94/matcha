@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select"
 import { DayPicker } from "react-day-picker"
 import dayjs from "dayjs"
+import { PopoverClose } from "@radix-ui/react-popover"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
 	placeholder?: string
@@ -122,26 +123,28 @@ export function DatePicker({
 						</SelectContent>
 					</Select>
 				</div>
-				<Calendar
-					mode="single"
-					selected={date}
-					month={new Date(year, month)}
-					onMonthChange={(newMonth) => {
-						setMonth(newMonth.getMonth())
-						setYear(newMonth.getFullYear())
-					}}
-					initialFocus
-					showOutsideDays={showOutsideDays}
-					className={cn("p-3")}
-					onSelect={(date) => {
-						if (date) {
-							setMonth(date.getMonth())
-							setYear(date.getFullYear())
-						}
-						setDate(date)
-						onSelect(date)
-					}}
-				/>
+				<PopoverClose>
+					<Calendar
+						mode="single"
+						selected={date}
+						month={new Date(year, month)}
+						onMonthChange={(newMonth) => {
+							setMonth(newMonth.getMonth())
+							setYear(newMonth.getFullYear())
+						}}
+						initialFocus
+						showOutsideDays={showOutsideDays}
+						className={cn("p-3")}
+						onSelect={(date) => {
+							if (date) {
+								setMonth(date.getMonth())
+								setYear(date.getFullYear())
+							}
+							setDate(date)
+							onSelect(date)
+						}}
+					/>
+				</PopoverClose>
 			</PopoverContent>
 		</Popover>
 	)
