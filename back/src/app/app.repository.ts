@@ -150,15 +150,10 @@ class appRepository {
 	async completeUser(
 		userData: Pick<
 			UserData,
-			| "id"
-			| "sessionId"
-			| "birthDate"
-			| "gender"
-			| "sexualOrientation"
-			| "bio"
-			| "tags"
+			"id" | "sessionId" | "birthDate" | "gender" | "sexualOrientation" | "bio"
 		>,
 		pictureNames: PictureData["name"][],
+		tagIds: TagData["id"][],
 	) {
 		await this.db.transact(async (transact) => {
 			await transact.query(appQueries.completeUserMutation, [
@@ -177,6 +172,11 @@ class appRepository {
 					i === 0,
 				])
 			}
+
+			await transact.query(appQueries.createUserTagsMutation, [
+				userData.id,
+				tagIds,
+			])
 		})
 	}
 

@@ -40,7 +40,6 @@ const appController: FastifyPluginAsync = async (app, options) => {
 					gender,
 					sexualOrientation,
 					bio,
-					tags: JSON.parse(tags),
 				},
 				[
 					principalPicture as unknown as Buffer,
@@ -49,6 +48,7 @@ const appController: FastifyPluginAsync = async (app, options) => {
 					secondaryPicture3 as unknown as Buffer,
 					secondaryPicture4 as unknown as Buffer,
 				].filter(Boolean),
+				JSON.parse(tags),
 			)
 
 			return reply

@@ -196,15 +196,10 @@ class appService {
 	async complete(
 		userData: Pick<
 			UserData,
-			| "id"
-			| "sessionId"
-			| "birthDate"
-			| "gender"
-			| "sexualOrientation"
-			| "bio"
-			| "tags"
+			"id" | "sessionId" | "birthDate" | "gender" | "sexualOrientation" | "bio"
 		>,
 		picturesBuffer: Buffer[],
+		tagIds: TagData["id"][],
 	) {
 		const sessionId = randomUUID()
 
@@ -218,6 +213,7 @@ class appService {
 					sessionId,
 				},
 				pictureNames,
+				tagIds,
 			)
 			await this.redisService.deleteCompletingSession(userData.sessionId)
 
