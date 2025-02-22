@@ -9,9 +9,10 @@ import ReactQueryProvider from "./providers/ReactQueryProvider"
 import LoginPage from "./views/mobile/login"
 import RegisterPage from "./views/mobile/register"
 import PublicRoute from "./PublicRoute"
-import ProtectedRoute from "./ProtectedRoute"
+import PrivateRoute from "./PrivateRoute"
 import CompletePage from "./views/mobile/complete"
-import TempProtectedRoute from "./TempProtectedRoute"
+import ResetPage from "./views/mobile/reset"
+import ProtectedRoute from "./ProtectedRoute"
 
 /*
 	TODO
@@ -34,10 +35,11 @@ function App() {
 							<Route path="register" element={<RegisterPage />} />
 							<Route index element={<LoginPage />} />
 						</Route>
-						<Route element={<TempProtectedRoute />}>
+						<Route element={<ProtectedRoute />}>
+							<Route path="reset" element={<ResetPage />} />
 							<Route path="complete" element={<CompletePage />} />
 						</Route>
-						<Route element={<ProtectedRoute />}>
+						<Route element={<PrivateRoute />}>
 							<Route element={<MobileLayout />}>
 								<Route path="home" element={<HomePage />} />
 								<Route path="profile" element={<ProfilePage />} />

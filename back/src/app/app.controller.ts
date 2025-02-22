@@ -18,7 +18,7 @@ const appController: FastifyPluginAsync = async (app, options) => {
 		async (request, reply) => {
 			if (!request.isMultipart) throw new BadRequestException()
 
-			const { tempSessionId, userId } = request
+			const { completingSessionId, userId } = request
 			const {
 				birthDate,
 				gender,
@@ -35,7 +35,7 @@ const appController: FastifyPluginAsync = async (app, options) => {
 			const sessionId = await service.complete(
 				{
 					id: userId,
-					sessionId: tempSessionId,
+					sessionId: completingSessionId,
 					birthDate,
 					gender,
 					sexualOrientation,
@@ -53,16 +53,19 @@ const appController: FastifyPluginAsync = async (app, options) => {
 
 			return reply
 				.setCookie("sessionId", sessionId)
-				.clearCookie("tempSessionId")
+				.clearCookie("completingSessionId")
 				.send()
 		},
 	)
 
 	app.delete("/logout", async (request, reply) => {
-		const { sessionId, tempSessionId, userId } = request
+		const { sessionId, completingSessionId, userId } = request
 
-		await service.logout(sessionId, tempSessionId, userId)
-		return reply.clearCookie("sessionId").clearCookie("tempSessionId").send()
+		await service.logout(sessionId, completingSessionId, userId)
+		return reply
+			.clearCookie("sessionId")
+			.clearCookie("completingSessionId")
+			.send()
 	})
 
 	/* ============ Users ============ */

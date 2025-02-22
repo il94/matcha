@@ -8,15 +8,7 @@ import Gender from "@/data/Gender"
 export const userIdParam = stringIdParam("userId")
 export const chatIdParam = stringIdParam("chatId")
 
-export const getUsers = {
-	querystring: {
-		type: "object",
-		properties: {
-			page: { type: "number", default: 1 },
-			limit: { type: "number", default: 5 },
-		},
-	},
-} as const satisfies FastifyRouteSchema
+/* ============= PUBLIC CONTROLLER ============= */
 
 export const login = {
 	body: {
@@ -53,7 +45,7 @@ export const register = {
 	},
 } as const satisfies FastifyRouteSchema
 
-export const forgotPassword = {
+export const forgot = {
 	body: {
 		type: "object",
 		properties: {
@@ -70,6 +62,48 @@ export const activate = {
 			token: { type: "string" },
 		},
 		required: ["token"],
+	},
+} as const satisfies FastifyRouteSchema
+
+export const reset = {
+	querystring: {
+		type: "object",
+		properties: {
+			token: { type: "string" },
+		},
+		required: ["token"],
+	},
+} as const satisfies FastifyRouteSchema
+
+export const resetPassword = {
+	body: {
+		type: "object",
+		properties: {
+			password: {
+				type: "string",
+				minLength: 8,
+				maxLength: 128,
+				allOf: [
+					{ pattern: "[a-z]" },
+					{ pattern: "[A-Z]" },
+					{ pattern: "[0-9]" },
+					{ pattern: '[!@#$%^&*(),.?":{}|<>]' },
+				],
+			},
+		},
+		required: ["password"],
+	},
+} as const satisfies FastifyRouteSchema
+
+/* ============= PRIVATE CONTROLLER ============= */
+
+export const getUsers = {
+	querystring: {
+		type: "object",
+		properties: {
+			page: { type: "number", default: 1 },
+			limit: { type: "number", default: 5 },
+		},
 	},
 } as const satisfies FastifyRouteSchema
 

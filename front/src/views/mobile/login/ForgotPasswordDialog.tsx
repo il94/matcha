@@ -9,7 +9,7 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog"
 import { Form, FormMessage } from "@/components/ui/form"
-import forgotPassword from "@/services/forgotPassword"
+import forgot from "@/services/forgot"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useCallback, useState } from "react"
@@ -42,8 +42,8 @@ export default function ForgotPasswordDialog({
 		mode: "onTouched",
 	})
 
-	const { mutate: forgotPasswordMutation } = useMutation({
-		mutationFn: forgotPassword,
+	const { mutate: forgotMutation } = useMutation({
+		mutationFn: forgot,
 		onSuccess: (data, params) => {
 			setIsSent(params.email)
 		},
@@ -60,9 +60,9 @@ export default function ForgotPasswordDialog({
 
 	const onSubmit = useCallback(
 		(values: z.infer<typeof formSchema>) => {
-			forgotPasswordMutation(values)
+			forgotMutation(values)
 		},
-		[forgotPasswordMutation],
+		[forgotMutation],
 	)
 
 	const error = Object.values(form.formState.errors ?? [])[0]?.message ?? " "

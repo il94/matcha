@@ -11,7 +11,7 @@ const schedulerPlugin: FastifyPluginAsync = async (app, options) => {
 
 		const deletedUsers = result.rows
 
-		console.log("Deleted inactive users", deletedUsers)
+		console.warn("Deleted inactive users", deletedUsers)
 	})
 
 	const cronJob = new CronJob(

@@ -13,7 +13,7 @@ import { FormMessage } from "@/components/ui/form"
 import Gender from "@/data/Gender"
 import SexualOrientation from "@/data/SexualOrientation"
 import dayjs from "@/lib/dayjs"
-import useAuth from "@/hooks/useAuth"
+import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 
 export const formSchema = z.object({
 	birthDate: z
@@ -49,7 +49,7 @@ export const formSchema = z.object({
 })
 
 export default function CompletePage() {
-	const { logout } = useAuth()
+	const { logout } = useAuthOutletContext()
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -80,7 +80,6 @@ export default function CompletePage() {
 
 	const onSubmit = useCallback(
 		(values: z.infer<typeof formSchema>) => {
-			console.log("values", values)
 			completeMutation(values)
 		},
 		[completeMutation],
@@ -89,8 +88,6 @@ export default function CompletePage() {
 	const error = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
 
 	const watched = form.watch()
-
-	console.log("watched", watched.birthDate)
 
 	return (
 		<main className="h-dvh">
@@ -128,7 +125,7 @@ export default function CompletePage() {
 							{currentStep < 3 ? "Next" : "Submit"}
 						</Button>
 						<Button
-							onClick={() => logout()}
+							onClick={logout}
 							type="button"
 							variant="darkLink"
 							className="hover:text-destructive/70"

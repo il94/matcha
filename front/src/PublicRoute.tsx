@@ -2,10 +2,12 @@ import useAuth from "./hooks/useAuth"
 import { Navigate, Outlet } from "react-router"
 
 export default function PublicRoute() {
-	const { isAuthenticated, isPending } = useAuth()
+	const { isAuthenticated, isCompleting, isReseting, isPending } = useAuth()
 
 	if (isPending) return <div>Loading...</div> // TODO Loader
 
+	if (isCompleting) return <Navigate to="/complete" />
+	if (isReseting) return <Navigate to="/reset" />
 	if (isAuthenticated) return <Navigate to="/home" />
 
 	return <Outlet />

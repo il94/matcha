@@ -44,7 +44,7 @@ const formSchema = z.object({
 		)
 		.refine((password) => /[a-z]/.test(password), {
 			message:
-				"Without a lowercase letter, your password feels a bit incomplete, doesn't it?",
+				"Without a lowercase letter, your password feels a bit incomplete, doesn't it ?",
 		})
 		.refine((password) => /[A-Z]/.test(password), {
 			message:

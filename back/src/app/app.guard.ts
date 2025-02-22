@@ -2,7 +2,7 @@ import { preHandlerAsyncHookHandler } from "fastify"
 import { UnauthorizedException } from "../lib/HttpException"
 
 const appGuard: preHandlerAsyncHookHandler = async (request, reply) => {
-	const { sessionId, tempSessionId } = request.cookies
+	const { sessionId, completingSessionId } = request.cookies
 
 	let userId
 
@@ -12,12 +12,14 @@ const appGuard: preHandlerAsyncHookHandler = async (request, reply) => {
 		if (!userId) throw new UnauthorizedException()
 
 		request.sessionId = sessionId
-	} else if (tempSessionId) {
-		userId = await request.server.redis.get(`tempSession:${tempSessionId}`)
+	} else if (completingSessionId) {
+		userId = await request.server.redis.get(
+			`completingSession:${completingSessionId}`,
+		)
 
 		if (!userId) throw new UnauthorizedException()
 
-		request.tempSessionId = tempSessionId
+		request.completingSessionId = completingSessionId
 	} else throw new UnauthorizedException()
 
 	request.userId = userId

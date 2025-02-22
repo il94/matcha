@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button"
-import useAuth from "@/hooks/useAuth"
+import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 import { BellIcon, LogOutIcon, Settings2Icon } from "lucide-react"
 
 export default function HeaderNavbar() {
-	const { logout } = useAuth()
+	const { logout } = useAuthOutletContext()
 
 	return (
 		<nav className="flex h-12 shrink-0 items-center justify-between bg-primary px-3">
@@ -18,12 +18,7 @@ export default function HeaderNavbar() {
 				<Button size="icon" variant="ghost" className="size-6">
 					<Settings2Icon className="text-black" />
 				</Button>
-				<Button
-					onClick={() => logout()}
-					size="icon"
-					variant="ghost"
-					className="size-6"
-				>
+				<Button onClick={logout} size="icon" variant="ghost" className="size-6">
 					<LogOutIcon className="text-black" />
 				</Button>
 			</div>

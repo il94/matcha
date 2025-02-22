@@ -48,7 +48,7 @@ class appService {
 		try {
 			if (user.completed)
 				await this.redisService.createSession(user.id, sessionId)
-			else await this.redisService.createTempSession(user.id, sessionId)
+			else await this.redisService.createCompletingSession(user.id, sessionId)
 			await this.repository.updateUserSessionId(user.id, sessionId)
 
 			return {
@@ -78,13 +78,7 @@ class appService {
 		let userId: UserData["id"] = ""
 
 		try {
-			userId = await this.repository.createUser({
-				email: userData.email,
-				firstName: capitalize(userData.firstName),
-				lastName: capitalize(userData.lastName),
-				username: userData.username,
-				password: await bcrypt.hash(userData.password, 10),
-			})
+			userId = await this.repository.createUser(userData)
 
 			await this.redisService.createActivationToken(userId, token)
 			await this.mailerService.sendActivationEmail(
@@ -99,7 +93,7 @@ class appService {
 		}
 	}
 
-	async forgotPassword(email: UserData["email"]) {
+	async forgot(email: UserData["email"]) {
 		const user = await this.repository.getUserByEmail(email)
 
 		if (!user) return
@@ -116,11 +110,13 @@ class appService {
 
 	async verify(
 		sessionId?: UserData["sessionId"],
-		tempSessionId?: UserData["sessionId"],
+		completingSessionId?: UserData["sessionId"],
+		resetingSessionId?: UserData["sessionId"],
 	): Promise<{
 		userId: UserData["id"]
-		isAuthenticated: boolean
+		isAuthenticated?: boolean
 		isCompleting?: boolean
+		isReseting?: boolean
 	}> {
 		if (sessionId) {
 			const userId = await this.redisService.getSession(sessionId)
@@ -131,16 +127,26 @@ class appService {
 				userId,
 				isAuthenticated: true,
 			}
-		} else if (tempSessionId) {
-			const userId = await this.redisService.getTempSession(tempSessionId)
+		} else if (completingSessionId) {
+			const userId =
+				await this.redisService.getCompletingSession(completingSessionId)
 
-			if (!userId || (await this.repository.isUserCompleted(userId)))
+			if (!userId || (await this.repository.isUserCompletedQuery(userId)))
 				throw new UnauthorizedException()
 
 			return {
 				userId,
-				isAuthenticated: true,
 				isCompleting: true,
+			}
+		} else if (resetingSessionId) {
+			const userId =
+				await this.redisService.getResetingSession(resetingSessionId)
+
+			if (!userId) throw new UnauthorizedException()
+
+			return {
+				userId,
+				isReseting: true,
 			}
 		}
 
@@ -152,12 +158,37 @@ class appService {
 
 		if (!userId) throw new BadRequestException()
 
-		const sessionId = await this.redisService.createTempSession(userId)
+		const sessionId = await this.redisService.createCompletingSession(userId)
 
 		await this.repository.activateUser(userId, sessionId)
 		await this.redisService.deleteActivationToken(token)
 
 		return sessionId
+	}
+
+	async reset(token: string) {
+		const userId = await this.redisService.getResetPasswordToken(token)
+
+		if (!userId) throw new BadRequestException()
+
+		const sessionId = await this.redisService.createResetingSession(userId)
+
+		await this.repository.activateUser(userId, sessionId)
+		await this.redisService.deleteResetPasswordToken(token)
+
+		return sessionId
+	}
+
+	async resetPassword(
+		sessionId: UserData["sessionId"],
+		newPassword: UserData["password"],
+	) {
+		const userId = await this.redisService.getResetingSession(sessionId)
+
+		if (!userId) throw new UnauthorizedException()
+
+		await this.repository.updateUserPassword(userId, newPassword)
+		await this.redisService.deleteResetingSession(sessionId)
 	}
 
 	/* ============= PRIVATE CONTROLLER ============= */
@@ -188,7 +219,7 @@ class appService {
 				},
 				pictureNames,
 			)
-			await this.redisService.deleteTempSession(userData.sessionId)
+			await this.redisService.deleteCompletingSession(userData.sessionId)
 
 			return sessionId
 		} catch (error) {
@@ -198,14 +229,20 @@ class appService {
 		}
 	}
 
+	async publicLogout(resetingSessionId?: UserData["sessionId"]) {
+		if (!resetingSessionId) throw new UnauthorizedException()
+
+		await this.redisService.deleteResetingSession(resetingSessionId)
+	}
+
 	async logout(
 		sessionId: NonNullable<UserData["sessionId"]>,
-		tempSessionId: NonNullable<UserData["sessionId"]>,
+		completingSessionId: NonNullable<UserData["sessionId"]>,
 		userId: UserData["id"],
 	) {
 		await this.repository.updateUserSessionId(userId, null)
 		await this.redisService.deleteSession(sessionId)
-		await this.redisService.deleteTempSession(tempSessionId)
+		await this.redisService.deleteCompletingSession(completingSessionId)
 	}
 
 	/* ============ Users ============ */

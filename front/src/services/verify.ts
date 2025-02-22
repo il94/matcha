@@ -4,6 +4,7 @@ type verifyReturn = {
 	userId: User["id"]
 	isAuthenticated: boolean
 	isCompleting?: boolean
+	isReseting?: boolean
 }
 
 export default async function verify() {

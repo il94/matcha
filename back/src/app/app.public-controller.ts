@@ -1,8 +1,8 @@
 import { FastifyPluginAsync } from "fastify"
 import appService from "@/app/app.service"
-import { BadRequestException } from "@/lib/HttpException"
 import * as schemas from "@/app/app.schemas"
 import { InferSchema } from "@/types"
+import { UnauthorizedException } from "@/lib/HttpException"
 
 const appPublicController: FastifyPluginAsync = async (app, options) => {
 	const service = new appService(app, options)
@@ -28,7 +28,10 @@ const appPublicController: FastifyPluginAsync = async (app, options) => {
 			)
 
 			return reply
-				.setCookie(isCompleting ? "tempSessionId" : "sessionId", sessionId)
+				.setCookie(
+					isCompleting ? "completingSessionId" : "sessionId",
+					sessionId,
+				)
 				.send()
 		},
 	)
@@ -43,20 +46,27 @@ const appPublicController: FastifyPluginAsync = async (app, options) => {
 		},
 	)
 
-	app.post<InferSchema<typeof schemas.forgotPassword>>(
-		"/forgot-password",
-		{ schema: schemas.forgotPassword },
+	app.post<InferSchema<typeof schemas.forgot>>(
+		"/forgot",
+		{ schema: schemas.forgot },
 		async (request) => {
 			const { email } = request.body
 
-			return service.forgotPassword(email)
+			return service.forgot(email)
 		},
 	)
 
 	app.get("/verify", async (request) => {
-		const { sessionId, tempSessionId } = request.cookies
+		const { sessionId, completingSessionId, resetingSessionId } =
+			request.cookies
 
-		return service.verify(sessionId, tempSessionId)
+		const result = await service.verify(
+			sessionId,
+			completingSessionId,
+			resetingSessionId,
+		)
+
+		return result
 	})
 
 	app.get<InferSchema<typeof schemas.activate>>(
@@ -68,11 +78,50 @@ const appPublicController: FastifyPluginAsync = async (app, options) => {
 			const sessionId = await service.activate(token)
 
 			return reply
-				.setCookie("tempSessionId", sessionId)
+				.setCookie("completingSessionId", sessionId)
 				.redirect(process.env.API_FRONT_URL!)
 				.send()
 		},
 	)
+
+	app.get<InferSchema<typeof schemas.reset>>(
+		"/reset",
+		{ schema: schemas.reset },
+		async (request, reply) => {
+			const { token } = request.query
+
+			const sessionId = await service.reset(token)
+
+			return reply
+				.setCookie("resetingSessionId", sessionId, {
+					maxAge: parseInt(process.env.COOKIE_RESET_MAX_AGE!),
+				})
+				.redirect(process.env.API_FRONT_URL!)
+				.send()
+		},
+	)
+
+	app.patch<InferSchema<typeof schemas.resetPassword>>(
+		"/reset-password",
+		{ schema: schemas.resetPassword },
+		async (request, reply) => {
+			const { resetingSessionId } = request.cookies
+			const { password } = request.body
+
+			if (!resetingSessionId) throw new UnauthorizedException()
+
+			await service.resetPassword(resetingSessionId, password)
+
+			return reply.clearCookie("resetingSessionId").send()
+		},
+	)
+
+	app.delete("/public-logout", async (request, reply) => {
+		const { resetingSessionId } = request.cookies
+
+		await service.publicLogout(resetingSessionId)
+		return reply.clearCookie("resetingSessionId").send()
+	})
 }
 
 export default appPublicController

@@ -6,6 +6,8 @@ class redisService {
 
 	private SESSION_DURATION = 3600 * 24 * 30
 	private TOKEN_DURATION = 3600 * 24
+	private RESETING_SESSION_DURATION = 900
+	private RESET_TOKEN_DURATION = 900
 
 	constructor(app: FastifyInstance, options: FastifyPluginOptions) {
 		this.redis = app.redis
@@ -27,20 +29,36 @@ class redisService {
 		return sessionId
 	}
 
-	async createTempSession(
+	async createCompletingSession(
 		userId: UserData["id"],
 		defaultSessionId?: UserData["sessionId"],
 	): Promise<NonNullable<UserData["sessionId"]>> {
-		const tempSessionId = defaultSessionId ?? randomUUID()
+		const completingSessionId = defaultSessionId ?? randomUUID()
 
 		await this.redis.set(
-			`tempSession:${tempSessionId}`,
+			`completingSession:${completingSessionId}`,
 			userId,
 			"EX",
 			this.SESSION_DURATION,
 		)
 
-		return tempSessionId
+		return completingSessionId
+	}
+
+	async createResetingSession(
+		userId: UserData["id"],
+		defaultSessionId?: UserData["sessionId"],
+	): Promise<NonNullable<UserData["sessionId"]>> {
+		const sessionId = defaultSessionId ?? randomUUID()
+
+		await this.redis.set(
+			`resetingSession:${sessionId}`,
+			userId,
+			"EX",
+			this.RESETING_SESSION_DURATION,
+		)
+
+		return sessionId
 	}
 
 	async createActivationToken(userId: UserData["id"], defaultToken?: string) {
@@ -66,7 +84,7 @@ class redisService {
 			`resetPassword:${token}`,
 			userId,
 			"EX",
-			this.TOKEN_DURATION,
+			this.RESET_TOKEN_DURATION,
 		)
 
 		return token
@@ -76,25 +94,37 @@ class redisService {
 		return this.redis.get(`session:${sessionId}`)
 	}
 
-	async getTempSession(tempSessionId: UserData["sessionId"]) {
-		return this.redis.get(`tempSession:${tempSessionId}`)
+	async getCompletingSession(sessionId: UserData["sessionId"]) {
+		return this.redis.get(`completingSession:${sessionId}`)
+	}
+
+	async getResetingSession(sessionId: UserData["sessionId"]) {
+		return this.redis.get(`resetingSession:${sessionId}`)
 	}
 
 	async getActivationToken(token: string) {
 		return this.redis.get(`activation:${token}`)
 	}
 
+	async getResetPasswordToken(token: string) {
+		return this.redis.get(`resetPassword:${token}`)
+	}
+
 	async deleteSession(sessionId: UserData["sessionId"]) {
 		await this.redis.del(`session:${sessionId}`)
 	}
 
-	async deleteTempSession(tempSessionId: UserData["sessionId"]) {
-		await this.redis.del(`tempSession:${tempSessionId}`)
+	async deleteCompletingSession(sessionId: UserData["sessionId"]) {
+		await this.redis.del(`completingSession:${sessionId}`)
+	}
+
+	async deleteResetingSession(sessionId: UserData["sessionId"]) {
+		await this.redis.del(`resetingSession:${sessionId}`)
 	}
 
 	async deleteAllSession(sessionId: UserData["sessionId"]) {
 		await this.deleteSession(sessionId)
-		await this.deleteTempSession(sessionId)
+		await this.deleteCompletingSession(sessionId)
 	}
 
 	async deleteActivationToken(token: string) {

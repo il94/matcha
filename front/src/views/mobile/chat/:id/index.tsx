@@ -8,7 +8,7 @@ import useId from "@/hooks/useId"
 import { useQuery } from "@tanstack/react-query"
 import { useNavigate } from "react-router"
 import getUserChatConversation from "@/services/getUserChatConversation"
-import useAuth from "@/hooks/useAuth"
+import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 
 type ChatDateProps = {
 	date: string
@@ -57,7 +57,7 @@ function ChatSender({ avatar, children }: ChatSenderProps) {
 }
 
 export default function ChatIdPage() {
-	const { userId } = useAuth()
+	const { userId } = useAuthOutletContext()
 	const chatId = useId()
 
 	const {

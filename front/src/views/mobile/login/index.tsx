@@ -83,6 +83,7 @@ export default function LoginPage() {
 						<div>
 							<InputTextField
 								control={form.control}
+								type="password"
 								name="password"
 								placeholder="Password"
 								className="h-12"

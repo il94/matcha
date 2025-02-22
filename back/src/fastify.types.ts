@@ -7,7 +7,8 @@ import { Transporter } from "nodemailer"
 declare module "fastify" {
 	interface FastifyRequest {
 		sessionId: string
-		tempSessionId: string
+		completingSessionId: string
+		resetingSessionId: string
 		userId: string
 	}
 

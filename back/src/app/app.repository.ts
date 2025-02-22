@@ -4,6 +4,8 @@ import convertObjectKeysToCamelCase from "@/lib/convertObjectKeysToCamelCase"
 import * as appQueries from "@/db/queries/app"
 import { isPGError, PGException } from "@/lib/PGException"
 import { PoolClient } from "pg"
+import bcrypt from "bcrypt"
+import capitalize from "@/lib/capitalize"
 
 /*
 	TODO
@@ -33,9 +35,9 @@ class appRepository {
 			const executor = transact || this.db
 
 			const result = await executor.query(appQueries.createUserMutation, [
-				userData.password,
-				userData.firstName,
-				userData.lastName,
+				await bcrypt.hash(userData.password, 10),
+				capitalize(userData.firstName),
+				capitalize(userData.lastName),
 				userData.username,
 				userData.email,
 			])
@@ -125,8 +127,10 @@ class appRepository {
 		return chat
 	}
 
-	async isUserCompleted(userId: UserData["id"]): Promise<boolean> {
-		const result = await this.db.query(appQueries.isUserCompleted, [userId])
+	async isUserCompletedQuery(userId: UserData["id"]): Promise<boolean> {
+		const result = await this.db.query(appQueries.isUserCompletedQuery, [
+			userId,
+		])
 
 		const [user] = result.rows
 		return user.completed
@@ -183,6 +187,16 @@ class appRepository {
 		await this.db.query(appQueries.updateUserSessionIdMutation, [
 			userId,
 			sessionId,
+		])
+	}
+
+	async updateUserPassword(
+		userId: UserData["id"],
+		password: UserData["password"],
+	) {
+		await this.db.query(appQueries.updateUserPasswordMutation, [
+			userId,
+			await bcrypt.hash(password, 10),
 		])
 	}
 
