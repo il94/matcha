@@ -77,6 +77,7 @@ export default forwardRef(function PhotosSection(
 						age={age}
 						location={location}
 						status={status}
+						principalPicture={user.principalPicture}
 						pictures={user.pictures}
 						setNextCard={setNextCard}
 						parentWidth={cardContainerSize.width}

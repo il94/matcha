@@ -13,15 +13,12 @@ import { motion } from "framer-motion"
 import { FramerCallback } from "@/types"
 
 function shufflePictures(pictures: Picture[]) {
-	const firstPicture = pictures.filter((picture) => picture.isPrincipal)[0]
-	const restPictures = pictures.filter((picture) => !picture.isPrincipal)
-
-	for (let i = restPictures.length - 1; i > 0; i--) {
+	for (let i = pictures.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1))
-		;[restPictures[i], restPictures[j]] = [restPictures[j], restPictures[i]]
+		;[pictures[i], pictures[j]] = [pictures[j], pictures[i]]
 	}
 
-	return [firstPicture, ...restPictures]
+	return pictures
 }
 
 const dragElastic = 1
@@ -32,6 +29,7 @@ type SwipeableCardProps = {
 	age: number
 	location: string
 	status: string // TODO Definir
+	principalPicture: User["principalPicture"]
 	pictures: User["pictures"]
 	setNextCard: () => void
 	parentWidth: number
@@ -43,6 +41,7 @@ export default forwardRef(function SwipeableCard(
 		age,
 		location,
 		status,
+		principalPicture,
 		pictures,
 		setNextCard,
 		parentWidth,
@@ -88,6 +87,11 @@ export default forwardRef(function SwipeableCard(
 		[like, dislike, confrimThreshold, velocityThreshold],
 	)
 
+	const picturesList = useMemo(
+		() => [principalPicture, ...shufflePictures(pictures)],
+		[principalPicture, pictures],
+	)
+
 	const [displayedPicture, setDisplayedPicture] = useState(0)
 
 	const displayPreviousPicture = useCallback(() => {
@@ -96,9 +100,9 @@ export default forwardRef(function SwipeableCard(
 	}, [displayedPicture])
 
 	const displayNextPicture = useCallback(() => {
-		if (displayedPicture >= pictures.length - 1) return
+		if (displayedPicture >= picturesList.length - 1) return
 		setDisplayedPicture(displayedPicture + 1)
-	}, [displayedPicture, pictures])
+	}, [displayedPicture, picturesList])
 
 	const handlePictureClick = useCallback(
 		(event: MouseEvent<HTMLDivElement>) => {
@@ -110,8 +114,6 @@ export default forwardRef(function SwipeableCard(
 		},
 		[displayPreviousPicture, displayNextPicture],
 	)
-
-	const picturesShuffled = useMemo(() => shufflePictures(pictures), [pictures])
 
 	return (
 		<motion.div
@@ -131,7 +133,7 @@ export default forwardRef(function SwipeableCard(
 			onClick={handlePictureClick}
 			className="absolute h-full w-full overflow-hidden rounded-xl"
 		>
-			{picturesShuffled.map((picture, index) => (
+			{picturesList.map((picture, index) => (
 				<img
 					key={`test_${index}`}
 					src={picture.name}
@@ -142,9 +144,9 @@ export default forwardRef(function SwipeableCard(
 				/>
 			))}
 
-			{picturesShuffled.length > 1 && (
+			{picturesList.length > 1 && (
 				<div className="absolute top-2 flex h-1 w-full bg-background/20">
-					{picturesShuffled.map((_, index) => (
+					{picturesList.map((_, index) => (
 						<div
 							key={`picture_${index}`}
 							className={cn(

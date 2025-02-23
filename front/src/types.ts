@@ -18,6 +18,7 @@ declare global {
 		gender?: string
 
 		bio?: string
+		principalPicture: Picture
 		pictures: Picture[]
 
 		tags: Tag[]
@@ -29,10 +30,7 @@ declare global {
 	}
 
 	type Picture = {
-		id: string
-		userId: User["id"]
 		name: string
-		isPrincipal: boolean
 	}
 
 	type Tag = {

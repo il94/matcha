@@ -248,6 +248,14 @@ class appService {
 
 		for (const user of users.users) {
 			const pictures = []
+
+			if (user.firstName === "Ilyes") {
+				const signedUrl = await this.s3Service.getSignedURL(
+					user.principalPicture.name,
+				)
+				user.principalPicture.name = signedUrl
+			}
+
 			for (let i = 0; i < user.pictures.length; i++) {
 				// TODO Retirer condition temporaire
 				if (user.firstName === "Ilyes") {
@@ -255,16 +263,34 @@ class appService {
 						user.pictures[i].name,
 					)
 					user.pictures[i].name = signedUrl
-				} // TODO Temporaire pour fake users
-				else pictures.push(user.pictures[i].name)
+				}
 			}
 		}
 
 		return users
 	}
 
-	getUser(userId: UserData["id"]) {
-		return this.repository.getUser(userId)
+	async getUser(userId: UserData["id"]) {
+		const user = await this.repository.getUser(userId)
+
+		if (user.firstName === "Ilyes") {
+			const signedUrl = await this.s3Service.getSignedURL(
+				user.principalPicture.name,
+			)
+			user.principalPicture.name = signedUrl
+		}
+
+		for (let i = 0; i < user.pictures.length; i++) {
+			// TODO Retirer condition temporaire
+			if (user.firstName === "Ilyes") {
+				const signedUrl = await this.s3Service.getSignedURL(
+					user.pictures[i].name,
+				)
+				user.pictures[i].name = signedUrl
+			}
+		}
+
+		return user
 	}
 
 	getUserChats(userId: UserData["id"]) {

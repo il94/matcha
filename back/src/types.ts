@@ -39,6 +39,7 @@ declare global {
 		activated: boolean
 		completed: boolean
 
+		principalPicture: PictureData
 		pictures: PictureData[]
 		tags: TagData["id"][]
 	}

@@ -72,17 +72,6 @@ class appRepository {
 	async getUser(userId: UserData["id"]): Promise<UserData> {
 		const result = await this.db.query(appQueries.getUserQuery, [userId])
 
-		result.rows[0].pictures = []
-		for (const pictureName of result.rows[0].picture_names) {
-			// TODO Décommenter cette partie quand il y aura de vrais users
-			// const s3Url = await this.getS3Url(pictureName)
-			// result.rows[0].pictures.push(pictureName)
-
-			// TODO Temporaire pour fake users
-			result.rows[0].pictures.push(pictureName)
-		}
-		delete result.rows[0].picture_names
-
 		const [user] = convertObjectKeysToCamelCase(result.rows)
 		return user
 	}
