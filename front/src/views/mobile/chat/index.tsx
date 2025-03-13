@@ -45,7 +45,7 @@ export default function ChatPage() {
 	if (isError) throw error // TODO
 
 	return (
-		<div className="flex h-full flex-col overflow-y-hidden">
+		<main className="flex h-full flex-col overflow-y-hidden">
 			<div className="flex h-24 shrink-0 items-center justify-center gap-3 border-b border-b-button px-3">
 				<Button variant="dark" className="h-11 w-full rounded-xl">
 					<MapPinned />
@@ -65,6 +65,6 @@ export default function ChatPage() {
 					)
 				})}
 			</ScrollArea>
-		</div>
+		</main>
 	)
 }

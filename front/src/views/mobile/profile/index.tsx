@@ -31,7 +31,7 @@ export default function ProfilePage() {
 	if (isPending) return <p>Load</p> // TODO
 
 	return (
-		<div className="flex h-full flex-col items-center justify-between overflow-y-hidden px-3 py-8">
+		<main className="flex h-full flex-col items-center justify-between overflow-y-hidden px-3 py-8">
 			<h2 className="text-4xl">Hi, {user.firstName}</h2>
 
 			<div className="flex h-full w-full flex-col items-center justify-evenly">
@@ -57,6 +57,6 @@ export default function ProfilePage() {
 					Preview
 				</Button>
 			</div>
-		</div>
+		</main>
 	)
 }

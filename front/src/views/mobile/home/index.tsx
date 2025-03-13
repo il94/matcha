@@ -76,7 +76,7 @@ export default function HomePage() {
 	const today = useMemo(() => dayjs(), [])
 
 	return (
-		<div className="flex h-full flex-col justify-between overflow-y-hidden bg-background px-3 py-3">
+		<main className="flex h-full flex-col justify-between overflow-y-hidden bg-background px-3 py-3">
 			{isPending || currentCardIndex === users.length ? (
 				<h1>Load</h1> // TODO Loader
 			) : (
@@ -141,6 +141,6 @@ export default function HomePage() {
 					</div>
 				</>
 			)}
-		</div>
+		</main>
 	)
 }
