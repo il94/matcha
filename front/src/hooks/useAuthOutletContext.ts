@@ -1,7 +1,7 @@
 import { useOutletContext } from "react-router"
 
 type OutletAuthContext = {
-	userId: User["id"]
+	user: User
 	isAuthenticated: boolean
 	isCompleting: boolean
 	isReseting: boolean

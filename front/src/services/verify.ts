@@ -1,7 +1,8 @@
 import axios from "@/lib/axios"
 
-type verifyReturn = {
+type VerifyReturn = {
 	userId: User["id"]
+	user?: User
 	isAuthenticated: boolean
 	isCompleting?: boolean
 	isReseting?: boolean
@@ -9,7 +10,7 @@ type verifyReturn = {
 
 export default async function verify() {
 	// TODO Gestion d'erreur
-	const response = await axios.get<verifyReturn>(`/verify`)
+	const response = await axios.get<VerifyReturn>(`/verify`)
 
 	return response.data
 }

@@ -114,6 +114,7 @@ class appService {
 		resetingSessionId?: UserData["sessionId"],
 	): Promise<{
 		userId: UserData["id"]
+		user?: UserData
 		isAuthenticated?: boolean
 		isCompleting?: boolean
 		isReseting?: boolean
@@ -123,8 +124,11 @@ class appService {
 
 			if (!userId) throw new UnauthorizedException()
 
+			const user = await this.getUser(userId)
+
 			return {
 				userId,
+				user,
 				isAuthenticated: true,
 			}
 		} else if (completingSessionId) {

@@ -14,10 +14,10 @@ declare global {
 		username: string
 		email: string
 		birthDate: string
+		gender: string
 		sexualOrientation: string
-		gender?: string
 
-		bio?: string
+		bio: string
 		principalPicture: Picture
 		pictures: Picture[]
 

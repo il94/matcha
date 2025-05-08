@@ -11,8 +11,8 @@ export const createUsersTableMutation = `
 		email VARCHAR(256) NOT NULL UNIQUE,
 		
 		birth_date VARCHAR DEFAULT NULL,
-		sexual_orientation sexual_orientation_enum DEFAULT NULL,
-		gender gender_enum DEFAULT NULL,
+		sexual_orientation sexual_orientation DEFAULT NULL,
+		gender gender DEFAULT NULL,
 		bio VARCHAR(256) DEFAULT NULL,
 		elo SMALLINT DEFAULT 0 NOT NULL CHECK (elo >= 0 AND elo <= 1000),
 		views SMALLINT DEFAULT 0 NOT NULL CHECK (views >= 0),

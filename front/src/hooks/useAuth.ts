@@ -29,7 +29,7 @@ export default function useAuth() {
 	})
 
 	return {
-		userId: data?.userId,
+		user: data?.user,
 		isAuthenticated: data?.isAuthenticated,
 		isCompleting: data?.isCompleting,
 		isReseting: data?.isReseting,

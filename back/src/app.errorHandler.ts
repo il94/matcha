@@ -1,10 +1,19 @@
 import { FastifyErrorHandler } from "./fastify.types"
-import { HttpException } from "@/lib/HttpException"
+import { HttpException, UnauthorizedException } from "@/lib/HttpException"
 import { PGException } from "./lib/PGException"
 
 const appErrorHandler: FastifyErrorHandler = (error, request, reply) => {
 	if (error instanceof HttpException) {
 		const httpError = error as HttpException
+
+		if (httpError instanceof UnauthorizedException) {
+			return reply
+				.status(httpError.code)
+				.clearCookie("sessionId")
+				.clearCookie("completingSessionId")
+				.clearCookie("resetingSessionId")
+				.send({ message: httpError.message })
+		}
 
 		return reply.status(httpError.code).send({ message: httpError.message })
 	} else if (error instanceof PGException) {
