@@ -1,8 +1,6 @@
 import { FastifyRouteSchema } from "@/fastify.types"
 import { stringIdParam } from "./app.schemas-utils"
-import SexualOrientation from "@/data/SexualOrientation"
-import Gender from "@/data/Gender"
-
+import schemasModels from "./app.schemas-models"
 // TODO check les params de validation
 
 export const userIdParam = stringIdParam("userId")
@@ -14,10 +12,11 @@ export const login = {
 	body: {
 		type: "object",
 		properties: {
-			username: { type: "string", minLength: 1, maxLength: 128 },
-			password: { type: "string", minLength: 1, maxLength: 128 },
+			username: schemasModels.username,
+			password: schemasModels.passwordLogin,
 		},
 		required: ["username", "password"],
+		additionalProperties: false,
 	},
 } as const satisfies FastifyRouteSchema
 
@@ -25,23 +24,14 @@ export const register = {
 	body: {
 		type: "object",
 		properties: {
-			password: {
-				type: "string",
-				minLength: 8,
-				maxLength: 128,
-				allOf: [
-					{ pattern: "[a-z]" },
-					{ pattern: "[A-Z]" },
-					{ pattern: "[0-9]" },
-					{ pattern: '[!@#$%^&*(),.?":{}|<>]' },
-				],
-			},
-			firstName: { type: "string", minLength: 1, maxLength: 64 },
-			lastName: { type: "string", minLength: 1, maxLength: 64 },
-			username: { type: "string", minLength: 1, maxLength: 32 },
-			email: { type: "string", minLength: 1, maxLength: 256, format: "email" },
+			email: schemasModels.email,
+			username: schemasModels.username,
+			firstName: schemasModels.firstName,
+			lastName: schemasModels.lastName,
+			password: schemasModels.password,
 		},
-		required: ["email", "firstName", "lastName", "username", "password"],
+		required: ["email", "username", "firstName", "lastName", "password"],
+		additionalProperties: false,
 	},
 } as const satisfies FastifyRouteSchema
 
@@ -49,9 +39,10 @@ export const forgot = {
 	body: {
 		type: "object",
 		properties: {
-			email: { type: "string", minLength: 1, maxLength: 256, format: "email" },
+			email: schemasModels.email,
 		},
 		required: ["email"],
+		additionalProperties: false,
 	},
 } as const satisfies FastifyRouteSchema
 
@@ -62,6 +53,7 @@ export const activate = {
 			token: { type: "string" },
 		},
 		required: ["token"],
+		additionalProperties: false,
 	},
 } as const satisfies FastifyRouteSchema
 
@@ -72,6 +64,7 @@ export const reset = {
 			token: { type: "string" },
 		},
 		required: ["token"],
+		additionalProperties: false,
 	},
 } as const satisfies FastifyRouteSchema
 
@@ -79,19 +72,10 @@ export const resetPassword = {
 	body: {
 		type: "object",
 		properties: {
-			password: {
-				type: "string",
-				minLength: 8,
-				maxLength: 128,
-				allOf: [
-					{ pattern: "[a-z]" },
-					{ pattern: "[A-Z]" },
-					{ pattern: "[0-9]" },
-					{ pattern: '[!@#$%^&*(),.?":{}|<>]' },
-				],
-			},
+			password: schemasModels.password,
 		},
 		required: ["password"],
+		additionalProperties: false,
 	},
 } as const satisfies FastifyRouteSchema
 
@@ -111,20 +95,18 @@ export const complete = {
 	body: {
 		type: "object",
 		properties: {
-			birthDate: { type: "string", format: "date", adult: true },
-			gender: { type: "string", enum: Object.values(Gender) },
-			sexualOrientation: {
-				type: "string",
-				enum: Object.values(SexualOrientation),
-			},
-			tags: { type: "string", pattern: "^(\\[\\d+(?:,\\s*\\d+)*\\]|\\[\\])$" },
-			bio: { type: "string", maxLength: 256 },
-			principalPicture: { type: "object" },
-			secondaryPicture1: { type: "object" },
-			secondaryPicture2: { type: "object" },
-			secondaryPicture3: { type: "object" },
-			secondaryPicture4: { type: "object" },
+			birthDate: schemasModels.birthDate,
+			gender: schemasModels.gender,
+			sexualOrientation: schemasModels.sexualOrientation,
+			bio: schemasModels.bio,
+			tags: schemasModels.tags,
+			principalPicture: schemasModels.principalPicture,
+			secondaryPicture1: schemasModels.secondaryPicture1,
+			secondaryPicture2: schemasModels.secondaryPicture2,
+			secondaryPicture3: schemasModels.secondaryPicture3,
+			secondaryPicture4: schemasModels.secondaryPicture4,
 		},
 		required: ["birthDate", "gender", "sexualOrientation", "tags", "bio"],
+		additionalProperties: false,
 	},
 } as const satisfies FastifyRouteSchema

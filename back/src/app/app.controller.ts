@@ -23,8 +23,8 @@ const appController: FastifyPluginAsync = async (app, options) => {
 				birthDate,
 				gender,
 				sexualOrientation,
-				tags,
 				bio,
+				tags,
 				principalPicture,
 				secondaryPicture1,
 				secondaryPicture2,
@@ -103,6 +103,7 @@ const appController: FastifyPluginAsync = async (app, options) => {
 		},
 	)
 
+	/* ============ Tags ============ */
 	app.get("/tags", () => {
 		return service.getTags()
 	})
