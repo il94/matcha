@@ -14,6 +14,7 @@ import CompletePage from "./views/mobile/complete"
 import ResetPage from "./views/mobile/reset"
 import ProtectedRoute from "./ProtectedRoute"
 import SettingsPage from "./views/mobile/settings"
+import { Toaster } from "@/components/ui/sonner"
 
 /*
 	TODO
@@ -52,6 +53,7 @@ function App() {
 						<Route path="*" element={<Navigate to="/" replace />} />
 					</Routes>
 				</BrowserRouter>
+				<Toaster />
 			</ReactQueryProvider>
 		</ThemeProvider>
 	)

@@ -305,6 +305,15 @@ class appService {
 		return this.repository.getUserChatConversation(userId, chatId)
 	}
 
+	updateUser(
+		userId: UserData["id"],
+		userData: Partial<UserData>,
+		picturesBuffer: Buffer[],
+		tagIds: TagData["id"][],
+	) {
+		this.repository.updateUser(userId, userData)
+	}
+
 	getTags() {
 		return this.repository.getTags()
 	}

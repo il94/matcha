@@ -125,6 +125,10 @@ class appRepository {
 		return user.completed
 	}
 
+	async updateUser(userId: UserData["id"], userData: Partial<UserData>) {
+		await this.db.query(appQueries.updateUserMutation, [userId, userData])
+	}
+
 	async getTags(): Promise<TagData[]> {
 		const result = await this.db.query(appQueries.getTagsQuery)
 

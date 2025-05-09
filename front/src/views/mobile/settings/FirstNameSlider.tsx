@@ -3,9 +3,11 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Form, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { cn } from "@/lib/utils"
 import InputTextField from "@/components/FormFields/InputTextField"
+import updateUser from "@/services/updateUser"
+import toast from "@/lib/toast"
 
 const formSchema = z.object({
 	firstName: z
@@ -21,10 +23,12 @@ type FirstNameSliderProps = {
 }
 
 export default function FirstNameSlider({
+	initialValue,
 	onClose,
 	className,
-	initialValue,
 }: FirstNameSliderProps) {
+	const queryClient = useQueryClient()
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -33,12 +37,11 @@ export default function FirstNameSlider({
 		mode: "onTouched",
 	})
 
-	const { mutate: updateFirstName } = useMutation({
-		mutationFn: async (values: z.infer<typeof formSchema>) => {
-			// TODO: Implement your first name update API call here
-			console.log("Update first name:", values)
-		},
+	const { mutate: updateFirstNameMutation } = useMutation({
+		mutationFn: updateUser,
 		onSuccess: () => {
+			toast.success("First name successfully updated !")
+			queryClient.invalidateQueries({ queryKey: ["verify"] })
 			onClose()
 		},
 		onError: () => {
@@ -49,13 +52,15 @@ export default function FirstNameSlider({
 		},
 	})
 
-	const error = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
+	const message = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
 
 	return (
 		<div className={cn(className)}>
 			<Form {...form}>
 				<form
-					onSubmit={form.handleSubmit((values) => updateFirstName(values))}
+					onSubmit={form.handleSubmit((values) =>
+						updateFirstNameMutation({ firstName: values.firstName }),
+					)}
 					className="flex h-full flex-col justify-between"
 				>
 					<div className="flex h-full flex-col gap-6">
@@ -74,13 +79,12 @@ export default function FirstNameSlider({
 								className="h-12"
 								variant="outline"
 							/>
-							<FormMessage className="h-5 px-1">{error}</FormMessage>
+							<FormMessage className="h-5 px-1">{message}</FormMessage>
 						</div>
 					</div>
 
 					<Button
 						variant="dark"
-						type="submit"
 						disabled={
 							!form.formState.isValid ||
 							form.getValues().firstName === initialValue

@@ -39,8 +39,14 @@ export default function SettingSlider({
 						className={className}
 					/>
 				)
-			case "password":
-				return <PasswordSlider onClose={onClose} className={className} />
+			case "username":
+				return (
+					<UsernameSlider
+						initialValue={user.username}
+						onClose={onClose}
+						className={className}
+					/>
+				)
 			case "first_name":
 				return (
 					<FirstNameSlider
@@ -57,14 +63,9 @@ export default function SettingSlider({
 						className={className}
 					/>
 				)
-			case "username":
-				return (
-					<UsernameSlider
-						initialValue={user.username}
-						onClose={onClose}
-						className={className}
-					/>
-				)
+			case "password":
+				return <PasswordSlider onClose={onClose} className={className} />
+
 			case "birth_date":
 				return (
 					<BirthDateSlider
@@ -89,18 +90,18 @@ export default function SettingSlider({
 						className={className}
 					/>
 				)
-			case "tags":
-				return (
-					<TagsSlider
-						initialValue={user.tags}
-						onClose={onClose}
-						className={className}
-					/>
-				)
 			case "bio":
 				return (
 					<BioSlider
 						initialValue={user.bio}
+						onClose={onClose}
+						className={className}
+					/>
+				)
+			case "tags":
+				return (
+					<TagsSlider
+						initialValue={user.tags}
 						onClose={onClose}
 						className={className}
 					/>

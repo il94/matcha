@@ -88,6 +88,31 @@ export const getUsers = {
 			page: { type: "number", default: 1 },
 			limit: { type: "number", default: 5 },
 		},
+		additionalProperties: false,
+	},
+} as const satisfies FastifyRouteSchema
+
+export const updateUser = {
+	body: {
+		type: "object",
+		properties: {
+			email: schemasModels.email,
+			username: schemasModels.username,
+			firstName: schemasModels.firstName,
+			lastName: schemasModels.lastName,
+			password: schemasModels.password,
+			birthDate: schemasModels.birthDate,
+			gender: schemasModels.gender,
+			sexualOrientation: schemasModels.sexualOrientation,
+			bio: schemasModels.bio,
+			tags: schemasModels.tags,
+			principalPicture: schemasModels.principalPicture,
+			secondaryPicture1: schemasModels.secondaryPicture1,
+			secondaryPicture2: schemasModels.secondaryPicture2,
+			secondaryPicture3: schemasModels.secondaryPicture3,
+			secondaryPicture4: schemasModels.secondaryPicture4,
+		},
+		additionalProperties: false,
 	},
 } as const satisfies FastifyRouteSchema
 
