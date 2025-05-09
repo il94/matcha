@@ -307,17 +307,35 @@ class appService {
 
 	async updateUser(
 		userId: UserData["id"],
-		userData: Partial<UserData>,
+		userData: Partial<
+			UserData & {
+				currentPassword: string
+				newPassword: string
+			}
+		>,
 		picturesBuffer: Buffer[],
 		tagIds: TagData["id"][],
 	) {
+		const user = await this.repository.getUser(userId)
+
 		if (
 			userData.username &&
 			(await this.repository.getUserByUsername(userData.username))
 		)
 			throw new ForbiddenException("USERNAME_ALREADY_TAKEN")
+		else if (
+			userData.newPassword &&
+			(!userData.currentPassword ||
+				!(await bcrypt.compare(userData.currentPassword, user.password)))
+		)
+			throw new ForbiddenException("INVALID_PASSWORD")
 
-		this.repository.updateUser(userId, userData)
+		this.repository.updateUser(userId, {
+			...userData,
+			password: userData.newPassword
+				? await bcrypt.hash(userData.newPassword, 10)
+				: undefined,
+		})
 	}
 
 	getTags() {

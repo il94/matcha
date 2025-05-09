@@ -5,6 +5,7 @@ export const updateUserMutation = `
 		last_name = COALESCE(($2::jsonb)->>'lastName', last_name),
 		username = COALESCE(($2::jsonb)->>'username', username),
 		email = COALESCE(($2::jsonb)->>'email', email),
+		password = COALESCE(($2::jsonb)->>'password', password),
 		birth_date = COALESCE(($2::jsonb)->>'birthDate', birth_date),
 		gender = CASE 
 			WHEN ($2::jsonb)->>'gender' IS NOT NULL 

@@ -4,9 +4,11 @@ import { z } from "zod"
 import { Form, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import InputTextField from "@/components/FormFields/InputTextField"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { AxiosError } from "axios"
 import { cn } from "@/lib/utils"
+import updateUser from "@/services/updateUser"
+import toast from "@/lib/toast"
 
 const formSchema = z
 	.object({
@@ -51,6 +53,8 @@ export default function PasswordSlider({
 	onClose,
 	className,
 }: PasswordSliderProps) {
+	const queryClient = useQueryClient()
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -61,12 +65,11 @@ export default function PasswordSlider({
 		mode: "onTouched",
 	})
 
-	const { mutate: updatePassword } = useMutation({
-		mutationFn: async (values: z.infer<typeof formSchema>) => {
-			// TODO: Implement your password update API call here
-			console.log("Update password:", values)
-		},
+	const { mutate: updatePasswordMutation } = useMutation({
+		mutationFn: updateUser,
 		onSuccess: () => {
+			toast.success("Password successfully updated !")
+			queryClient.invalidateQueries({ queryKey: ["verify"] })
 			onClose()
 		},
 		onError: (error: AxiosError<{ message: string }>) => {
@@ -87,13 +90,18 @@ export default function PasswordSlider({
 		},
 	})
 
-	const error = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
+	const message = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
 
 	return (
 		<div className={cn(className)}>
 			<Form {...form}>
 				<form
-					onSubmit={form.handleSubmit((values) => updatePassword(values))}
+					onSubmit={form.handleSubmit((values) =>
+						updatePasswordMutation({
+							currentPassword: values.currentPassword,
+							newPassword: values.newPassword,
+						}),
+					)}
 					className="flex h-full flex-col justify-between"
 				>
 					<div className="flex h-full flex-col gap-6">
@@ -129,7 +137,7 @@ export default function PasswordSlider({
 								variant="outline"
 								className="h-12"
 							/>
-							<FormMessage className="h-5 px-1">{error}</FormMessage>
+							<FormMessage className="h-5 px-1">{message}</FormMessage>
 						</div>
 					</div>
 
