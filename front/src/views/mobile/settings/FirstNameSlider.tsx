@@ -37,7 +37,7 @@ export default function FirstNameSlider({
 		mode: "onTouched",
 	})
 
-	const { mutate: updateFirstNameMutation } = useMutation({
+	const { mutate: updateUserMutation } = useMutation({
 		mutationFn: updateUser,
 		onSuccess: () => {
 			toast.success("First name successfully updated !")
@@ -59,7 +59,7 @@ export default function FirstNameSlider({
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit((values) =>
-						updateFirstNameMutation({ firstName: values.firstName }),
+						updateUserMutation({ firstName: values.firstName }),
 					)}
 					className="flex h-full flex-col justify-between"
 				>
