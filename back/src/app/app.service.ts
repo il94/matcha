@@ -305,12 +305,18 @@ class appService {
 		return this.repository.getUserChatConversation(userId, chatId)
 	}
 
-	updateUser(
+	async updateUser(
 		userId: UserData["id"],
 		userData: Partial<UserData>,
 		picturesBuffer: Buffer[],
 		tagIds: TagData["id"][],
 	) {
+		if (
+			userData.username &&
+			(await this.repository.getUserByUsername(userData.username))
+		)
+			throw new ForbiddenException("USERNAME_ALREADY_TAKEN")
+
 		this.repository.updateUser(userId, userData)
 	}
 

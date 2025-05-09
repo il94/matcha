@@ -92,38 +92,33 @@ const appController: FastifyPluginAsync = async (app, options) => {
 		return service.getUserChats(userId)
 	})
 
-	app.patch<InferSchema<typeof schemas.updateUser>>(
-		"/user",
-		(request, reply) => {
-			const userId = request.userId
-			const userData = request.body
+	app.patch<InferSchema<typeof schemas.updateUser>>("/user", (request) => {
+		const userId = request.userId
+		const userData = request.body
 
-			service.updateUser(
-				userId,
-				{
-					email: userData.email,
-					username: userData.username,
-					firstName: userData.firstName,
-					lastName: userData.lastName,
-					password: userData.password,
-					birthDate: userData.birthDate,
-					gender: userData.gender,
-					sexualOrientation: userData.sexualOrientation,
-					bio: userData.bio,
-				},
-				[
-					userData.principalPicture as unknown as Buffer,
-					userData.secondaryPicture1 as unknown as Buffer,
-					userData.secondaryPicture2 as unknown as Buffer,
-					userData.secondaryPicture3 as unknown as Buffer,
-					userData.secondaryPicture4 as unknown as Buffer,
-				].filter(Boolean),
-				userData.tags ? JSON.parse(userData.tags) : [],
-			)
-
-			return reply.send()
-		},
-	)
+		return service.updateUser(
+			userId,
+			{
+				email: userData.email,
+				username: userData.username,
+				firstName: userData.firstName,
+				lastName: userData.lastName,
+				password: userData.password,
+				birthDate: userData.birthDate,
+				gender: userData.gender,
+				sexualOrientation: userData.sexualOrientation,
+				bio: userData.bio,
+			},
+			[
+				userData.principalPicture as unknown as Buffer,
+				userData.secondaryPicture1 as unknown as Buffer,
+				userData.secondaryPicture2 as unknown as Buffer,
+				userData.secondaryPicture3 as unknown as Buffer,
+				userData.secondaryPicture4 as unknown as Buffer,
+			].filter(Boolean),
+			userData.tags ? JSON.parse(userData.tags) : [],
+		)
+	})
 
 	/* ============ Chats ============ */
 
