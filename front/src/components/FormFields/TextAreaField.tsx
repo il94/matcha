@@ -42,6 +42,7 @@ export default function TextAreaField<T extends FieldValues>({
 							<Textarea
 								{...field}
 								{...props}
+								maxLength={props.maxLength ? props.maxLength + 1 : undefined}
 								className={cn(
 									props.className,
 									fieldState.invalid && "bg-destructive/50",

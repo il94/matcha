@@ -3,9 +3,11 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Form } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { cn } from "@/lib/utils"
 import TextAreaField from "@/components/FormFields/TextAreaField"
+import toast from "@/lib/toast"
+import updateUser from "@/services/updateUser"
 
 const formSchema = z.object({
 	bio: z.string().max(256, "Keep it concise !"),
@@ -18,10 +20,12 @@ type BioSliderProps = {
 }
 
 export default function BioSlider({
-	onClose,
-	className,
 	initialValue = "",
+	className,
+	onClose,
 }: BioSliderProps) {
+	const queryClient = useQueryClient()
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -30,12 +34,11 @@ export default function BioSlider({
 		mode: "onTouched",
 	})
 
-	const { mutate: updateBio } = useMutation({
-		mutationFn: async (values: z.infer<typeof formSchema>) => {
-			// TODO: Implement your bio update API call here
-			console.log("Update bio:", values)
-		},
+	const { mutate: updateUserMutation } = useMutation({
+		mutationFn: updateUser,
 		onSuccess: () => {
+			toast.success("Bio successfully updated !")
+			queryClient.invalidateQueries({ queryKey: ["verify"] })
 			onClose()
 		},
 		onError: () => {
@@ -50,7 +53,9 @@ export default function BioSlider({
 		<div className={cn(className)}>
 			<Form {...form}>
 				<form
-					onSubmit={form.handleSubmit((values) => updateBio(values))}
+					onSubmit={form.handleSubmit((values) =>
+						updateUserMutation({ bio: values.bio }),
+					)}
 					className="flex h-full flex-col justify-between"
 				>
 					<div className="flex h-full flex-col gap-6">
@@ -68,7 +73,7 @@ export default function BioSlider({
 								name="bio"
 								placeholder="Bio"
 								autoSize
-								maxLength={270}
+								maxLength={256}
 								className="h-24 max-h-64 min-h-24"
 							/>
 						</div>
