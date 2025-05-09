@@ -6,11 +6,12 @@ import {
 	FormItem,
 	FormLabel,
 } from "../ui/form"
-import { Input } from "../ui/input"
+import { Input, inputVariants } from "../ui/input"
 import { InputHTMLAttributes, useState } from "react"
 import { cn } from "@/lib/utils"
 import { EyeClosedIcon, EyeIcon } from "lucide-react"
 import { Button } from "../ui/button"
+import { VariantProps } from "class-variance-authority"
 
 type FieldProps<T extends FieldValues> =
 	InputHTMLAttributes<HTMLInputElement> & {
@@ -18,6 +19,7 @@ type FieldProps<T extends FieldValues> =
 		name: Path<T>
 		label?: string
 		description?: string
+		variant?: VariantProps<typeof inputVariants>["variant"]
 	}
 
 export default function InputTextField<T extends FieldValues>({
@@ -25,6 +27,7 @@ export default function InputTextField<T extends FieldValues>({
 	name,
 	label,
 	description,
+	variant,
 	...props
 }: FieldProps<T>) {
 	const [showPassword, setShowPassword] = useState(false)
@@ -46,6 +49,7 @@ export default function InputTextField<T extends FieldValues>({
 										? "text"
 										: props.type
 								}
+								variant={variant}
 								className={cn(
 									props.className,
 									fieldState.invalid && "bg-destructive/50",

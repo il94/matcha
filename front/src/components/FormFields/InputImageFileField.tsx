@@ -20,6 +20,7 @@ type FieldProps<T extends FieldValues> =
 		label?: string
 		description?: string
 		withClearButton?: boolean
+		initialValue?: string
 	}
 
 export default function InputImageFileField<T extends FieldValues>({
@@ -28,9 +29,10 @@ export default function InputImageFileField<T extends FieldValues>({
 	label,
 	description,
 	withClearButton,
+	initialValue,
 	...props
 }: FieldProps<T>) {
-	const [imagePreview, setImagePreview] = useState<string | null>(null)
+	const [imagePreview, setImagePreview] = useState(initialValue)
 
 	const inputRef = useRef<HTMLInputElement>(null)
 	const fileRef = control.register(name)
@@ -111,7 +113,7 @@ export default function InputImageFileField<T extends FieldValues>({
 							{imagePreview && withClearButton && (
 								<Button
 									onClick={() => {
-										setImagePreview(null)
+										setImagePreview(undefined)
 										field.onChange(undefined)
 										props.onChange?.(
 											null as unknown as ChangeEvent<HTMLInputElement>,

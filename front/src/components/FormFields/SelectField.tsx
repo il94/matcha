@@ -25,6 +25,7 @@ type FieldProps<T extends FieldValues> =
 		label?: string
 		description?: string
 		placeholder?: string
+		defaultValues?: string[]
 	}
 
 export default function SelectField<T extends FieldValues>({
@@ -34,6 +35,7 @@ export default function SelectField<T extends FieldValues>({
 	isMulti,
 	label,
 	description,
+	defaultValues,
 	...props
 }: FieldProps<T>) {
 	return (
@@ -50,6 +52,7 @@ export default function SelectField<T extends FieldValues>({
 									onValueChange={field.onChange}
 									options={items}
 									placeholder={props.placeholder}
+									defaultValue={defaultValues}
 								/>
 							) : (
 								<Select

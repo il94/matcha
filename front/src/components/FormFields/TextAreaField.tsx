@@ -5,6 +5,7 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
+	FormMessage,
 } from "../ui/form"
 import { TextareaHTMLAttributes } from "react"
 import { cn } from "@/lib/utils"
@@ -18,6 +19,7 @@ type FieldProps<T extends FieldValues> =
 		description?: string
 	} & {
 		autoSize?: boolean
+		disableErrorMessage?: boolean
 	}
 
 export default function TextAreaField<T extends FieldValues>({
@@ -25,6 +27,7 @@ export default function TextAreaField<T extends FieldValues>({
 	name,
 	label,
 	description,
+	disableErrorMessage = false,
 	...props
 }: FieldProps<T>) {
 	return (
@@ -47,7 +50,7 @@ export default function TextAreaField<T extends FieldValues>({
 						</div>
 					</FormControl>
 					{description && <FormDescription>{description}</FormDescription>}
-					{/* <FormMessage /> */}
+					{!disableErrorMessage && <FormMessage />}
 				</FormItem>
 			)}
 		/>

@@ -18,6 +18,7 @@ export default function Step2() {
 					placeholder="Bio"
 					autoSize
 					maxLength={270}
+					disableErrorMessage
 					className="h-24 max-h-64 min-h-24"
 				/>
 			</div>

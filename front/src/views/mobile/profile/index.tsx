@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import getUserMe from "@/services/getUserMe"
 import { useQuery } from "@tanstack/react-query"
+import { useNavigate } from "react-router"
 
 type StatProps = {
 	value: number
@@ -17,6 +18,8 @@ function Stat({ value, label }: StatProps) {
 }
 
 export default function ProfilePage() {
+	const navigate = useNavigate()
+
 	const {
 		data: user,
 		isPending,
@@ -50,7 +53,11 @@ export default function ProfilePage() {
 			</div>
 
 			<div className="w-full space-y-3">
-				<Button variant="dark" className="h-10 w-full rounded-xl">
+				<Button
+					onClick={() => navigate("/settings")}
+					variant="dark"
+					className="h-10 w-full rounded-xl"
+				>
 					Edit profile
 				</Button>
 				<Button variant="dark" className="h-10 w-full rounded-xl">

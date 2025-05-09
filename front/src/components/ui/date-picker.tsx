@@ -24,15 +24,17 @@ import { PopoverClose } from "@radix-ui/react-popover"
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
 	placeholder?: string
 	onSelect: (date?: Date) => void
+	initialValue?: Date
 }
 
 export function DatePicker({
 	className,
 	showOutsideDays = true,
 	placeholder = "Pick a date",
+	initialValue,
 	onSelect,
 }: CalendarProps) {
-	const [date, setDate] = React.useState<Date>()
+	const [date, setDate] = React.useState(initialValue)
 	const [month, setMonth] = React.useState<number>(
 		date ? date.getMonth() : new Date().getMonth(),
 	)
@@ -123,7 +125,7 @@ export function DatePicker({
 						</SelectContent>
 					</Select>
 				</div>
-				<PopoverClose>
+				<PopoverClose asChild>
 					<Calendar
 						mode="single"
 						selected={date}

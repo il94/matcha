@@ -13,6 +13,7 @@ import PrivateRoute from "./PrivateRoute"
 import CompletePage from "./views/mobile/complete"
 import ResetPage from "./views/mobile/reset"
 import ProtectedRoute from "./ProtectedRoute"
+import SettingsPage from "./views/mobile/settings"
 
 /*
 	TODO
@@ -45,6 +46,7 @@ function App() {
 								<Route path="profile" element={<ProfilePage />} />
 								<Route path="chat" element={<ChatPage />} />
 								<Route path="chat/:id" element={<ChatIdPage />} />
+								<Route path="settings" element={<SettingsPage />} />
 							</Route>
 						</Route>
 						<Route path="*" element={<Navigate to="/" replace />} />

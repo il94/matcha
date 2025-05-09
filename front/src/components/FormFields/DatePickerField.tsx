@@ -17,6 +17,7 @@ type FieldProps<T extends FieldValues> = CalendarProps & {
 	label?: string
 	description?: string
 	placeholder?: string
+	initialValue?: Date
 }
 
 export default function DatePickerField<T extends FieldValues>({
@@ -24,6 +25,8 @@ export default function DatePickerField<T extends FieldValues>({
 	name,
 	label,
 	description,
+	initialValue,
+	...props
 }: FieldProps<T>) {
 	return (
 		<FormField
@@ -39,7 +42,11 @@ export default function DatePickerField<T extends FieldValues>({
 									if (date) field.onChange(dayjs(date).format("YYYY-MM-DD"))
 								}}
 								placeholder="Select your birth date"
-								className={cn(fieldState.invalid && "bg-destructive/50")}
+								className={cn(
+									props.className,
+									fieldState.invalid && "bg-destructive/50",
+								)}
+								initialValue={initialValue}
 							/>
 						</FormControl>
 						{description && <FormDescription>{description}</FormDescription>}
