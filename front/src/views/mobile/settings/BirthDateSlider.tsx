@@ -1,12 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Form } from "@/components/ui/form"
+import { Form, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { cn } from "@/lib/utils"
 import DatePickerField from "@/components/FormFields/DatePickerField"
 import dayjs from "@/lib/dayjs"
+import { toast } from "sonner"
+import updateUser from "@/services/updateUser"
 
 const formSchema = z.object({
 	birthDate: z
@@ -26,10 +28,12 @@ type BirthDateSliderProps = {
 }
 
 export default function BirthDateSlider({
+	initialValue,
 	onClose,
 	className,
-	initialValue,
 }: BirthDateSliderProps) {
+	const queryClient = useQueryClient()
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -38,12 +42,11 @@ export default function BirthDateSlider({
 		mode: "onTouched",
 	})
 
-	const { mutate: updateBirthDate } = useMutation({
-		mutationFn: async (values: z.infer<typeof formSchema>) => {
-			// TODO: Implement your birth date update API call here
-			console.log("Update birth date:", values)
-		},
+	const { mutate: updateUserMutation } = useMutation({
+		mutationFn: updateUser,
 		onSuccess: () => {
+			toast.success("Birth date successfully updated !")
+			queryClient.invalidateQueries({ queryKey: ["verify"] })
 			onClose()
 		},
 		onError: () => {
@@ -54,15 +57,15 @@ export default function BirthDateSlider({
 		},
 	})
 
-	const error = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
-
-	console.log({ initialValue, error })
+	const message = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
 
 	return (
 		<div className={cn(className)}>
 			<Form {...form}>
 				<form
-					onSubmit={form.handleSubmit((values) => updateBirthDate(values))}
+					onSubmit={form.handleSubmit((values) =>
+						updateUserMutation({ birthDate: values.birthDate }),
+					)}
 					className="flex h-full flex-col justify-between"
 				>
 					<div className="flex h-full flex-col gap-6">
@@ -82,6 +85,7 @@ export default function BirthDateSlider({
 								name="birthDate"
 								className="h-12"
 							/>
+							<FormMessage className="h-5 px-1">{message}</FormMessage>
 						</div>
 					</div>
 
