@@ -125,8 +125,22 @@ class appRepository {
 		return user.completed
 	}
 
-	async updateUser(userId: UserData["id"], userData: Partial<UserData>) {
-		await this.db.query(appQueries.updateUserMutation, [userId, userData])
+	async updateUser(
+		userId: UserData["id"],
+		userData: Partial<UserData>,
+		tagIds?: TagData["id"][],
+	) {
+		await this.db.transact(async (transact) => {
+			await transact.query(appQueries.updateUserMutation, [userId, userData])
+
+			if (tagIds) {
+				await transact.query(appQueries.deleteUserTagsMutation, [userId])
+				await transact.query(appQueries.updateUserTagsMutation, [
+					userId,
+					tagIds,
+				])
+			}
+		})
 	}
 
 	async getTags(): Promise<TagData[]> {

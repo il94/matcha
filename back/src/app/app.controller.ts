@@ -117,7 +117,7 @@ const appController: FastifyPluginAsync = async (app, options) => {
 				userData.secondaryPicture3 as unknown as Buffer,
 				userData.secondaryPicture4 as unknown as Buffer,
 			].filter(Boolean),
-			userData.tags ? JSON.parse(userData.tags) : [],
+			userData.tags as unknown as number[],
 		)
 	})
 

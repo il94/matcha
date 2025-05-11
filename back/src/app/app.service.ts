@@ -314,7 +314,7 @@ class appService {
 			}
 		>,
 		picturesBuffer: Buffer[],
-		tagIds: TagData["id"][],
+		tagIds?: number[],
 	) {
 		const user = await this.repository.getUser(userId)
 
@@ -330,12 +330,16 @@ class appService {
 		)
 			throw new ForbiddenException("INVALID_PASSWORD")
 
-		this.repository.updateUser(userId, {
-			...userData,
-			password: userData.newPassword
-				? await bcrypt.hash(userData.newPassword, 10)
-				: undefined,
-		})
+		this.repository.updateUser(
+			userId,
+			{
+				...userData,
+				password: userData.newPassword
+					? await bcrypt.hash(userData.newPassword, 10)
+					: undefined,
+			},
+			tagIds,
+		)
 	}
 
 	getTags() {

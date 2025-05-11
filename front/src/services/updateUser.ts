@@ -1,10 +1,13 @@
 import axios from "@/lib/axios"
 
 type UpdateUserParams = Partial<
-	User & {
-		currentPassword: string
-		newPassword: string
-	}
+	| (User & {
+			currentPassword: string
+			newPassword: string
+	  })
+	| {
+			tags: number[]
+	  }
 >
 
 export default async function updateUser(userData: UpdateUserParams) {

@@ -3,10 +3,12 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Form } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { cn } from "@/lib/utils"
 import SelectField from "@/components/FormFields/SelectField"
 import getTags from "@/services/getTags"
+import updateUser from "@/services/updateUser"
+import { toast } from "sonner"
 
 const formSchema = z.object({
 	tags: z.array(z.number()),
@@ -23,6 +25,8 @@ export default function TagsSlider({
 	className,
 	initialValue = [],
 }: TagsSliderProps) {
+	const queryClient = useQueryClient()
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -41,12 +45,11 @@ export default function TagsSlider({
 		queryFn: getTags,
 	})
 
-	const { mutate: updateTags } = useMutation({
-		mutationFn: async (values: z.infer<typeof formSchema>) => {
-			// TODO: Implement your tags update API call here
-			console.log("Update tags:", values)
-		},
+	const { mutate: updateUserMutation } = useMutation({
+		mutationFn: updateUser,
 		onSuccess: () => {
+			toast.success("Tags successfully updated !")
+			queryClient.invalidateQueries({ queryKey: ["verify"] })
 			onClose()
 		},
 		onError: () => {
@@ -64,7 +67,9 @@ export default function TagsSlider({
 		<div className={cn(className)}>
 			<Form {...form}>
 				<form
-					onSubmit={form.handleSubmit((values) => updateTags(values))}
+					onSubmit={form.handleSubmit((values) =>
+						updateUserMutation({ tags: values.tags }),
+					)}
 					className="flex h-full flex-col justify-between"
 				>
 					<div className="flex h-full flex-col gap-6">
