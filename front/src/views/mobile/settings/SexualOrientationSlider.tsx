@@ -1,12 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Form } from "@/components/ui/form"
+import { Form, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { cn } from "@/lib/utils"
 import SelectField from "@/components/FormFields/SelectField"
 import SexualOrientation from "@/data/SexualOrientation"
+import updateUser from "@/services/updateUser"
+import { toast } from "sonner"
 
 const formSchema = z.object({
 	sexualOrientation: z.string().min(1, "Please select your sexual orientation"),
@@ -23,6 +25,8 @@ export default function SexualOrientationSlider({
 	onClose,
 	className,
 }: SexualOrientationSliderProps) {
+	const queryClient = useQueryClient()
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -31,12 +35,11 @@ export default function SexualOrientationSlider({
 		mode: "onTouched",
 	})
 
-	const { mutate: updateSexualOrientation } = useMutation({
-		mutationFn: async (values: z.infer<typeof formSchema>) => {
-			// TODO: Implement your sexual orientation update API call here
-			console.log("Update sexual orientation:", values)
-		},
+	const { mutate: updateUserMutation } = useMutation({
+		mutationFn: updateUser,
 		onSuccess: () => {
+			toast.success("Sexual orientation successfully updated !")
+			queryClient.invalidateQueries({ queryKey: ["verify"] })
 			onClose()
 		},
 		onError: () => {
@@ -47,12 +50,14 @@ export default function SexualOrientationSlider({
 		},
 	})
 
+	const message = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
+
 	return (
 		<div className={cn(className)}>
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit((values) =>
-						updateSexualOrientation(values),
+						updateUserMutation({ sexualOrientation: values.sexualOrientation }),
 					)}
 					className="flex h-full flex-col justify-between"
 				>
@@ -76,6 +81,7 @@ export default function SexualOrientationSlider({
 								}))}
 								className="h-12"
 							/>
+							<FormMessage className="h-5 px-1">{message}</FormMessage>
 						</div>
 					</div>
 
