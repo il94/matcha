@@ -8,10 +8,10 @@ import {
 	UnauthorizedException,
 } from "@/lib/HttpException"
 import bcrypt from "bcrypt"
-import capitalize from "@/lib/capitalize"
 import redisService from "@/redis/redis.service"
 import mailerService from "@/mailer/mailer.service"
 import s3Service from "@/s3/s3.service"
+import { isPGError, PGException } from "@/lib/PGException"
 
 class appService {
 	private repository
@@ -318,6 +318,24 @@ class appService {
 	) {
 		const user = await this.repository.getUser(userId)
 
+		if (userData.email) {
+			if (await this.repository.getUserByEmail(userData.email))
+				throw new ForbiddenException("EMAIL_ALREADY_TAKEN")
+
+			const token = this.getRandomToken()
+			try {
+				await this.redisService.createNewEmailToken(
+					user.id,
+					userData.email,
+					token,
+				)
+				await this.mailerService.sendNewEmailEmail(userData.email, token)
+			} catch (error) {
+				await this.redisService.deleteNewEmailToken(token)
+				throw error
+			}
+		}
+
 		if (
 			userData.username &&
 			(await this.repository.getUserByUsername(userData.username))
@@ -334,12 +352,34 @@ class appService {
 			userId,
 			{
 				...userData,
+				email: undefined,
 				password: userData.newPassword
 					? await bcrypt.hash(userData.newPassword, 10)
 					: undefined,
 			},
 			tagIds,
 		)
+	}
+
+	async changeEmail(token: string) {
+		const value = await this.redisService.getNewEmailToken(token)
+		if (!value) throw new BadRequestException()
+
+		try {
+			const { userId, newEmail } = JSON.parse(value) as {
+				userId: UserData["id"]
+				newEmail: UserData["email"]
+			}
+
+			await this.repository.updateUser(userId, { email: newEmail })
+		} catch (error) {
+			if (isPGError(error))
+				throw new PGException(error.message, error.constraint)
+			throw error
+		}
+		finally {
+			await this.redisService.deleteNewEmailToken(token)
+		}
 	}
 
 	getTags() {

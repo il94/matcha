@@ -32,6 +32,15 @@ class mailerService {
 		})
 	}
 
+	async sendNewEmailEmail(to: UserData["email"], token: string) {
+		await this.mailer.sendMail({
+			to,
+			subject: "Change Your Email",
+			from: this.MAILER_FROM,
+			html: this.getNewEmailEmailTemplate(token),
+		})
+	}
+
 	/* ============ Templates ============ */
 
 	getActivationTokenEmailTemplate(
@@ -71,6 +80,25 @@ class mailerService {
 				</p>
 				<p class="footer">
 					If you didn't request this, you can safely ignore this email.
+				</p>
+			</div>
+		`
+
+		return this.getEmailTemplate(body)
+	}
+
+	getNewEmailEmailTemplate(token: string) {
+		const body = `
+			<div class="container">
+				<h1 class="title">Hey there,</h1>
+				<p>
+					You've requested to change your email address. Please click the link below to confirm the new email.
+				</p>
+				<p>
+					<a class="button" href="${process.env.API_BACK_URL}/change-email?token=${token}">Confirm New Email</a>
+				</p>
+				<p class="footer">
+					If this email wasn't meant for you, please feel free to ignore it.
 				</p>
 			</div>
 		`

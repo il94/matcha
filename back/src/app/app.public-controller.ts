@@ -116,6 +116,21 @@ const appPublicController: FastifyPluginAsync = async (app, options) => {
 		},
 	)
 
+	app.get<InferSchema<typeof schemas.changeEmail>>(
+		"/change-email",
+		{ schema: schemas.changeEmail },
+		async (request, reply) => {
+			const { token } = request.query
+
+			await service.changeEmail(token)
+			return reply
+				.redirect(
+					`${process.env.API_FRONT_URL!}/settings?success=EMAIL_UPDATED`,
+				)
+				.send()
+		},
+	)
+
 	app.delete("/public-logout", async (request, reply) => {
 		const { resetingSessionId } = request.cookies
 

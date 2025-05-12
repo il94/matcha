@@ -7,4 +7,10 @@ export default {
 			duration: 2000,
 		})
 	},
+	error: (message: string) => {
+		toast.error(message, {
+			position: "top-center",
+			duration: 2000,
+		})
+	},
 }

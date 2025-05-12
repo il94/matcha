@@ -90,6 +90,23 @@ class redisService {
 		return token
 	}
 
+	async createNewEmailToken(
+		userId: UserData["id"],
+		newEmail: UserData["email"],
+		defaultToken?: string,
+	) {
+		const token = defaultToken ?? this.getRandomToken()
+
+		await this.redis.set(
+			`newEmail:${token}`,
+			JSON.stringify({ userId, newEmail }),
+			"EX",
+			this.RESET_TOKEN_DURATION,
+		)
+
+		return token
+	}
+
 	async getSession(sessionId: UserData["sessionId"]) {
 		return this.redis.get(`session:${sessionId}`)
 	}
@@ -108,6 +125,10 @@ class redisService {
 
 	async getResetPasswordToken(token: string) {
 		return this.redis.get(`resetPassword:${token}`)
+	}
+
+	async getNewEmailToken(token: string) {
+		return this.redis.get(`newEmail:${token}`)
 	}
 
 	async deleteSession(sessionId: UserData["sessionId"]) {
@@ -133,6 +154,10 @@ class redisService {
 
 	async deleteResetPasswordToken(token: string) {
 		await this.redis.del(`resetPassword:${token}`)
+	}
+
+	async deleteNewEmailToken(token: string) {
+		await this.redis.del(`newEmail:${token}`)
 	}
 
 	/* ============ Utils ============ */

@@ -1,9 +1,25 @@
 import SectionButton from "./SectionButton"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import SettingSlider from "./SettingSlider"
+import toast from "@/lib/toast"
+import { useSearchParams } from "react-router"
 
 export default function SettingsPage() {
 	const [settingSelected, setSettingSelected] = useState("")
+
+	const [searchParams, setSearchParams] = useSearchParams()
+	const success = searchParams.get("success")
+	const error = searchParams.get("error")
+
+	useEffect(() => {
+		if (success === "EMAIL_UPDATED") {
+			toast.success("Email successfully updated !")
+			setSearchParams({})
+		} else if (error === "EMAIL_ALREADY_TAKEN") {
+			toast.error("This email is already taken. Please try another one.")
+			setSearchParams({})
+		}
+	}, [success, error, setSearchParams])
 
 	return (
 		<main className="relative flex h-full flex-col items-center justify-between gap-4 overflow-y-scroll px-3 pb-8 pt-4">

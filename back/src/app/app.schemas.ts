@@ -79,6 +79,17 @@ export const resetPassword = {
 	},
 } as const satisfies FastifyRouteSchema
 
+export const changeEmail = {
+	querystring: {
+		type: "object",
+		properties: {
+			token: { type: "string" },
+		},
+		required: ["token"],
+		additionalProperties: false,
+	},
+} as const satisfies FastifyRouteSchema
+
 /* ============= PRIVATE CONTROLLER ============= */
 
 export const getUsers = {
