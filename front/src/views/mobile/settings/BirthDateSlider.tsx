@@ -83,6 +83,7 @@ export default function BirthDateSlider({
 								initialValue={dayjs(initialValue).toDate()}
 								placeholder="Select your birth date"
 								name="birthDate"
+								toDate={dayjs().subtract(18, "years").toDate()}
 								className="h-12"
 							/>
 							<FormMessage className="h-5 px-1">{message}</FormMessage>

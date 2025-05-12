@@ -4,6 +4,7 @@ import Gender from "@/data/Gender"
 import SexualOrientation from "@/data/SexualOrientation"
 import getTags from "@/services/getTags"
 import { useQuery } from "@tanstack/react-query"
+import dayjs from "@/lib/dayjs"
 import { useFormContext } from "react-hook-form"
 
 export default function Step1() {
@@ -31,6 +32,8 @@ export default function Step1() {
 					control={form.control}
 					placeholder="Select your birth date"
 					name="birthDate"
+					defaultMonth={dayjs().subtract(18, "years").set("month", 0).toDate()}
+					toDate={dayjs().subtract(18, "years").toDate()}
 				/>
 				<SelectField
 					control={form.control}

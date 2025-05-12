@@ -47,6 +47,8 @@ export default function DatePickerField<T extends FieldValues>({
 									fieldState.invalid && "bg-destructive/50",
 								)}
 								initialValue={initialValue}
+								defaultMonth={props.defaultMonth}
+								toDate={props.toDate}
 							/>
 						</FormControl>
 						{description && <FormDescription>{description}</FormDescription>}

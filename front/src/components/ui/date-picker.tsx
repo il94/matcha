@@ -33,13 +33,22 @@ export function DatePicker({
 	placeholder = "Pick a date",
 	initialValue,
 	onSelect,
+	...props
 }: CalendarProps) {
 	const [date, setDate] = React.useState(initialValue)
 	const [month, setMonth] = React.useState<number>(
-		date ? date.getMonth() : new Date().getMonth(),
+		date
+			? date.getMonth()
+			: props.defaultMonth
+				? props.defaultMonth.getMonth()
+				: new Date().getMonth(),
 	)
 	const [year, setYear] = React.useState<number>(
-		date ? date.getFullYear() : new Date().getFullYear(),
+		date
+			? date.getFullYear()
+			: props.defaultMonth
+				? props.defaultMonth.getFullYear()
+				: new Date().getFullYear(),
 	)
 
 	const years = React.useMemo(() => {
@@ -84,6 +93,8 @@ export function DatePicker({
 		}
 	}
 
+	console.log("Props : ", props)
+
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
@@ -127,6 +138,7 @@ export function DatePicker({
 				</div>
 				<PopoverClose asChild>
 					<Calendar
+						// {...props}
 						mode="single"
 						selected={date}
 						month={new Date(year, month)}
@@ -145,6 +157,8 @@ export function DatePicker({
 							setDate(date)
 							onSelect(date)
 						}}
+						toDate={props.toDate}
+						defaultMonth={props.defaultMonth}
 					/>
 				</PopoverClose>
 			</PopoverContent>
