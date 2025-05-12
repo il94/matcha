@@ -16,6 +16,7 @@ export const getUsersQuery = `
 	LEFT JOIN pictures ON pictures.user_id = users.id
 	LEFT JOIN user_tags ON user_tags.user_id = users.id
 	LEFT JOIN tags ON tags.id = user_tags.tag_id
+	WHERE completed = TRUE
 	GROUP BY users.id
 	OFFSET ($1 - 1) * $2
 	LIMIT $2;

@@ -12,6 +12,7 @@ const adminController: FastifyPluginAsync = async (app, options) => {
 
 	app.put("/", async () => {
 		await repository.dropDb()
+		await app.redis.flushall()
 		await repository.fillDb()
 
 		return "Db recreated"
