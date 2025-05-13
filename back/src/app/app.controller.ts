@@ -110,16 +110,28 @@ const appController: FastifyPluginAsync = async (app, options) => {
 				sexualOrientation: userData.sexualOrientation,
 				bio: userData.bio,
 			},
-			[
-				userData.principalPicture as unknown as Buffer,
-				userData.secondaryPicture1 as unknown as Buffer,
-				userData.secondaryPicture2 as unknown as Buffer,
-				userData.secondaryPicture3 as unknown as Buffer,
-				userData.secondaryPicture4 as unknown as Buffer,
-			].filter(Boolean),
 			userData.tags as unknown as number[],
 		)
 	})
+
+	app.patch<InferSchema<typeof schemas.updateUserPictures>>(
+		"/user/pictures",
+		(request) => {
+			const userId = request.userId
+			const picturesData = request.body
+
+			return service.updateUserPictures(
+				userId,
+				[
+					picturesData.principalPicture as unknown as Buffer,
+					picturesData.secondaryPicture1 as unknown as Buffer,
+					picturesData.secondaryPicture2 as unknown as Buffer,
+					picturesData.secondaryPicture3 as unknown as Buffer,
+					picturesData.secondaryPicture4 as unknown as Buffer,
+				].filter(Boolean),
+			)
+		},
+	)
 
 	/* ============ Chats ============ */
 

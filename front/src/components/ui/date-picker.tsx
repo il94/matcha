@@ -93,8 +93,6 @@ export function DatePicker({
 		}
 	}
 
-	console.log("Props : ", props)
-
 	return (
 		<Popover>
 			<PopoverTrigger asChild>

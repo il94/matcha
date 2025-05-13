@@ -38,7 +38,7 @@ const schemasModels = {
 		pattern: "^(\\[\\d+(?:,\\s*\\d+)*\\]|\\[\\])$",
 	} as const,
 	bio: { type: "string", maxLength: 256 } as const,
-	principalPicture: { type: "object" } as const,
+	principalPicture: { type: "object", format: "binary" } as const,
 	secondaryPicture1: { type: "object" } as const,
 	secondaryPicture2: { type: "object" } as const,
 	secondaryPicture3: { type: "object" } as const,

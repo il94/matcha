@@ -96,6 +96,17 @@ class appRepository {
 		return user
 	}
 
+	async getUserPictures(
+		userId: UserData["id"],
+	): Promise<Pick<PictureData, "id" | "name">[]> {
+		const result = await this.db.query(appQueries.getUserPicturesQuery, [
+			userId,
+		])
+
+		const pictures = convertObjectKeysToCamelCase(result.rows)
+		return pictures
+	}
+
 	async getUserChats(userId: UserData["id"]): Promise<ChatData[]> {
 		const result = await this.db.query(appQueries.getUserChatsQuery, [userId])
 
@@ -210,6 +221,38 @@ class appRepository {
 	async deleteUser(userId: UserData["id"]) {
 		await this.db.query(appQueries.deleteUserMutation, [userId])
 	}
+
+	async updatePictures(
+		userId: UserData["id"],
+		pictureNames: PictureData["name"][],
+	) {
+		await this.db.transact(async (transact) => {
+			await transact.query(appQueries.deleteUserPicturesMutation, [userId])
+			for (let i = 0; i < pictureNames.length; i++) {
+				await transact.query(appQueries.createPictureMutation, [
+					userId,
+					pictureNames[i],
+					i === 0,
+				])
+			}
+		})
+	}
+
+	// 	async createPicture(
+	// 		userId: UserData["id"],
+	// 		pictureName: PictureData["name"],
+	// 		isPrincipal: boolean,
+	// 	): Promise<PictureData["id"]> {
+
+	// 		const result = await this.db.query(appQueries.createPictureMutation, [
+	// 			userId,
+	// 			pictureName,
+	// 			isPrincipal,
+	// 		])
+
+	// 		const [picture] = convertObjectKeysToCamelCase(result.rows)
+	// 		return picture.id
+	// 	}
 }
 
 export default appRepository

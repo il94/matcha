@@ -62,6 +62,8 @@ class s3Service {
 	}
 
 	async deleteFiles(fileNames: PictureData["name"][]) {
+		if (!fileNames.length) return
+
 		await this.s3.send(
 			new DeleteObjectsCommand({
 				Bucket: process.env.AWS_BUCKET_NAME,

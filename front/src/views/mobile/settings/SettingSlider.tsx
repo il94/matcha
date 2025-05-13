@@ -125,8 +125,6 @@ export default function SettingSlider({
 		}
 	}
 
-	console.log({ user })
-
 	return (
 		<div
 			className={cn(

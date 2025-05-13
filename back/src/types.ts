@@ -45,6 +45,7 @@ declare global {
 	}
 
 	type PictureData = {
+		id: string
 		name: string
 		isPrincipal: boolean
 	}

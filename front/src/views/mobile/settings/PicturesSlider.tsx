@@ -1,19 +1,26 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Form } from "@/components/ui/form"
+import { Form, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { cn } from "@/lib/utils"
 import InputImageFileField from "@/components/FormFields/InputImageFileField"
 import { useState } from "react"
+import toast from "@/lib/toast"
+import updateUserPictures from "@/services/updateUserPictures"
 
 const formSchema = z.object({
-	principalPicture: z.any(),
-	secondaryPicture1: z.any().optional(),
-	secondaryPicture2: z.any().optional(),
-	secondaryPicture3: z.any().optional(),
-	secondaryPicture4: z.any().optional(),
+	principalPicture: z.union([
+		z.string(),
+		z.instanceof(Blob, {
+			message: "A picture is worth a thousand words—don't skip this one !",
+		}),
+	]),
+	secondaryPicture1: z.union([z.string(), z.instanceof(Blob)]).optional(),
+	secondaryPicture2: z.union([z.string(), z.instanceof(Blob)]).optional(),
+	secondaryPicture3: z.union([z.string(), z.instanceof(Blob)]).optional(),
+	secondaryPicture4: z.union([z.string(), z.instanceof(Blob)]).optional(),
 })
 
 type PicturesSliderProps = {
@@ -33,6 +40,8 @@ export default function PicturesSlider({
 	className,
 	initialValue,
 }: PicturesSliderProps) {
+	const queryClient = useQueryClient()
+
 	const [picturesState, setPicturesState] = useState(() => {
 		let count = 0
 		if (initialValue.principalPicture) count++
@@ -55,12 +64,11 @@ export default function PicturesSlider({
 		mode: "onTouched",
 	})
 
-	const { mutate: updatePictures } = useMutation({
-		mutationFn: async (values: z.infer<typeof formSchema>) => {
-			// TODO: Implement your pictures update API call here
-			console.log("Update pictures:", values)
-		},
+	const { mutate: updateUserMutation } = useMutation({
+		mutationFn: updateUserPictures,
 		onSuccess: () => {
+			toast.success("Pictures successfully updated !")
+			queryClient.invalidateQueries({ queryKey: ["verify"] })
 			onClose()
 		},
 		onError: () => {
@@ -71,11 +79,21 @@ export default function PicturesSlider({
 		},
 	})
 
+	const message = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
+
 	return (
 		<div className={cn(className)}>
 			<Form {...form}>
 				<form
-					onSubmit={form.handleSubmit((values) => updatePictures(values))}
+					onSubmit={form.handleSubmit((values) =>
+						updateUserMutation({
+							principalPicture: values.principalPicture,
+							secondaryPicture1: values.secondaryPicture1,
+							secondaryPicture2: values.secondaryPicture2,
+							secondaryPicture3: values.secondaryPicture3,
+							secondaryPicture4: values.secondaryPicture4,
+						}),
+					)}
 					className="flex h-full flex-col justify-between"
 				>
 					<div className="flex h-full flex-col gap-6">
@@ -189,13 +207,27 @@ export default function PicturesSlider({
 									/>
 								</div>
 							</div>
+							<FormMessage className="h-5 px-1">{message}</FormMessage>
 						</div>
 					</div>
 
 					<Button
 						variant="dark"
 						type="submit"
-						disabled={!form.formState.isValid || picturesState === 0}
+						disabled={
+							!form.formState.isValid ||
+							picturesState === 0 ||
+							(initialValue.principalPicture ===
+								form.getValues().principalPicture &&
+								initialValue.secondaryPicture1 ===
+									form.getValues().secondaryPicture1 &&
+								initialValue.secondaryPicture2 ===
+									form.getValues().secondaryPicture2 &&
+								initialValue.secondaryPicture3 ===
+									form.getValues().secondaryPicture3 &&
+								initialValue.secondaryPicture4 ===
+									form.getValues().secondaryPicture4)
+						}
 					>
 						Save
 					</Button>

@@ -118,12 +118,33 @@ export const updateUser = {
 			sexualOrientation: schemasModels.sexualOrientation,
 			bio: schemasModels.bio,
 			tags: schemasModels.tags,
-			principalPicture: schemasModels.principalPicture,
-			secondaryPicture1: schemasModels.secondaryPicture1,
-			secondaryPicture2: schemasModels.secondaryPicture2,
-			secondaryPicture3: schemasModels.secondaryPicture3,
-			secondaryPicture4: schemasModels.secondaryPicture4,
 		},
+		additionalProperties: false,
+		minProperties: 1,
+	},
+} as const satisfies FastifyRouteSchema
+
+export const updateUserPictures = {
+	body: {
+		type: "object",
+		properties: {
+			principalPicture: {
+				anyOf: [schemasModels.principalPicture, { type: "object" }],
+			},
+			secondaryPicture1: {
+				anyOf: [schemasModels.secondaryPicture1, { type: "object" }],
+			},
+			secondaryPicture2: {
+				anyOf: [schemasModels.secondaryPicture2, { type: "object" }],
+			},
+			secondaryPicture3: {
+				anyOf: [schemasModels.secondaryPicture3, { type: "object" }],
+			},
+			secondaryPicture4: {
+				anyOf: [schemasModels.secondaryPicture4, { type: "object" }],
+			},
+		},
+		required: ["principalPicture"],
 		additionalProperties: false,
 	},
 } as const satisfies FastifyRouteSchema

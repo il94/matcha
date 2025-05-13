@@ -313,7 +313,6 @@ class appService {
 				newPassword: string
 			}
 		>,
-		picturesBuffer: Buffer[],
 		tagIds?: number[],
 	) {
 		const user = await this.repository.getUser(userId)
@@ -361,6 +360,72 @@ class appService {
 		)
 	}
 
+	async updateUserPictures(
+		userId: UserData["id"],
+		pictures: (string | Buffer)[],
+	) {
+		const { picturesBuffer, picturesString } = pictures.reduce(
+			(acc, picture) => {
+				if (typeof picture === "string") {
+					acc.picturesString.push(picture)
+				} else {
+					acc.picturesBuffer.push(picture)
+				}
+				return acc
+			},
+			{ picturesBuffer: [] as Buffer[], picturesString: [] as string[] },
+		)
+
+		try {
+			const userPictures = await this.repository.getUserPictures(userId)
+
+			// Vérifier que les url d'images envoyées existent dans la base de données
+			for (const pictureString of picturesString) {
+				const pictureName = pictureString.match(/\/([^/?]+)(?:\?|$)/)
+				if (!pictureName) throw new BadRequestException("INVALID_PICTURE_URL")
+				if (
+					!userPictures.find(
+						(userPicture) => userPicture.name === pictureName[1],
+					)
+				)
+					throw new BadRequestException("INVALID_PICTURE_URL_2")
+			}
+
+			const pictureNames = await this.s3Service.uploadFiles(picturesBuffer)
+
+			const finalPictures: string[] = []
+
+			let bufferIndex = 0
+
+			for (const picture of pictures) {
+				if (typeof picture === "string") {
+					const fileName = picture.match(/\/([^/?]+)(?:\?|$)/)
+					if (!fileName) throw new BadRequestException()
+
+					finalPictures.push(fileName[1])
+				} else {
+					finalPictures.push(pictureNames[bufferIndex])
+					bufferIndex++
+				}
+			}
+
+			// Ajouter les fichiers restants (si jamais il y a eu plus de buffers que prévu dans pictures)
+			while (bufferIndex < pictureNames.length) {
+				finalPictures.push(pictureNames[bufferIndex])
+				bufferIndex++
+			}
+
+			await this.repository.updatePictures(userId, finalPictures)
+			await this.s3Service.deleteFiles(
+				userPictures
+					.map((picture) => picture.name)
+					.filter((picture) => !finalPictures.includes(picture)),
+			)
+		} catch (error) {
+			throw error
+		}
+	}
+
 	async changeEmail(token: string) {
 		const value = await this.redisService.getNewEmailToken(token)
 		if (!value) throw new BadRequestException()
@@ -376,8 +441,7 @@ class appService {
 			if (isPGError(error))
 				throw new PGException(error.message, error.constraint)
 			throw error
-		}
-		finally {
+		} finally {
 			await this.redisService.deleteNewEmailToken(token)
 		}
 	}
