@@ -1,7 +1,3 @@
-import { XIcon } from "lucide-react"
-import { Button } from "../../../components/ui/button"
-import AnimateHeart from "@/components/AnimateHeart"
-
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query"
 import getUsers from "@/services/getUsers"
 import { useCallback, useMemo, useRef, useState } from "react"
@@ -10,8 +6,15 @@ import BioSection from "./BioSection"
 import EssentialsSection from "./EssentialsSection"
 import TagsSection from "./TagsSection"
 import PhotosSection from "./PhotosSection"
+import WarningSection from "./WarningSection"
+import ActionButtons from "./ActionButtons"
+import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 
-export default function HomePage() {
+type HomePageProps = {
+	isPreview?: boolean
+}
+
+export default function HomePage({ isPreview }: HomePageProps) {
 	const {
 		data,
 		isPending,
@@ -32,13 +35,19 @@ export default function HomePage() {
 			return lastPage.nextPage
 		},
 		placeholderData: keepPreviousData,
+		enabled: !isPreview,
 	})
+
+	const { user } = useAuthOutletContext()
 
 	if (isError) throw error // TODO Gestion d'erreur
 
 	const users = useMemo(() => {
+		if (isPreview) {
+			return [user]
+		}
 		return data?.pages.flatMap((page) => page.users) ?? []
-	}, [data])
+	}, [data, isPreview, user])
 
 	const [currentCardIndex, setCurrentCardIndex] = useState(0)
 
@@ -77,7 +86,7 @@ export default function HomePage() {
 
 	return (
 		<main className="flex h-full flex-col justify-between overflow-y-hidden bg-background px-3 py-3">
-			{isPending || currentCardIndex === users.length ? (
+			{!isPreview && (isPending || currentCardIndex === users.length) ? (
 				<h1>Load</h1> // TODO Loader
 			) : (
 				<>
@@ -108,37 +117,16 @@ export default function HomePage() {
 						{users[currentCardIndex].tags.length ? (
 							<TagsSection tags={users[currentCardIndex].tags} />
 						) : null}
-						<Button
-							variant="destructiveDark"
-							className="h-10 w-full rounded-xl"
-						>
-							Block {users[currentCardIndex].firstName}
-						</Button>
-						<Button
-							variant="destructiveDark"
-							className="h-10 w-full rounded-xl"
-						>
-							Report {users[currentCardIndex].firstName}
-						</Button>
+						<WarningSection
+							user={users[currentCardIndex]}
+							isPreview={isPreview}
+						/>
 					</div>
-					<div className="flex h-16 w-full items-center justify-evenly">
-						<Button
-							onClick={onDislike}
-							size="icon"
-							variant="ghost"
-							className="size-16 rounded-full"
-						>
-							<XIcon className="size-10 stroke-red-400 stroke-[3.5]" />
-						</Button>
-						<Button
-							onClick={onLike}
-							size="icon"
-							variant="ghost"
-							className="size-16 rounded-full"
-						>
-							<AnimateHeart />
-						</Button>
-					</div>
+					<ActionButtons
+						onLike={onLike}
+						onDislike={onDislike}
+						isPreview={isPreview}
+					/>
 				</>
 			)}
 		</main>

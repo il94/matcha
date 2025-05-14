@@ -48,6 +48,7 @@ function App() {
 								<Route path="chat" element={<ChatPage />} />
 								<Route path="chat/:id" element={<ChatIdPage />} />
 								<Route path="settings" element={<SettingsPage />} />
+								<Route path="preview" element={<HomePage isPreview />} />
 							</Route>
 						</Route>
 						<Route path="*" element={<Navigate to="/" replace />} />

@@ -60,7 +60,11 @@ export default function ProfilePage() {
 				>
 					Edit profile
 				</Button>
-				<Button variant="dark" className="h-10 w-full rounded-xl">
+				<Button
+					onClick={() => navigate("/preview")}
+					variant="dark"
+					className="h-10 w-full rounded-xl"
+				>
 					Preview
 				</Button>
 			</div>
