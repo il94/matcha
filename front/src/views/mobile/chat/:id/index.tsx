@@ -57,7 +57,7 @@ function ChatSender({ avatar, children }: ChatSenderProps) {
 }
 
 export default function ChatIdPage() {
-	const { userId } = useAuthOutletContext()
+	const { user } = useAuthOutletContext()
 	const chatId = useId()
 
 	const {
@@ -115,7 +115,7 @@ export default function ChatIdPage() {
 							return (
 								<Fragment key={index}>
 									{Date && <Date date={message.createdAt} />}
-									{message.authorId === userId ? (
+									{message.authorId === user.id ? (
 										<ChatUser>{message.content}</ChatUser>
 									) : (
 										<ChatSender avatar={chat.avatar}>

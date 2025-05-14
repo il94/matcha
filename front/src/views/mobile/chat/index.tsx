@@ -5,6 +5,7 @@ import dayjs from "@/lib/dayjs"
 import { Calendar, MapPinned } from "lucide-react"
 import { Link } from "react-router"
 import getUserChats from "@/services/getUserChats"
+import { cn } from "@/lib/utils"
 
 type ChatProps = {
 	chat: Chat
@@ -20,10 +21,14 @@ function Chat({ chat }: ChatProps) {
 			<div className="w-full overflow-hidden text-sm">
 				<p className="font-bold">{chat.title}</p>
 				<div className="flex">
-					<p className="truncate">{chat.lastMessage.content}</p>
-					<p className="shrink-0">
-						&nbsp;·&nbsp;{dayjs(chat.lastMessage.createdAt).fromNow()}
+					<p className={cn("truncate", !chat.lastMessage && "opacity-50")}>
+						{chat.lastMessage?.content ?? "New match !"}
 					</p>
+					{chat.lastMessage && (
+						<p className="shrink-0">
+							&nbsp;·&nbsp;{dayjs(chat.lastMessage.createdAt).fromNow()}
+						</p>
+					)}
 				</div>
 			</div>
 		</div>
@@ -40,6 +45,8 @@ export default function ChatPage() {
 		queryKey: ["chats"],
 		queryFn: getUserChats,
 	})
+
+	console.log(chats)
 
 	if (isPending) return <div>Loading...</div> // TODO
 	if (isError) throw error // TODO

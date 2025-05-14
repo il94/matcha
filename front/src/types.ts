@@ -43,7 +43,7 @@ declare global {
 		title: User["firstName"]
 		avatar: Picture["name"]
 		messages: Message[]
-		lastMessage: Message
+		lastMessage?: Message
 	}
 
 	type Message = {
