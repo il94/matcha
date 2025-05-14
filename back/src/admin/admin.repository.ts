@@ -99,6 +99,20 @@ class adminRepository {
 		})
 	}
 
+	async createChats() {
+		await this.db.query(adminQueries.deleteChatsMutation)
+
+		await this.db.query(adminQueries.createChatMutation, ["ilandols", "mbappe"])
+		await this.db.query(adminQueries.createChatMutation, [
+			"ilandols",
+			"hermione",
+		])
+		await this.db.query(adminQueries.createChatMutation, [
+			"ilandols",
+			"harleyquinn",
+		])
+	}
+
 	async dropDb() {
 		await this.db.transact(async (transact) => {
 			await transact.query(adminQueries.dropDatabaseMutation)

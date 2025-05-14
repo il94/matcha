@@ -10,6 +10,12 @@ const adminController: FastifyPluginAsync = async (app, options) => {
 		return "Db created"
 	})
 
+	app.post("/chats", async () => {
+		await repository.createChats()
+
+		return "Chats created"
+	})
+
 	app.put("/", async () => {
 		await repository.dropDb()
 		await app.redis.flushall()

@@ -10,3 +10,5 @@ export * from "./createGenderEnumMutation"
 export * from "./createSexualOrientationEnumMutation"
 
 export * from "./createUserMutation"
+export * from "./createChatMutation"
+export * from "./deleteChatsMutation"
