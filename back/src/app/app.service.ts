@@ -5,6 +5,7 @@ import { FastifyInstance, FastifyPluginOptions } from "fastify"
 import {
 	BadRequestException,
 	ForbiddenException,
+	NotFoundException,
 	UnauthorizedException,
 } from "@/lib/HttpException"
 import bcrypt from "bcrypt"
@@ -297,12 +298,26 @@ class appService {
 		return user
 	}
 
-	getUserChats(userId: UserData["id"]) {
-		return this.repository.getUserChats(userId)
+	async getUserChats(userId: UserData["id"]) {
+		const chats = await this.repository.getUserChats(userId)
+		for (const chat of chats) {
+			chat.avatar = await this.s3Service.getSignedURL(chat.avatar)
+		}
+
+		return chats
 	}
 
-	getUserChatConversation(userId: UserData["id"], chatId: ChatData["id"]) {
-		return this.repository.getUserChatConversation(userId, chatId)
+	async getUserChatConversation(
+		userId: UserData["id"],
+		chatId: ChatData["id"],
+	) {
+		const conversation = await this.repository.getUserChatConversation(
+			userId,
+			chatId,
+		)
+		conversation.avatar = await this.s3Service.getSignedURL(conversation.avatar)
+
+		return conversation
 	}
 
 	async updateUser(
@@ -448,6 +463,38 @@ class appService {
 
 	getTags() {
 		return this.repository.getTags()
+	}
+
+	/* ============= WEBSOCKETS CONTROLLER ============= */
+
+	async createMessage(
+		userId: UserData["id"],
+		chatId: ChatData["id"],
+		content: string,
+	) {
+		const chat = await this.repository.getChat(chatId)
+
+		if (!chat) throw new NotFoundException()
+
+		const authorId =
+			userId === chat.userId1
+				? chat.userId1
+				: userId === chat.userId2
+					? chat.userId2
+					: undefined
+		if (!authorId) throw new BadRequestException()
+
+		const message = await this.repository.createMessage(chatId, {
+			authorId,
+			content,
+		})
+
+		const receiverId = userId === chat.userId1 ? chat.userId2 : chat.userId1
+
+		return {
+			receiverId,
+			message,
+		}
 	}
 
 	/* ============ Utils ============ */

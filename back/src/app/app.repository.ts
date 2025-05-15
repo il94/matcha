@@ -161,6 +161,15 @@ class appRepository {
 		return tags
 	}
 
+	async getChat(
+		chatId: ChatData["id"],
+	): Promise<Pick<ChatData, "userId1" | "userId2">> {
+		const result = await this.db.query(appQueries.getChatQuery, [chatId])
+
+		const [chat] = convertObjectKeysToCamelCase(result.rows)
+		return chat
+	}
+
 	async activateUser(userId: UserData["id"], sessionId: UserData["sessionId"]) {
 		await this.db.query(appQueries.activateUserMutation, [userId, sessionId])
 	}
@@ -238,21 +247,19 @@ class appRepository {
 		})
 	}
 
-	// 	async createPicture(
-	// 		userId: UserData["id"],
-	// 		pictureName: PictureData["name"],
-	// 		isPrincipal: boolean,
-	// 	): Promise<PictureData["id"]> {
+	async createMessage(
+		chatId: ChatData["id"],
+		messageData: Pick<MessageData, "authorId" | "content">,
+	): Promise<MessageData> {
+		const result = await this.db.query(appQueries.createMessageMutation, [
+			chatId,
+			messageData.authorId,
+			messageData.content,
+		])
 
-	// 		const result = await this.db.query(appQueries.createPictureMutation, [
-	// 			userId,
-	// 			pictureName,
-	// 			isPrincipal,
-	// 		])
-
-	// 		const [picture] = convertObjectKeysToCamelCase(result.rows)
-	// 		return picture.id
-	// 	}
+		const [message] = convertObjectKeysToCamelCase(result.rows)
+		return message
+	}
 }
 
 export default appRepository

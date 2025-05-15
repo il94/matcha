@@ -3,7 +3,14 @@ import { ArrowLeftIcon, PhoneIcon, SendIcon, VideoIcon } from "lucide-react"
 import dayjs from "@/lib/dayjs"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Fragment, useEffect, useRef } from "react"
+import {
+	FormEvent,
+	Fragment,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from "react"
 import useId from "@/hooks/useId"
 import { useQuery } from "@tanstack/react-query"
 import { useNavigate } from "react-router"
@@ -57,8 +64,10 @@ function ChatSender({ avatar, children }: ChatSenderProps) {
 }
 
 export default function ChatIdPage() {
-	const { user } = useAuthOutletContext()
+	const { user, socket } = useAuthOutletContext()
 	const chatId = useId()
+	const [input, setInput] = useState("")
+	const [messages, setMessages] = useState<Message[]>([])
 
 	const {
 		data: chat,
@@ -70,6 +79,12 @@ export default function ChatIdPage() {
 		queryFn: () => getUserChatConversation({ chatId }),
 	})
 
+	useEffect(() => {
+		if (chat?.messages) {
+			setMessages(chat.messages)
+		}
+	}, [chat])
+
 	const scrollAreaRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
@@ -77,9 +92,66 @@ export default function ChatIdPage() {
 		scrollAreaRef.current.scrollIntoView(false)
 	}, [])
 
+	const onMessage = useCallback(
+		(event: MessageEvent) => {
+			const data = JSON.parse(event.data)
+
+			if (data.type === "message") {
+				console.log("Message : ", data)
+
+				setMessages((prevMessages) => {
+					return [
+						...prevMessages,
+						{
+							authorId: data.authorId,
+							createdAt: new Date(data.createdAt).toISOString(),
+							content: data.content,
+							avatar: data.avatar,
+						},
+					]
+				})
+			}
+		},
+		[setMessages],
+	)
+
+	useEffect(() => {
+		if (!socket) return
+
+		socket.addEventListener("message", onMessage)
+		return () => {
+			socket.removeEventListener("message", onMessage)
+		}
+	}, [onMessage, socket])
+
 	const navigate = useNavigate()
 
 	if (isError) throw error
+
+	function handleSubmit(event: FormEvent<HTMLFormElement>) {
+		event.preventDefault()
+
+		socket.send(
+			JSON.stringify({
+				content: input,
+				chatId,
+			}),
+		)
+
+		setMessages((prevMessages) => {
+			if (!prevMessages) return []
+			return [
+				...prevMessages,
+				{
+					authorId: user.id,
+					createdAt: new Date().toISOString(),
+					content: input,
+					avatar: user.principalPicture.name,
+				},
+			]
+		})
+		setInput("")
+	}
 
 	return (
 		<div className="relative flex h-full flex-col items-center overflow-y-hidden">
@@ -105,9 +177,9 @@ export default function ChatIdPage() {
 					{isPending ? (
 						<p>load</p>
 					) : (
-						chat.messages.map((message, index) => {
+						messages.map((message, index) => {
 							const previousDate =
-								index > 0 ? chat.messages[index - 1].createdAt : null
+								index > 0 ? messages[index - 1].createdAt : null
 							const currentDate = message.createdAt
 							const diff = dayjs(currentDate).diff(previousDate, "hours")
 							const Date = !previousDate || diff > 8 ? ChatDate : null
@@ -128,15 +200,20 @@ export default function ChatIdPage() {
 					)}
 				</div>
 			</ScrollArea>
-			<div className="absolute bottom-3 z-10 flex h-10 w-full gap-2 px-3">
+			<form
+				onSubmit={handleSubmit}
+				className="absolute bottom-3 z-10 flex h-10 w-full gap-2 px-3"
+			>
 				<Input
+					onChange={(e) => setInput(e.target.value)}
+					value={input}
 					placeholder="Message..."
 					className="h-full rounded-xl bg-input"
 				/>
-				<Button className="h-full rounded-xl">
+				<Button disabled={input.length === 0} className="h-full rounded-xl">
 					<SendIcon />
 				</Button>
-			</div>
+			</form>
 			<div className="backdrop absolute bottom-0 h-12 w-full backdrop-blur-sm" />
 		</div>
 	)

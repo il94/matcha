@@ -4,11 +4,14 @@ import * as schemas from "@/app/app.schemas"
 import { InferSchema } from "@/types"
 import appGuard from "./app.guard"
 import { BadRequestException } from "@/lib/HttpException"
+import wsController from "@/ws/ws.controller"
 
 const appController: FastifyPluginAsync = async (app, options) => {
 	const service = new appService(app, options)
 
 	app.addHook("preHandler", appGuard)
+
+	app.register(wsController)
 
 	/* ============ Auth ============ */
 

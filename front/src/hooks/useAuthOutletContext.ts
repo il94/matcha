@@ -2,6 +2,8 @@ import { useOutletContext } from "react-router"
 
 type OutletAuthContext = {
 	user: User
+	socket: WebSocket
+
 	isAuthenticated: boolean
 	isCompleting: boolean
 	isReseting: boolean

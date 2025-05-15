@@ -11,6 +11,7 @@ import appConfig from "./app.config"
 import mailerPlugin from "./mailer/mailer.plugin"
 import schedulerPlugin from "./scheduler/scheduler.plugin"
 import appLogger from "./app.logger"
+import wsPlugin from "./ws/ws.plugin"
 
 const appPlugin: FastifyPluginAsync = async (app, options) => {
 	app.register(fastifyPlugin(appConfig))
@@ -20,6 +21,7 @@ const appPlugin: FastifyPluginAsync = async (app, options) => {
 	app.register(fastifyPlugin(redisPlugin))
 	app.register(fastifyPlugin(mailerPlugin))
 	app.register(fastifyPlugin(schedulerPlugin))
+	app.register(fastifyPlugin(wsPlugin))
 	app.register(fastifyPlugin(appLogger))
 
 	app.register(adminController, { prefix: "/admin" }) // TODO Supprimer le plugin entier à la fin
