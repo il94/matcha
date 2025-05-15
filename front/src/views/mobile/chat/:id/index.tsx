@@ -85,12 +85,15 @@ export default function ChatIdPage() {
 		}
 	}, [chat])
 
-	const scrollAreaRef = useRef<HTMLDivElement>(null)
+	const scrollBottomRef = useRef<HTMLDivElement>(null)
+
+	const scrollToBottom = () => {
+		scrollBottomRef.current?.scrollIntoView()
+	}
 
 	useEffect(() => {
-		if (!scrollAreaRef.current) return
-		scrollAreaRef.current.scrollIntoView(false)
-	}, [])
+		scrollToBottom()
+	}, [messages])
 
 	const onMessage = useCallback(
 		(event: MessageEvent) => {
@@ -151,6 +154,7 @@ export default function ChatIdPage() {
 			]
 		})
 		setInput("")
+		scrollToBottom()
 	}
 
 	return (
@@ -173,7 +177,7 @@ export default function ChatIdPage() {
 			</div>
 
 			<ScrollArea className="w-full overflow-y-scroll px-3">
-				<div className="relative space-y-2.5 py-2.5 pb-16" ref={scrollAreaRef}>
+				<div className="relative space-y-2.5 py-2.5 pb-16">
 					{isPending ? (
 						<p>load</p>
 					) : (
@@ -198,6 +202,7 @@ export default function ChatIdPage() {
 							)
 						})
 					)}
+					<div ref={scrollBottomRef} />
 				</div>
 			</ScrollArea>
 			<form
