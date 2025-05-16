@@ -46,8 +46,6 @@ export default function ChatPage() {
 		queryFn: getUserChats,
 	})
 
-	console.log(chats)
-
 	if (isPending) return <div>Loading...</div> // TODO
 	if (isError) throw error // TODO
 
