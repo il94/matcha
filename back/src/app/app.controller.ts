@@ -71,10 +71,18 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 
 	/* ============ Users ============ */
 
+	app.post("/user/vote", { schema: schemas.createVote }, (request) => {
+		const userId = request.userId
+		const { targetId, vote } = request.body
+
+		return service.createUserVote(userId, targetId, vote)
+	})
+
 	app.get("/users", { schema: schemas.getUsers }, (request) => {
+		const userId = request.userId
 		const { page, limit } = request.query
 
-		return service.getUsers(page, limit)
+		return service.getUsers(userId, page, limit)
 	})
 
 	app.get("/user/me", (request) => {

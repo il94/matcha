@@ -8,6 +8,7 @@ export * from "./createChatsTableMutation"
 export * from "./dropDatabaseMutation"
 export * from "./createGenderEnumMutation"
 export * from "./createSexualOrientationEnumMutation"
+export * from "./createUserVotesTableMutation"
 
 export * from "./createUserMutation"
 export * from "./createChatMutation"

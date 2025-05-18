@@ -17,7 +17,13 @@ export const getUsersQuery = `
 	LEFT JOIN user_tags ON user_tags.user_id = users.id
 	LEFT JOIN tags ON tags.id = user_tags.tag_id
 	WHERE completed = TRUE
+		AND users.id != $1
+		AND users.id NOT IN (
+			SELECT target_id
+			FROM user_votes
+			WHERE user_id = $1
+		)
 	GROUP BY users.id
-	OFFSET ($1 - 1) * $2
-	LIMIT $2;
+	OFFSET ($2 - 1) * $3
+	LIMIT $3;
 `

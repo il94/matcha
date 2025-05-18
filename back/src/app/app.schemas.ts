@@ -92,6 +92,18 @@ export const changeEmail = {
 
 /* ============= PRIVATE CONTROLLER ============= */
 
+export const createVote = {
+	body: {
+		type: "object",
+		properties: {
+			targetId: { type: "string" },
+			vote: { type: "boolean" },
+		},
+		required: ["targetId", "vote"],
+		additionalProperties: false,
+	},
+} as const satisfies FastifyRouteSchema
+
 export const getUsers = {
 	querystring: {
 		type: "object",

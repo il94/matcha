@@ -52,13 +52,18 @@ class appRepository {
 	}
 
 	async getUsers(
+		userId: UserData["id"],
 		page: number,
 		limit: number,
 	): Promise<{
 		users: UserData[]
 		nextPage: number | null
 	}> {
-		const result = await this.db.query(appQueries.getUsersQuery, [page, limit])
+		const result = await this.db.query(appQueries.getUsersQuery, [
+			userId,
+			page,
+			limit,
+		])
 
 		const users = convertObjectKeysToCamelCase(result.rows)
 		const nextPage = result.rows.length >= limit ? page + 1 : null
@@ -259,6 +264,61 @@ class appRepository {
 
 		const [message] = convertObjectKeysToCamelCase(result.rows)
 		return message
+	}
+
+	async createUserVote(
+		userId: UserData["id"],
+		targetId: UserData["id"],
+		vote: boolean,
+	) {
+		return await this.db.transact(async (transact) => {
+			await transact.query(appQueries.createUserVoteMutation, [
+				userId,
+				targetId,
+				vote,
+			])
+			if (vote && (await this.isUserLiked(userId, targetId, transact))) {
+				const chat = await this.createChat(targetId, userId, transact)
+				return {
+					match: true,
+					chatId: chat.id,
+				}
+			}
+
+			return { match: false }
+		})
+	}
+
+	async isUserLiked(
+		userId: UserData["id"],
+		targetId: UserData["id"],
+		transact?: PoolClient,
+	): Promise<boolean> {
+		const executor = transact || this.db
+
+		const result = await executor.query(appQueries.isUserLikedQuery, [
+			userId,
+			targetId,
+		])
+
+		const [vote] = result.rows
+		return !!vote
+	}
+
+	async createChat(
+		userId1: UserData["id"],
+		userId2: UserData["id"],
+		transact?: PoolClient,
+	): Promise<ChatData> {
+		const executor = transact || this.db
+
+		const result = await executor.query(appQueries.createChatMutation, [
+			userId1,
+			userId2,
+		])
+
+		const [chat] = convertObjectKeysToCamelCase(result.rows)
+		return chat
 	}
 }
 

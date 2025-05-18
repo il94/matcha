@@ -12,7 +12,6 @@ import bcrypt from "bcrypt"
 import redisService from "@/redis/redis.service"
 import mailerService from "@/mailer/mailer.service"
 import s3Service from "@/s3/s3.service"
-import { isPGError, PGException } from "@/lib/PGException"
 
 class appService {
 	private repository
@@ -248,8 +247,18 @@ class appService {
 
 	/* ============ Users ============ */
 
-	async getUsers(page: number, limit: number) {
-		const users = await this.repository.getUsers(page, limit)
+	async createUserVote(
+		userId: UserData["id"],
+		targetId: UserData["id"],
+		vote: boolean,
+	) {
+		const isMatch = await this.repository.createUserVote(userId, targetId, vote)
+
+		return isMatch
+	}
+
+	async getUsers(userId: UserData["id"], page: number, limit: number) {
+		const users = await this.repository.getUsers(userId, page, limit)
 
 		for (const user of users.users) {
 			const pictures = []
@@ -452,10 +461,6 @@ class appService {
 			}
 
 			await this.repository.updateUser(userId, { email: newEmail })
-		} catch (error) {
-			if (isPGError(error))
-				throw new PGException(error.message, error.constraint)
-			throw error
 		} finally {
 			await this.redisService.deleteNewEmailToken(token)
 		}

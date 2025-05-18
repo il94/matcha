@@ -1,4 +1,9 @@
-import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query"
+import {
+	keepPreviousData,
+	useInfiniteQuery,
+	useMutation,
+	useQueryClient,
+} from "@tanstack/react-query"
 import getUsers from "@/services/getUsers"
 import { useCallback, useMemo, useRef, useState } from "react"
 import dayjs from "@/lib/dayjs"
@@ -9,6 +14,8 @@ import PhotosSection from "./PhotosSection"
 import WarningSection from "./WarningSection"
 import ActionButtons from "./ActionButtons"
 import useAuthOutletContext from "@/hooks/useAuthOutletContext"
+import createVote from "@/services/createVote"
+import MatchScreen from "./MatchScreen"
 
 type HomePageProps = {
 	isPreview?: boolean
@@ -39,6 +46,31 @@ export default function HomePage({ isPreview }: HomePageProps) {
 	})
 
 	const { user } = useAuthOutletContext()
+	const queryClient = useQueryClient()
+
+	const [isMatch, setIsMatch] = useState<number | undefined>()
+	const [newChatId, setNewChatId] = useState("")
+
+	const { mutate: createVoteMutation } = useMutation({
+		mutationFn: createVote,
+		onMutate: async (variables) => {
+			await scrollToTop()
+			if (variables.vote) photoSectionRef.current?.like()
+			else photoSectionRef.current?.dislike()
+		},
+		onSuccess: (data, variables) => {
+			if (variables.vote) {
+				if (data.match) {
+					queryClient.invalidateQueries({ queryKey: ["chats"] })
+					setNewChatId(data.chatId)
+					setIsMatch(currentCardIndex)
+				}
+			} else photoSectionRef.current?.dislike()
+		},
+		onError: (error) => {
+			console.error("Error creating vote MUTATION:", error) // TODO
+		},
+	})
 
 	if (isError) throw error // TODO Gestion d'erreur
 
@@ -70,22 +102,12 @@ export default function HomePage({ isPreview }: HomePageProps) {
 			await new Promise((resolve) => setTimeout(resolve, 300))
 	}, [])
 
-	const onDislike = useCallback(async () => {
-		await scrollToTop()
-		photoSectionRef.current?.dislike()
-	}, [scrollToTop])
-
-	const onLike = useCallback(async () => {
-		await scrollToTop()
-		photoSectionRef.current?.like()
-	}, [scrollToTop])
-
 	const scrollRef = useRef<HTMLDivElement>(null)
 
 	const today = useMemo(() => dayjs(), [])
 
 	return (
-		<main className="flex h-full flex-col justify-between overflow-y-hidden bg-background px-3 py-3">
+		<main className="relative flex h-full flex-col justify-between overflow-y-hidden bg-background p-3">
 			{!isPreview && (isPending || currentCardIndex === users.length) ? (
 				<h1>Load</h1> // TODO Loader
 			) : (
@@ -123,12 +145,29 @@ export default function HomePage({ isPreview }: HomePageProps) {
 						/>
 					</div>
 					<ActionButtons
-						onLike={onLike}
-						onDislike={onDislike}
+						onLike={() =>
+							createVoteMutation({
+								targetId: users[currentCardIndex].id,
+								vote: true,
+							})
+						}
+						onDislike={() =>
+							createVoteMutation({
+								targetId: users[currentCardIndex].id,
+								vote: false,
+							})
+						}
 						isPreview={isPreview}
 					/>
 				</>
 			)}
+			<MatchScreen
+				open={isMatch !== undefined}
+				onClose={() => setIsMatch(undefined)}
+				user={user}
+				userTarget={users[isMatch ?? 0]}
+				newChatId={newChatId}
+			/>
 		</main>
 	)
 }

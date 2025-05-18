@@ -1,6 +1,6 @@
 import { FastifyErrorHandler } from "./fastify.types"
 import { HttpException, UnauthorizedException } from "@/lib/HttpException"
-import { PGException } from "./lib/PGException"
+import { isPGError, PGException } from "./lib/PGException"
 
 const appErrorHandler: FastifyErrorHandler = (error, request, reply) => {
 	if (error instanceof HttpException) {
@@ -16,7 +16,7 @@ const appErrorHandler: FastifyErrorHandler = (error, request, reply) => {
 		}
 
 		return reply.status(httpError.code).send({ message: httpError.message })
-	} else if (error instanceof PGException) {
+	} else if (isPGError(error)) {
 		const pgError = error as PGException
 
 		if (pgError.constraint === "users_username_key")
@@ -32,7 +32,8 @@ const appErrorHandler: FastifyErrorHandler = (error, request, reply) => {
 			pgError.constraint === "users_elo_check" ||
 			pgError.constraint === "users_views_check" ||
 			pgError.constraint === "users_matchs_check" ||
-			pgError.constraint === "users_dates_check"
+			pgError.constraint === "users_dates_check" ||
+			pgError.constraint === "no_self_chat"
 		)
 			return reply.status(400).send({ message: "UNKNOWN_ERROR" })
 		else return reply.status(500).send({ message: "UNKNOWN_ERROR" })

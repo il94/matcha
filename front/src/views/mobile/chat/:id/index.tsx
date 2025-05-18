@@ -37,7 +37,7 @@ function ChatUser({ children }: ChatUserProps) {
 	return (
 		<div className="flex justify-end">
 			<div className="flex w-3/5 justify-end">
-				<p className="w-fit rounded-2xl bg-secondary px-4 py-2 text-sm text-primary-foreground">
+				<p className="w-fit rounded-2xl bg-secondary px-4 py-2 text-sm text-secondary-foreground">
 					{children}
 				</p>
 			</div>
@@ -55,7 +55,7 @@ function ChatSender({ avatar, children }: ChatSenderProps) {
 		<div className="flex items-end justify-start gap-x-2">
 			<img src={avatar} className="size-7 rounded-full object-cover" />
 			<div className="w-3/5">
-				<p className="w-fit rounded-2xl bg-gray-300 px-4 py-2 text-sm text-primary-foreground">
+				<p className="w-fit rounded-2xl bg-gray-300 px-4 py-2 text-sm text-background">
 					{children}
 				</p>
 			</div>

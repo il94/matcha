@@ -7,7 +7,8 @@ export const createChatsTableMutation = `
 		
 		CONSTRAINT fk_chats_user_id_1 FOREIGN KEY(user_id_1) REFERENCES users(id) ON DELETE CASCADE,
 		CONSTRAINT fk_chats_user_id_2 FOREIGN KEY(user_id_2) REFERENCES users(id) ON DELETE CASCADE,
-		CONSTRAINT unique_chat_users UNIQUE (user_id_1, user_id_2)
+		CONSTRAINT unique_chat_users UNIQUE (user_id_1, user_id_2),
+		CONSTRAINT no_self_chat CHECK (user_id_1 <> user_id_2)
 	);
 
 	CREATE INDEX IF NOT EXISTS idx_chats_user_id_1 ON chats(user_id_1);

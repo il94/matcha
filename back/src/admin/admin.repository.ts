@@ -42,6 +42,9 @@ class adminRepository {
 			console.log("DB: Create messages table")
 			await transact.query(adminQueries.createMessagesTableMutation)
 
+			console.log("DB: Create user_votes table")
+			await transact.query(adminQueries.createUserVotesTableMutation)
+
 			console.log("DB: Get tags")
 			const tagsDb = await transact.query(appQueries.getTagsQuery)
 
@@ -72,27 +75,6 @@ class adminRepository {
 					await transact.query(appQueries.createUserTagMutation, [
 						userCreated.id,
 						tagId,
-					])
-				}
-
-				if (userIds.length > 1) {
-					console.log("DB: Create chat")
-					const createChatresult = await transact.query(
-						appQueries.createChatMutation,
-						[userIds[i], userIds[i - 1]],
-					)
-					const chatCreated = createChatresult.rows[0]
-					console.log("DB: Create message 1")
-					await transact.query(appQueries.createMessageMutation, [
-						chatCreated.id,
-						userIds[i],
-						"Hello",
-					])
-					console.log("DB: Create message 2")
-					await transact.query(appQueries.createMessageMutation, [
-						chatCreated.id,
-						userIds[i - 1],
-						"Hola",
 					])
 				}
 			}
