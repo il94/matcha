@@ -1,12 +1,14 @@
-import { FastifyPluginAsync } from "fastify"
 import appService from "@/app/app.service"
 import * as schemas from "@/app/app.schemas"
-import { InferSchema } from "@/types"
 import appGuard from "./app.guard"
 import { BadRequestException } from "@/lib/HttpException"
 import wsController from "@/ws/ws.controller"
+import { FastifyPluginAsyncJsonSchemaToTs } from "@fastify/type-provider-json-schema-to-ts"
 
-const appController: FastifyPluginAsync = async (app, options) => {
+const appController: FastifyPluginAsyncJsonSchemaToTs = async (
+	app,
+	options,
+) => {
 	const service = new appService(app, options)
 
 	app.addHook("preHandler", appGuard)
@@ -15,51 +17,47 @@ const appController: FastifyPluginAsync = async (app, options) => {
 
 	/* ============ Auth ============ */
 
-	app.put<InferSchema<typeof schemas.complete>>(
-		"/complete",
-		{ schema: schemas.complete },
-		async (request, reply) => {
-			if (!request.isMultipart) throw new BadRequestException()
+	app.put("/complete", { schema: schemas.complete }, async (request, reply) => {
+		if (!request.isMultipart) throw new BadRequestException()
 
-			const { completingSessionId, userId } = request
-			const {
+		const { completingSessionId, userId } = request
+		const {
+			birthDate,
+			gender,
+			sexualOrientation,
+			bio,
+			tags,
+			principalPicture,
+			secondaryPicture1,
+			secondaryPicture2,
+			secondaryPicture3,
+			secondaryPicture4,
+		} = request.body
+
+		const sessionId = await service.complete(
+			{
+				id: userId,
+				sessionId: completingSessionId,
 				birthDate,
 				gender,
 				sexualOrientation,
 				bio,
-				tags,
-				principalPicture,
-				secondaryPicture1,
-				secondaryPicture2,
-				secondaryPicture3,
-				secondaryPicture4,
-			} = request.body
+			},
+			[
+				principalPicture as unknown as Buffer,
+				secondaryPicture1 as unknown as Buffer,
+				secondaryPicture2 as unknown as Buffer,
+				secondaryPicture3 as unknown as Buffer,
+				secondaryPicture4 as unknown as Buffer,
+			].filter(Boolean),
+			JSON.parse(tags),
+		)
 
-			const sessionId = await service.complete(
-				{
-					id: userId,
-					sessionId: completingSessionId,
-					birthDate,
-					gender,
-					sexualOrientation,
-					bio,
-				},
-				[
-					principalPicture as unknown as Buffer,
-					secondaryPicture1 as unknown as Buffer,
-					secondaryPicture2 as unknown as Buffer,
-					secondaryPicture3 as unknown as Buffer,
-					secondaryPicture4 as unknown as Buffer,
-				].filter(Boolean),
-				JSON.parse(tags),
-			)
-
-			return reply
-				.setCookie("sessionId", sessionId)
-				.clearCookie("completingSessionId")
-				.send()
-		},
-	)
+		return reply
+			.setCookie("sessionId", sessionId)
+			.clearCookie("completingSessionId")
+			.send()
+	})
 
 	app.delete("/logout", async (request, reply) => {
 		const { sessionId, completingSessionId, userId } = request
@@ -73,15 +71,11 @@ const appController: FastifyPluginAsync = async (app, options) => {
 
 	/* ============ Users ============ */
 
-	app.get<InferSchema<typeof schemas.getUsers>>(
-		"/users",
-		{ schema: schemas.getUsers },
-		(request) => {
-			const { page, limit } = request.query
+	app.get("/users", { schema: schemas.getUsers }, (request) => {
+		const { page, limit } = request.query
 
-			return service.getUsers(page, limit)
-		},
-	)
+		return service.getUsers(page, limit)
+	})
 
 	app.get("/user/me", (request) => {
 		const userId = request.userId
@@ -95,7 +89,7 @@ const appController: FastifyPluginAsync = async (app, options) => {
 		return service.getUserChats(userId)
 	})
 
-	app.patch<InferSchema<typeof schemas.updateUser>>("/user", (request) => {
+	app.patch("/user", { schema: schemas.updateUser }, (request) => {
 		const userId = request.userId
 		const userData = request.body
 
@@ -117,8 +111,9 @@ const appController: FastifyPluginAsync = async (app, options) => {
 		)
 	})
 
-	app.patch<InferSchema<typeof schemas.updateUserPictures>>(
+	app.patch(
 		"/user/pictures",
+		{ schema: schemas.updateUserPictures },
 		(request) => {
 			const userId = request.userId
 			const picturesData = request.body
@@ -138,7 +133,7 @@ const appController: FastifyPluginAsync = async (app, options) => {
 
 	/* ============ Chats ============ */
 
-	app.get<InferSchema<typeof schemas.chatIdParam>>(
+	app.get(
 		"/chat/:chatId/conversation",
 		{ schema: schemas.chatIdParam },
 		(request) => {

@@ -1,13 +1,5 @@
 import { FromSchema, JSONSchema } from "json-schema-to-ts"
 
-export type InferSchema<S extends Record<string, JSONSchema>> = {
-	Params: S["params"] extends JSONSchema ? FromSchema<S["params"]> : never
-	Body: S["body"] extends JSONSchema ? FromSchema<S["body"]> : never
-	Querystring: S["querystring"] extends JSONSchema
-		? FromSchema<S["querystring"]>
-		: never
-}
-
 declare global {
 	type PostUserBody = Omit<UserData, "id" | "createdAt">
 

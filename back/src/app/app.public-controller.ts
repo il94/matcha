@@ -1,10 +1,12 @@
-import { FastifyPluginAsync } from "fastify"
 import appService from "@/app/app.service"
 import * as schemas from "@/app/app.schemas"
-import { InferSchema } from "@/types"
 import { UnauthorizedException } from "@/lib/HttpException"
+import { FastifyPluginAsyncJsonSchemaToTs } from "@fastify/type-provider-json-schema-to-ts"
 
-const appPublicController: FastifyPluginAsync = async (app, options) => {
+const appPublicController: FastifyPluginAsyncJsonSchemaToTs = async (
+	app,
+	options,
+) => {
 	const service = new appService(app, options)
 
 	// app.addHook("preValidation", async (request, reply) => {
@@ -16,45 +18,27 @@ const appPublicController: FastifyPluginAsync = async (app, options) => {
 	// 	}
 	// })
 
-	app.post<InferSchema<typeof schemas.login>>(
-		"/login",
-		{ schema: schemas.login },
-		async (request, reply) => {
-			const { username, password } = request.body
+	app.post("/login", { schema: schemas.login }, async (request, reply) => {
+		const { username, password } = request.body
 
-			const { sessionId, isCompleting } = await service.login(
-				username,
-				password,
-			)
+		const { sessionId, isCompleting } = await service.login(username, password)
 
-			return reply
-				.setCookie(
-					isCompleting ? "completingSessionId" : "sessionId",
-					sessionId,
-				)
-				.send()
-		},
-	)
+		return reply
+			.setCookie(isCompleting ? "completingSessionId" : "sessionId", sessionId)
+			.send()
+	})
 
-	app.post<InferSchema<typeof schemas.register>>(
-		"/register",
-		{ schema: schemas.register },
-		async (request) => {
-			const userData = request.body
+	app.post("/register", { schema: schemas.register }, async (request) => {
+		const userData = request.body
 
-			return service.register(userData)
-		},
-	)
+		return service.register(userData)
+	})
 
-	app.post<InferSchema<typeof schemas.forgot>>(
-		"/forgot",
-		{ schema: schemas.forgot },
-		async (request) => {
-			const { email } = request.body
+	app.post("/forgot", { schema: schemas.forgot }, async (request) => {
+		const { email } = request.body
 
-			return service.forgot(email)
-		},
-	)
+		return service.forgot(email)
+	})
 
 	app.get("/verify", async (request) => {
 		const { sessionId, completingSessionId, resetingSessionId } =
@@ -69,39 +53,31 @@ const appPublicController: FastifyPluginAsync = async (app, options) => {
 		return result
 	})
 
-	app.get<InferSchema<typeof schemas.activate>>(
-		"/activate",
-		{ schema: schemas.activate },
-		async (request, reply) => {
-			const { token } = request.query
+	app.get("/activate", { schema: schemas.activate }, async (request, reply) => {
+		const { token } = request.query
 
-			const sessionId = await service.activate(token)
+		const sessionId = await service.activate(token)
 
-			return reply
-				.setCookie("completingSessionId", sessionId)
-				.redirect(process.env.API_FRONT_URL!)
-				.send()
-		},
-	)
+		return reply
+			.setCookie("completingSessionId", sessionId)
+			.redirect(process.env.API_FRONT_URL!)
+			.send()
+	})
 
-	app.get<InferSchema<typeof schemas.reset>>(
-		"/reset",
-		{ schema: schemas.reset },
-		async (request, reply) => {
-			const { token } = request.query
+	app.get("/reset", { schema: schemas.reset }, async (request, reply) => {
+		const { token } = request.query
 
-			const sessionId = await service.reset(token)
+		const sessionId = await service.reset(token)
 
-			return reply
-				.setCookie("resetingSessionId", sessionId, {
-					maxAge: parseInt(process.env.COOKIE_RESET_MAX_AGE!),
-				})
-				.redirect(process.env.API_FRONT_URL!)
-				.send()
-		},
-	)
+		return reply
+			.setCookie("resetingSessionId", sessionId, {
+				maxAge: parseInt(process.env.COOKIE_RESET_MAX_AGE!),
+			})
+			.redirect(process.env.API_FRONT_URL!)
+			.send()
+	})
 
-	app.patch<InferSchema<typeof schemas.resetPassword>>(
+	app.patch(
 		"/reset-password",
 		{ schema: schemas.resetPassword },
 		async (request, reply) => {
@@ -116,7 +92,7 @@ const appPublicController: FastifyPluginAsync = async (app, options) => {
 		},
 	)
 
-	app.get<InferSchema<typeof schemas.changeEmail>>(
+	app.get(
 		"/change-email",
 		{ schema: schemas.changeEmail },
 		async (request, reply) => {
