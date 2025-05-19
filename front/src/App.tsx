@@ -15,6 +15,8 @@ import ResetPage from "./views/mobile/reset"
 import ProtectedRoute from "./ProtectedRoute"
 import SettingsPage from "./views/mobile/settings"
 import { Toaster } from "@/components/ui/sonner"
+import ProfileViewsPage from "./views/mobile/profile/views"
+import ProfileLikesPage from "./views/mobile/profile/likes"
 
 /*
 	TODO
@@ -45,6 +47,8 @@ function App() {
 							<Route element={<MobileLayout />}>
 								<Route path="home" element={<HomePage />} />
 								<Route path="profile" element={<ProfilePage />} />
+								<Route path="profile/views" element={<ProfileViewsPage />} />
+								<Route path="profile/likes" element={<ProfileLikesPage />} />
 								<Route path="chat" element={<ChatPage />} />
 								<Route path="chat/:id" element={<ChatIdPage />} />
 								<Route path="settings" element={<SettingsPage />} />

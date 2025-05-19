@@ -119,6 +119,24 @@ class appRepository {
 		return chats
 	}
 
+	async getUserViews(
+		userId: UserData["id"],
+	): Promise<Pick<UserData, "id" | "firstName" | "principalPicture">[]> {
+		const result = await this.db.query(appQueries.getUserViewsQuery, [userId])
+
+		const users = convertObjectKeysToCamelCase(result.rows)
+		return users
+	}
+
+	async getUserLikes(
+		userId: UserData["id"],
+	): Promise<Pick<UserData, "id" | "firstName" | "principalPicture">[]> {
+		const result = await this.db.query(appQueries.getUserLikesQuery, [userId])
+
+		const users = convertObjectKeysToCamelCase(result.rows)
+		return users
+	}
+
 	async getUserChatConversation(
 		userId: UserData["id"],
 		chatId: ChatData["id"],

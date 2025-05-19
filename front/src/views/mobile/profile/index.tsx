@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import getUserMe from "@/services/getUserMe"
 import { useQuery } from "@tanstack/react-query"
 import { useNavigate } from "react-router"
@@ -6,14 +7,33 @@ import { useNavigate } from "react-router"
 type StatProps = {
 	value: number
 	label: string
+	isClickable?: boolean
 }
 
-function Stat({ value, label }: StatProps) {
+function Stat({ value, label, isClickable }: StatProps) {
+	const navigate = useNavigate()
+	const Parent = isClickable ? "button" : "div"
+
 	return (
-		<div className="flex flex-col items-center">
+		<Parent
+			onClick={() => {
+				if (isClickable) navigate(label.toLowerCase())
+			}}
+			className={cn(
+				"flex w-20 flex-col items-center",
+				isClickable && "cursor-pointer hover:text-primary",
+			)}
+		>
 			<p className="text-3xl font-bold">{value}</p>
-			<p className="text-1xl">{label}</p>
-		</div>
+			<p
+				className={cn(
+					"text-1xl",
+					isClickable && "underline underline-offset-8",
+				)}
+			>
+				{label}
+			</p>
+		</Parent>
 	)
 }
 
@@ -43,8 +63,8 @@ export default function ProfilePage() {
 					className="size-32 rounded-full object-cover"
 				/>
 				<div className="flex w-full justify-evenly">
-					<Stat value={user.views} label="Views" />
-					<Stat value={user.likes} label="Likes" />
+					<Stat value={user.views} label="Views" isClickable />
+					<Stat value={user.likes} label="Likes" isClickable />
 				</div>
 				<div className="flex w-full justify-evenly">
 					<Stat value={user.matchs} label="Matchs" />

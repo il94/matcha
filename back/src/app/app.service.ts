@@ -316,6 +316,32 @@ class appService {
 		return chats
 	}
 
+	async getUserViews(userId: UserData["id"]) {
+		const users = await this.repository.getUserViews(userId)
+
+		for (const user of users) {
+			const signedUrl = await this.s3Service.getSignedURL(
+				user.principalPicture.name,
+			)
+			user.principalPicture.name = signedUrl
+		}
+
+		return users
+	}
+
+	async getUserLikes(userId: UserData["id"]) {
+		const users = await this.repository.getUserLikes(userId)
+
+		for (const user of users) {
+			const signedUrl = await this.s3Service.getSignedURL(
+				user.principalPicture.name,
+			)
+			user.principalPicture.name = signedUrl
+		}
+
+		return users
+	}
+
 	async getUserChatConversation(
 		userId: UserData["id"],
 		chatId: ChatData["id"],
