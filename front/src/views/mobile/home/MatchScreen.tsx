@@ -70,6 +70,17 @@ export default function MatchScreen({
 	newChatId,
 }: MatchScreenProps) {
 	const navigate = useNavigate()
+	const [disableButtons, setDisableButtons] = useState(true)
+
+	useEffect(() => {
+		if (open) {
+			const timer = setTimeout(() => {
+				setDisableButtons(false)
+			}, 1500)
+
+			return () => clearTimeout(timer)
+		} else setDisableButtons(true)
+	}, [open])
 
 	return (
 		<AnimatePresence mode="wait">
@@ -104,18 +115,20 @@ export default function MatchScreen({
 					</div>
 					<div>
 						<Button
-							className="mt-4 w-full max-w-[300px]"
 							onClick={() => {
 								navigate(`/chat/${newChatId}`)
 								onClose()
 							}}
+							disabled={disableButtons}
+							className="mt-4 w-full max-w-[300px] select-none"
 						>
 							Say hello to {userTarget.firstName}
 						</Button>
 						<Button
 							variant="outline"
-							className="mt-4 w-full max-w-[300px]"
 							onClick={onClose}
+							disabled={disableButtons}
+							className="mt-4 w-full max-w-[300px] select-none"
 						>
 							Keep swiping
 						</Button>
