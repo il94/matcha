@@ -43,12 +43,12 @@ export default function ProfilePage() {
 					className="size-32 rounded-full object-cover"
 				/>
 				<div className="flex w-full justify-evenly">
-					<Stat value={user.elo} label="Rating" />
 					<Stat value={user.views} label="Views" />
+					<Stat value={user.likes} label="Likes" />
 				</div>
 				<div className="flex w-full justify-evenly">
 					<Stat value={user.matchs} label="Matchs" />
-					<Stat value={user.dates} label="Dates" />
+					<Stat value={user.elo} label="Rating" />
 				</div>
 			</div>
 

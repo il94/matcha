@@ -23,10 +23,10 @@ declare global {
 
 		tags: Tag[]
 
-		elo: number
 		views: number
+		likes: number
+		elo: number
 		matchs: number
-		dates: number
 	}
 
 	type Picture = {

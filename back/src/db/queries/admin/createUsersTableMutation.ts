@@ -15,9 +15,6 @@ export const createUsersTableMutation = `
 		sexual_orientation sexual_orientation DEFAULT NULL,
 		bio VARCHAR(256) DEFAULT NULL,
 		elo SMALLINT DEFAULT 0 NOT NULL CHECK (elo >= 0 AND elo <= 1000),
-		views SMALLINT DEFAULT 0 NOT NULL CHECK (views >= 0),
-		matchs SMALLINT DEFAULT 0 NOT NULL CHECK (views >= 0),
-		dates SMALLINT DEFAULT 0 NOT NULL CHECK (views >= 0),
 
 		activated BOOLEAN DEFAULT FALSE NOT NULL,
 		completed BOOLEAN DEFAULT FALSE NOT NULL

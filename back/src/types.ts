@@ -23,10 +23,10 @@ declare global {
 		sexualOrientation?: string
 		gender?: string
 		bio?: string
-		elo: number
 		views: number
+		likes: number
 		matchs: number
-		dates: number
+		elo: number
 
 		activated: boolean
 		completed: boolean
