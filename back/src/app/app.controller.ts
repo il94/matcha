@@ -85,8 +85,14 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 		return service.getUsers(userId, page, limit)
 	})
 
-	app.get("/user/me", (request) => {
+	app.get("/user", (request) => {
 		const userId = request.userId
+
+		return service.getUser(userId)
+	})
+
+	app.get("/user/:userId", { schema: schemas.getUserById }, (request) => {
+		const userId = request.params.userId
 
 		return service.getUser(userId)
 	})
@@ -155,7 +161,7 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 
 	app.get(
 		"/chat/:chatId/conversation",
-		{ schema: schemas.chatIdParam },
+		{ schema: schemas.getChatConversation },
 		(request) => {
 			const userId = request.userId
 			const { chatId } = request.params

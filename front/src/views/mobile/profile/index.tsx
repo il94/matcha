@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import getUserMe from "@/services/getUserMe"
+import getUser from "@/services/getUser"
 import { useQuery } from "@tanstack/react-query"
 import { useNavigate } from "react-router"
 
@@ -46,8 +46,8 @@ export default function ProfilePage() {
 		isError,
 		error,
 	} = useQuery({
-		queryKey: ["me"],
-		queryFn: getUserMe,
+		queryKey: ["user"],
+		queryFn: () => getUser({}),
 	})
 
 	if (isError) throw error // TODO

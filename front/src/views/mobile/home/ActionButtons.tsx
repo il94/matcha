@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
 
 type ActionButtonsProps = {
-	onLike: () => void
-	onDislike: () => void
+	onLike?: () => void
+	onDislike?: () => void
 	isPreview?: boolean
 }
 

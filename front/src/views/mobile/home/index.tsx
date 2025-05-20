@@ -17,11 +17,7 @@ import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 import createVote from "@/services/createVote"
 import MatchScreen from "./MatchScreen"
 
-type HomePageProps = {
-	isPreview?: boolean
-}
-
-export default function HomePage({ isPreview }: HomePageProps) {
+export default function HomePage() {
 	const {
 		data,
 		isPending,
@@ -42,7 +38,6 @@ export default function HomePage({ isPreview }: HomePageProps) {
 			return lastPage.nextPage
 		},
 		placeholderData: keepPreviousData,
-		enabled: !isPreview,
 	})
 
 	const { user } = useAuthOutletContext()
@@ -75,11 +70,8 @@ export default function HomePage({ isPreview }: HomePageProps) {
 	if (isError) throw error // TODO Gestion d'erreur
 
 	const users = useMemo(() => {
-		if (isPreview) {
-			return [user]
-		}
 		return data?.pages.flatMap((page) => page.users) ?? []
-	}, [data, isPreview, user])
+	}, [data])
 
 	const [currentCardIndex, setCurrentCardIndex] = useState(0)
 
@@ -108,7 +100,7 @@ export default function HomePage({ isPreview }: HomePageProps) {
 
 	return (
 		<main className="relative flex h-full flex-col justify-between overflow-y-hidden bg-background p-3">
-			{!isPreview && (isPending || currentCardIndex === users.length) ? (
+			{isPending || currentCardIndex === users.length ? (
 				<h1>Load</h1> // TODO Loader
 			) : (
 				<>
@@ -139,10 +131,7 @@ export default function HomePage({ isPreview }: HomePageProps) {
 						{users[currentCardIndex].tags.length ? (
 							<TagsSection tags={users[currentCardIndex].tags} />
 						) : null}
-						<WarningSection
-							user={users[currentCardIndex]}
-							isPreview={isPreview}
-						/>
+						<WarningSection user={users[currentCardIndex]} />
 					</div>
 					<ActionButtons
 						onLike={() =>
@@ -157,7 +146,6 @@ export default function HomePage({ isPreview }: HomePageProps) {
 								vote: false,
 							})
 						}
-						isPreview={isPreview}
 					/>
 				</>
 			)}

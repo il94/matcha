@@ -14,10 +14,11 @@ type PhotosSectionProps = {
 	users: User[]
 	currentCardIndex: number
 	setNextCard: () => void
+	disabled?: boolean
 }
 
 export default forwardRef(function PhotosSection(
-	{ users, currentCardIndex, setNextCard }: PhotosSectionProps,
+	{ users, currentCardIndex, setNextCard, disabled }: PhotosSectionProps,
 	ref,
 ) {
 	const today = useMemo(() => dayjs(), [])
@@ -82,6 +83,7 @@ export default forwardRef(function PhotosSection(
 						setNextCard={setNextCard}
 						parentWidth={cardContainerSize.width}
 						ref={cardRefs[Math.abs(index - users.length) - 1]}
+						disabled={disabled}
 					/>
 				)
 			})}

@@ -17,6 +17,7 @@ import SettingsPage from "./views/mobile/settings"
 import { Toaster } from "@/components/ui/sonner"
 import ProfileViewsPage from "./views/mobile/profile/views"
 import ProfileLikesPage from "./views/mobile/profile/likes"
+import PreviewPage from "./views/mobile/preview"
 
 /*
 	TODO
@@ -52,7 +53,8 @@ function App() {
 								<Route path="chat" element={<ChatPage />} />
 								<Route path="chat/:id" element={<ChatIdPage />} />
 								<Route path="settings" element={<SettingsPage />} />
-								<Route path="preview" element={<HomePage isPreview />} />
+								<Route path="preview" element={<PreviewPage />} />
+								<Route path="preview/:userId" element={<PreviewPage />} />
 							</Route>
 						</Route>
 						<Route path="*" element={<Navigate to="/" replace />} />

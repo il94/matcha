@@ -1,10 +1,6 @@
 import { FastifyRouteSchema } from "@/fastify.types"
-import { stringIdParam } from "./app.schemas-utils"
 import schemasModels from "./app.schemas-models"
 // TODO check les params de validation
-
-export const userIdParam = stringIdParam("userId")
-export const chatIdParam = stringIdParam("chatId")
 
 /* ============= PUBLIC CONTROLLER ============= */
 
@@ -96,7 +92,7 @@ export const createVote = {
 	body: {
 		type: "object",
 		properties: {
-			targetId: { type: "string" },
+			targetId: schemasModels.id,
 			vote: { type: "boolean" },
 		},
 		required: ["targetId", "vote"],
@@ -111,6 +107,17 @@ export const getUsers = {
 			page: { type: "number", default: 1 },
 			limit: { type: "number", default: 5 },
 		},
+		additionalProperties: false,
+	},
+} as const satisfies FastifyRouteSchema
+
+export const getUserById = {
+	params: {
+		type: "object",
+		properties: {
+			userId: schemasModels.id,
+		},
+		required: ["userId"],
 		additionalProperties: false,
 	},
 } as const satisfies FastifyRouteSchema
@@ -177,6 +184,17 @@ export const complete = {
 			secondaryPicture4: schemasModels.secondaryPicture4,
 		},
 		required: ["birthDate", "gender", "sexualOrientation", "tags", "bio"],
+		additionalProperties: false,
+	},
+} as const satisfies FastifyRouteSchema
+
+export const getChatConversation = {
+	params: {
+		type: "object",
+		properties: {
+			chatId: schemasModels.id,
+		},
+		required: ["chatId"],
 		additionalProperties: false,
 	},
 } as const satisfies FastifyRouteSchema

@@ -33,6 +33,7 @@ type SwipeableCardProps = {
 	pictures: User["pictures"]
 	setNextCard: () => void
 	parentWidth: number
+	disabled?: boolean
 }
 
 export default forwardRef(function SwipeableCard(
@@ -45,6 +46,7 @@ export default forwardRef(function SwipeableCard(
 		pictures,
 		setNextCard,
 		parentWidth,
+		disabled,
 	}: SwipeableCardProps,
 	ref,
 ) {
@@ -115,14 +117,20 @@ export default forwardRef(function SwipeableCard(
 		[displayPreviousPicture, displayNextPicture],
 	)
 
+	const dragProps = disabled
+		? undefined
+		: {
+				drag: "x" as const,
+				dragConstraints: { left: 0, right: 0, top: 0, bottom: 0 },
+				dragElastic,
+				onDrag,
+				onDragEnd,
+				animate: { x: cardX, rotate: cardRotation },
+			}
+
 	return (
 		<motion.div
-			drag="x"
-			dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-			dragElastic={dragElastic}
-			onDrag={onDrag}
-			onDragEnd={onDragEnd}
-			animate={{ x: cardX, rotate: cardRotation }}
+			{...dragProps}
 			transition={{
 				x: { duration: 0.2 },
 				rotate: { ease: "backOut" },

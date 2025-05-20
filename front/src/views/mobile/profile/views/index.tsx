@@ -1,17 +1,26 @@
 import { ScrollArea } from "@/components/ui/scroll-area"
 import getUserViews from "@/services/getUserViews"
 import { useQuery } from "@tanstack/react-query"
+import { useNavigate } from "react-router"
 
 type UserListItemProps = {
+	userId: User["id"]
 	src: User["principalPicture"]["name"]
 	username: User["firstName"]
 }
 
-function UserListItem({ src, username }: UserListItemProps) {
+function UserListItem({ userId, src, username }: UserListItemProps) {
+	const navigate = useNavigate()
+
 	return (
-		<li className="flex w-full items-center gap-1.5 py-1.5 last:pb-4">
-			<img src={src} className="size-10 rounded-full object-cover" />
-			<p>{username}</p>
+		<li className="last:pb-4">
+			<button
+				onClick={() => navigate(`/preview/${userId}`)}
+				className="flex w-full items-center gap-1.5 py-1.5"
+			>
+				<img src={src} className="size-10 rounded-full object-cover" />
+				<p>{username}</p>
+			</button>
 		</li>
 	)
 }
@@ -38,6 +47,7 @@ export default function ProfileViewsPage() {
 					{users.map((user) => (
 						<UserListItem
 							key={user.id}
+							userId={user.id}
 							src={user.principalPicture.name}
 							username={user.firstName}
 						/>

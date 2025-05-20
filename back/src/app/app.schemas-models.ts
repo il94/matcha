@@ -2,6 +2,7 @@ import Gender from "@/data/Gender"
 import SexualOrientation from "@/data/SexualOrientation"
 
 const schemasModels = {
+	id: { type: "string", format: "uuid" } as const,
 	username: {
 		type: "string",
 		minLength: 1,
