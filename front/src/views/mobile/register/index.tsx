@@ -94,6 +94,11 @@ export default function RegisterPage() {
 						message:
 							"Someone else snagged this username—it's popular ! Try a new one.",
 					})
+				else if (error.response.data.message === "WORD_IN_PASSWORD")
+					form.setError("password", {
+						message:
+							"Your password contains a common word—let's make it more unique !",
+					})
 				else
 					form.setError("root", {
 						message:

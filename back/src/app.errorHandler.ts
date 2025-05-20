@@ -19,20 +19,17 @@ const appErrorHandler: FastifyErrorHandler = (error, request, reply) => {
 	} else if (isPGError(error)) {
 		const pgError = error as PGException
 
-		if (pgError.constraint === "users_username_key")
-			return reply.status(403).send({ message: "Username already taken" })
-		else if (pgError.constraint === "users_email_key") {
+		if (pgError.constraint === "users_username_key") {
+			return reply.status(403).send({ message: "USERNAME_ALREADY_TAKEN" })
+		} else if (pgError.constraint === "users_email_key") {
 			if (request.url.includes("change-email"))
 				return reply.redirect(
 					`${process.env.API_FRONT_URL!}/settings?error=EMAIL_ALREADY_TAKEN`,
 				)
 
-			return reply.status(403).send({ message: "Email already taken" })
+			return reply.status(403).send({ message: "EMAIL_ALREADY_TAKEN" })
 		} else if (
 			pgError.constraint === "users_elo_check" ||
-			pgError.constraint === "users_views_check" ||
-			pgError.constraint === "users_matchs_check" ||
-			pgError.constraint === "users_dates_check" ||
 			pgError.constraint === "no_self_chat"
 		)
 			return reply.status(400).send({ message: "UNKNOWN_ERROR" })

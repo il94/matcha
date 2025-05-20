@@ -1,11 +1,11 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
-import { BadRequestException, ForbiddenException } from "@/lib/HttpException"
+import { ForbiddenException } from "@/lib/HttpException"
 import convertObjectKeysToCamelCase from "@/lib/convertObjectKeysToCamelCase"
 import * as appQueries from "@/db/queries/app"
-import { isPGError, PGException } from "@/lib/PGException"
 import { PoolClient } from "pg"
 import bcrypt from "bcrypt"
 import capitalize from "@/lib/capitalize"
+import * as fs from "fs"
 
 /*
 	TODO
@@ -17,9 +17,19 @@ import capitalize from "@/lib/capitalize"
 
 class appRepository {
 	private db
+	private words: Set<string>
 
 	constructor(app: FastifyInstance, options: FastifyPluginOptions) {
 		this.db = app.pg
+
+		try {
+			const wordsFile = fs.readFileSync("./src/data/words.txt", "utf-8")
+
+			this.words = new Set(wordsFile.split("\n").filter(Boolean))
+		} catch (error) {
+			app.log.error("Error reading words file:", error)
+			this.words = new Set()
+		}
 	}
 
 	/* ============ Users ============ */
@@ -31,24 +41,21 @@ class appRepository {
 		>,
 		transact?: PoolClient,
 	): Promise<UserData["id"]> {
-		try {
-			const executor = transact || this.db
+		const executor = transact || this.db
 
-			const result = await executor.query(appQueries.createUserMutation, [
-				await bcrypt.hash(userData.password, 10),
-				capitalize(userData.firstName),
-				capitalize(userData.lastName),
-				userData.username,
-				userData.email,
-			])
+		if (this.isWordInPassword(userData.password))
+			throw new ForbiddenException("WORD_IN_PASSWORD")
 
-			const [user] = convertObjectKeysToCamelCase(result.rows)
-			return user.id
-		} catch (error) {
-			if (isPGError(error))
-				throw new PGException(error.message, error.constraint)
-			throw new BadRequestException((error as Error).message)
-		}
+		const result = await executor.query(appQueries.createUserMutation, [
+			await bcrypt.hash(userData.password, 10),
+			capitalize(userData.firstName),
+			capitalize(userData.lastName),
+			userData.username,
+			userData.email,
+		])
+
+		const [user] = convertObjectKeysToCamelCase(result.rows)
+		return user.id
 	}
 
 	async getUsers(
@@ -337,6 +344,15 @@ class appRepository {
 
 		const [chat] = convertObjectKeysToCamelCase(result.rows)
 		return chat
+	}
+
+	/* ============ Utils ============ */
+
+	isWordInPassword(password: string) {
+		for (const word of this.words) {
+			if (password.toLowerCase().includes(word)) return true
+		}
+		return false
 	}
 }
 

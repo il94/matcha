@@ -1,5 +1,6 @@
 import { FastifyPluginAsync } from "fastify"
 import { HttpException } from "./lib/HttpException"
+import { isPGError, PGException } from "./lib/PGException"
 
 const RED = "\x1b[31m"
 const GREEN = "\x1b[32m"
@@ -40,6 +41,31 @@ const appLogger: FastifyPluginAsync = async (app, options) => {
 					`(${request.ip}) ${httpError.code} ${request.method} ${request.url}`,
 				),
 			)
+		} else if (isPGError(error)) {
+			const pgError = error as PGException
+
+			if (
+				pgError.constraint === "users_username_key" ||
+				pgError.constraint === "users_email_key"
+			) {
+				request.log.error(
+					error,
+					print(RED, `(${request.ip}) ${403} ${request.method} ${request.url}`),
+				)
+			} else if (
+				pgError.constraint === "users_elo_check" ||
+				pgError.constraint === "no_self_chat"
+			) {
+				request.log.error(
+					error,
+					print(RED, `(${request.ip}) ${400} ${request.method} ${request.url}`),
+				)
+			} else {
+				request.log.error(
+					error,
+					print(RED, `(${request.ip}) ${500} ${request.method} ${request.url}`),
+				)
+			}
 		} else {
 			request.log.error(
 				error,

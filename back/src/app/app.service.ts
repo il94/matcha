@@ -68,12 +68,6 @@ class appService {
 			"email" | "firstName" | "lastName" | "username" | "password"
 		>,
 	) {
-		if (await this.repository.getUserByEmail(userData.email))
-			throw new ForbiddenException("EMAIL_ALREADY_TAKEN")
-
-		if (await this.repository.getUserByUsername(userData.username))
-			throw new ForbiddenException("USERNAME_ALREADY_TAKEN")
-
 		const token = this.getRandomToken()
 		let userId: UserData["id"] = ""
 
@@ -386,18 +380,13 @@ class appService {
 		}
 
 		if (
-			userData.username &&
-			(await this.repository.getUserByUsername(userData.username))
-		)
-			throw new ForbiddenException("USERNAME_ALREADY_TAKEN")
-		else if (
 			userData.newPassword &&
 			(!userData.currentPassword ||
 				!(await bcrypt.compare(userData.currentPassword, user.password)))
 		)
 			throw new ForbiddenException("INVALID_PASSWORD")
 
-		this.repository.updateUser(
+		await this.repository.updateUser(
 			userId,
 			{
 				...userData,
@@ -426,54 +415,48 @@ class appService {
 			{ picturesBuffer: [] as Buffer[], picturesString: [] as string[] },
 		)
 
-		try {
-			const userPictures = await this.repository.getUserPictures(userId)
+		const userPictures = await this.repository.getUserPictures(userId)
 
-			// Vérifier que les url d'images envoyées existent dans la base de données
-			for (const pictureString of picturesString) {
-				const pictureName = pictureString.match(/\/([^/?]+)(?:\?|$)/)
-				if (!pictureName) throw new BadRequestException("INVALID_PICTURE_URL")
-				if (
-					!userPictures.find(
-						(userPicture) => userPicture.name === pictureName[1],
-					)
-				)
-					throw new BadRequestException("INVALID_PICTURE_URL_2")
-			}
+		// Vérifier que les url d'images envoyées existent dans la base de données
+		for (const pictureString of picturesString) {
+			const pictureName = pictureString.match(/\/([^/?]+)(?:\?|$)/)
+			if (!pictureName) throw new BadRequestException("INVALID_PICTURE_URL")
+			if (
+				!userPictures.find((userPicture) => userPicture.name === pictureName[1])
+			)
+				throw new BadRequestException("INVALID_PICTURE_URL_2")
+		}
 
-			const pictureNames = await this.s3Service.uploadFiles(picturesBuffer)
+		const pictureNames = await this.s3Service.uploadFiles(picturesBuffer)
 
-			const finalPictures: string[] = []
+		const finalPictures: string[] = []
 
-			let bufferIndex = 0
+		let bufferIndex = 0
 
-			for (const picture of pictures) {
-				if (typeof picture === "string") {
-					const fileName = picture.match(/\/([^/?]+)(?:\?|$)/)
-					if (!fileName) throw new BadRequestException()
+		for (const picture of pictures) {
+			if (typeof picture === "string") {
+				const fileName = picture.match(/\/([^/?]+)(?:\?|$)/)
+				if (!fileName) throw new BadRequestException()
 
-					finalPictures.push(fileName[1])
-				} else {
-					finalPictures.push(pictureNames[bufferIndex])
-					bufferIndex++
-				}
-			}
-
-			// Ajouter les fichiers restants (si jamais il y a eu plus de buffers que prévu dans pictures)
-			while (bufferIndex < pictureNames.length) {
+				finalPictures.push(fileName[1])
+			} else {
 				finalPictures.push(pictureNames[bufferIndex])
 				bufferIndex++
 			}
-
-			await this.repository.updatePictures(userId, finalPictures)
-			await this.s3Service.deleteFiles(
-				userPictures
-					.map((picture) => picture.name)
-					.filter((picture) => !finalPictures.includes(picture)),
-			)
-		} catch (error) {
-			throw error
 		}
+
+		// Ajouter les fichiers restants (si jamais il y a eu plus de buffers que prévu dans pictures)
+		while (bufferIndex < pictureNames.length) {
+			finalPictures.push(pictureNames[bufferIndex])
+			bufferIndex++
+		}
+
+		await this.repository.updatePictures(userId, finalPictures)
+		await this.s3Service.deleteFiles(
+			userPictures
+				.map((picture) => picture.name)
+				.filter((picture) => !finalPictures.includes(picture)),
+		)
 	}
 
 	async changeEmail(token: string) {

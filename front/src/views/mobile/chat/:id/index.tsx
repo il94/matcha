@@ -100,8 +100,6 @@ export default function ChatIdPage() {
 			const data = JSON.parse(event.data)
 
 			if (data.type === "message") {
-				console.log("Message : ", data)
-
 				setMessages((prevMessages) => {
 					return [
 						...prevMessages,
