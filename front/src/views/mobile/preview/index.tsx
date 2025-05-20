@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { useMemo, useRef } from "react"
+import { useMemo } from "react"
 import dayjs from "@/lib/dayjs"
 import BioSection from "@/views/mobile/home/BioSection"
 import EssentialsSection from "@/views/mobile/home/EssentialsSection"
@@ -9,11 +9,14 @@ import WarningSection from "@/views/mobile/home/WarningSection"
 import ActionButtons from "@/views/mobile/home/ActionButtons"
 import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 import getUser from "@/services/getUser"
-import { useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
+import { Button } from "@/components/ui/button"
 
 export default function PreviewPage() {
 	const { userId } = useParams<{ userId?: string }>()
 	const { user } = useAuthOutletContext()
+
+	const navigate = useNavigate()
 
 	const {
 		data: userTarget,
@@ -30,8 +33,6 @@ export default function PreviewPage() {
 
 	const userToDisplay = userId && userTarget ? userTarget : user
 
-	const scrollRef = useRef<HTMLDivElement>(null)
-
 	const today = useMemo(() => dayjs(), [])
 
 	return (
@@ -40,10 +41,7 @@ export default function PreviewPage() {
 				<h1>Load</h1> // TODO Loader
 			) : (
 				<>
-					<div
-						className="no-scrollbar relative h-full space-y-3 overflow-y-scroll"
-						ref={scrollRef}
-					>
+					<div className="no-scrollbar relative h-full space-y-3 overflow-y-scroll">
 						<PhotosSection
 							users={[userToDisplay]}
 							currentCardIndex={0}
@@ -67,7 +65,14 @@ export default function PreviewPage() {
 						{userToDisplay.tags.length ? (
 							<TagsSection tags={userToDisplay.tags} />
 						) : null}
-						<WarningSection user={userToDisplay} isPreview={!userId} />
+						{userId && <WarningSection user={userToDisplay} />}
+						<Button
+							onClick={() => navigate(-1)}
+							variant="dark"
+							className="h-10 w-full rounded-xl"
+						>
+							Back
+						</Button>
 					</div>
 					<ActionButtons isPreview />
 				</>
