@@ -7,12 +7,13 @@ import { useNavigate } from "react-router"
 type StatProps = {
 	value: number
 	label: string
-	isClickable?: boolean
+	isButton?: boolean
 }
 
-function Stat({ value, label, isClickable }: StatProps) {
+function Stat({ value, label, isButton }: StatProps) {
 	const navigate = useNavigate()
-	const Parent = isClickable ? "button" : "div"
+	const Parent = isButton ? "button" : "div"
+	const isClickable = isButton && value > 0
 
 	return (
 		<Parent
@@ -28,7 +29,7 @@ function Stat({ value, label, isClickable }: StatProps) {
 			<p
 				className={cn(
 					"text-1xl",
-					isClickable && "underline underline-offset-8",
+					isClickable && value > 0 && "underline underline-offset-8",
 				)}
 			>
 				{label}
@@ -63,8 +64,8 @@ export default function ProfilePage() {
 					className="size-32 rounded-full object-cover"
 				/>
 				<div className="flex w-full justify-evenly">
-					<Stat value={user.views} label="Views" isClickable />
-					<Stat value={user.likes} label="Likes" isClickable />
+					<Stat value={user.views} label="Views" isButton />
+					<Stat value={user.likes} label="Likes" isButton />
 				</div>
 				<div className="flex w-full justify-evenly">
 					<Stat value={user.matchs} label="Matchs" />

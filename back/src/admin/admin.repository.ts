@@ -8,44 +8,49 @@ import * as appQueries from "@/db/queries/app"
 
 class adminRepository {
 	private db
+	private log
 
 	constructor(app: FastifyInstance, options: FastifyPluginOptions) {
 		this.db = app.pg
+		this.log = app.log
 	}
 
 	async fillDb() {
 		await this.db.transact(async (transact) => {
-			console.log("DB: Create uuid extension")
+			this.log.info("DB: Create uuid extension")
 			await transact.query(adminQueries.createUuidExtensionMutation)
 
-			console.log("DB: Create gender enum")
+			this.log.info("DB: Create gender enum")
 			await transact.query(adminQueries.createGenderEnumMutation)
 
-			console.log("DB: Create sexualOrientation enum")
+			this.log.info("DB: Create sexualOrientation enum")
 			await transact.query(adminQueries.createSexualOrientationEnumMutation)
 
-			console.log("DB: Create user table")
+			this.log.info("DB: Create user table")
 			await transact.query(adminQueries.createUsersTableMutation)
 
-			console.log("DB: Create pictures table")
+			this.log.info("DB: Create pictures table")
 			await transact.query(adminQueries.createPicturesTableMutation)
 
-			console.log("DB: Create tags table")
+			this.log.info("DB: Create tags table")
 			await transact.query(adminQueries.createTagsTableMutation)
 
-			console.log("DB: Create user_tags table")
+			this.log.info("DB: Create user_tags table")
 			await transact.query(adminQueries.createUserTagsTableMutation)
 
-			console.log("DB: Create chats table")
+			this.log.info("DB: Create chats table")
 			await transact.query(adminQueries.createChatsTableMutation)
 
-			console.log("DB: Create messages table")
+			this.log.info("DB: Create messages table")
 			await transact.query(adminQueries.createMessagesTableMutation)
 
-			console.log("DB: Create user_votes table")
-			await transact.query(adminQueries.createUserVotesTableMutation)
+			this.log.info("DB: Create votes table")
+			await transact.query(adminQueries.createVotesTableMutation)
 
-			console.log("DB: Get tags")
+			this.log.info("DB: Create reports table")
+			await transact.query(adminQueries.createReportsTableMutation)
+
+			this.log.info("DB: Get tags")
 			const tagsDb = await transact.query(appQueries.getTagsQuery)
 
 			const userIds = []
@@ -53,7 +58,7 @@ class adminRepository {
 			for (let i = 0; i < users.length; i++) {
 				const { tags, data } = users[i]
 
-				console.log("DB: Create user")
+				this.log.info("DB: Create user")
 				const createUserResult = await transact.query(
 					adminQueries.createUserMutation,
 					[await bcrypt.hash(data[0] as string, 10), ...[...data].splice(1)],
@@ -61,7 +66,7 @@ class adminRepository {
 				const userCreated = createUserResult.rows[0]
 				userIds.push(userCreated.id)
 				for (let j = 0; j < pictures[i].length; j++) {
-					console.log("DB: Create picture")
+					this.log.info("DB: Create picture")
 					await transact.query(appQueries.createPictureMutation, [
 						userCreated.id,
 						pictures[i][j],
@@ -71,7 +76,7 @@ class adminRepository {
 
 				for (const tag of tags) {
 					const { id: tagId } = tagsDb.rows.find((tagDb) => tagDb.name === tag)
-					console.log("DB: Create user tag")
+					this.log.info("DB: Create user tag")
 					await transact.query(appQueries.createUserTagMutation, [
 						userCreated.id,
 						tagId,

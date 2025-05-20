@@ -20,7 +20,7 @@ export const getUsersQuery = `
 		AND users.id != $1
 		AND users.id NOT IN (
 			SELECT target_id
-			FROM user_votes
+			FROM votes
 			WHERE user_id = $1
 		)
 	GROUP BY users.id

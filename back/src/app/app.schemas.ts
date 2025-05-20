@@ -100,6 +100,18 @@ export const createVote = {
 	},
 } as const satisfies FastifyRouteSchema
 
+export const createReport = {
+	body: {
+		type: "object",
+		properties: {
+			targetId: schemasModels.id,
+			reason: { type: "string" },
+		},
+		required: ["targetId", "reason"],
+		additionalProperties: false,
+	},
+} as const satisfies FastifyRouteSchema
+
 export const getUsers = {
 	querystring: {
 		type: "object",

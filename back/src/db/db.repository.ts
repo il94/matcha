@@ -18,7 +18,8 @@ class dbRepository {
 		await this.db.query(adminQueries.createUserTagsTableMutation)
 		await this.db.query(adminQueries.createChatsTableMutation)
 		await this.db.query(adminQueries.createMessagesTableMutation)
-		await this.db.query(adminQueries.createUserVotesTableMutation)
+		await this.db.query(adminQueries.createVotesTableMutation)
+		await this.db.query(adminQueries.createReportsTableMutation)
 	}
 }
 

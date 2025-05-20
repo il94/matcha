@@ -291,13 +291,13 @@ class appRepository {
 		return message
 	}
 
-	async createUserVote(
+	async createVote(
 		userId: UserData["id"],
 		targetId: UserData["id"],
 		vote: boolean,
 	) {
 		return await this.db.transact(async (transact) => {
-			await transact.query(appQueries.createUserVoteMutation, [
+			await transact.query(appQueries.createVoteMutation, [
 				userId,
 				targetId,
 				vote,
@@ -312,6 +312,18 @@ class appRepository {
 
 			return { match: false }
 		})
+	}
+
+	async createReport(
+		userId: UserData["id"],
+		targetId: UserData["id"],
+		reason: string,
+	) {
+		await this.db.query(appQueries.createReportMutation, [
+			userId,
+			targetId,
+			reason,
+		])
 	}
 
 	async isUserLiked(

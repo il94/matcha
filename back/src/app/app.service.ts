@@ -241,14 +241,22 @@ class appService {
 
 	/* ============ Users ============ */
 
-	async createUserVote(
+	async createVote(
 		userId: UserData["id"],
 		targetId: UserData["id"],
 		vote: boolean,
 	) {
-		const isMatch = await this.repository.createUserVote(userId, targetId, vote)
+		const isMatch = await this.repository.createVote(userId, targetId, vote)
 
 		return isMatch
+	}
+
+	async createReport(
+		userId: UserData["id"],
+		targetId: UserData["id"],
+		reason: string,
+	) {
+		await this.repository.createReport(userId, targetId, reason)
 	}
 
 	async getUsers(userId: UserData["id"], page: number, limit: number) {
