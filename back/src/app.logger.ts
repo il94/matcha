@@ -54,7 +54,9 @@ const appLogger: FastifyPluginAsync = async (app, options) => {
 				)
 			} else if (
 				pgError.constraint === "users_elo_check" ||
-				pgError.constraint === "no_self_chat"
+				pgError.constraint === "no_self_chat" ||
+				pgError.constraint === "no_self_block" ||
+				pgError.constraint === "user_blocks_pkey"
 			) {
 				request.log.error(
 					error,

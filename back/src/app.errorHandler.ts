@@ -30,7 +30,9 @@ const appErrorHandler: FastifyErrorHandler = (error, request, reply) => {
 			return reply.status(403).send({ message: "EMAIL_ALREADY_TAKEN" })
 		} else if (
 			pgError.constraint === "users_elo_check" ||
-			pgError.constraint === "no_self_chat"
+			pgError.constraint === "no_self_chat" ||
+			pgError.constraint === "no_self_block" ||
+			pgError.constraint === "user_blocks_pkey"
 		)
 			return reply.status(400).send({ message: "UNKNOWN_ERROR" })
 		else return reply.status(500).send({ message: "UNKNOWN_ERROR" })
