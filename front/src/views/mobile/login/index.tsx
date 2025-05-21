@@ -1,7 +1,7 @@
 import InputTextField from "@/components/FormFields/InputTextField"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
-import { Link, useNavigate } from "react-router"
+import { Link } from "react-router"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormMessage } from "@/components/ui/form"
@@ -11,6 +11,7 @@ import { AxiosError } from "axios"
 import { useCallback, useState } from "react"
 
 import ForgotPasswordDialog from "./ForgotPasswordDialog"
+import useNavigateFrom from "@/hooks/useNavigateFrom"
 
 const formSchema = z.object({
 	username: z
@@ -35,12 +36,12 @@ export default function LoginPage() {
 		},
 	})
 
-	const navigate = useNavigate()
+	const navigateFrom = useNavigateFrom()
 
 	const { mutate: loginMutation } = useMutation({
 		mutationFn: login,
 		onSuccess: () => {
-			navigate("/home")
+			navigateFrom("/home")
 		},
 		onError: (error: AxiosError) => {
 			if (error.response?.status === 403)

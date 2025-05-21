@@ -21,8 +21,8 @@ export default function ProfileLikesPage() {
 	if (isPending) return <p>Load</p> // TODO
 
 	return (
-		<main className="flex h-full flex-col justify-between overflow-y-hidden px-1.5 pt-6">
-			<h2 className="pl-1.5 text-2xl">Views</h2>
+		<main className="flex h-full flex-col justify-between overflow-y-hidden px-1.5 pb-6 pt-6">
+			<h2 className="pl-1.5 text-2xl">Likes</h2>
 			<UserList users={users} />
 			<Button
 				onClick={() => navigate(-1)}

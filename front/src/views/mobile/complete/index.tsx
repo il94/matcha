@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { useCallback } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { useNavigate, useSearchParams } from "react-router"
+import { useSearchParams } from "react-router"
 import { z } from "zod"
 import Step1 from "./Step1"
 import Step2 from "./Step2"
@@ -14,6 +14,7 @@ import Gender from "@/data/Gender"
 import SexualOrientation from "@/data/SexualOrientation"
 import dayjs from "@/lib/dayjs"
 import useAuthOutletContext from "@/hooks/useAuthOutletContext"
+import useNavigateFrom from "@/hooks/useNavigateFrom"
 
 export const formSchema = z.object({
 	birthDate: z
@@ -60,12 +61,12 @@ export default function CompletePage() {
 		mode: "onChange",
 	})
 
-	const navigate = useNavigate()
+	const navigateFrom = useNavigateFrom()
 
 	const { mutate: completeMutation } = useMutation({
 		mutationFn: complete,
 		onSuccess: () => {
-			navigate("/home")
+			navigateFrom("/home")
 		},
 	})
 

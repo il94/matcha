@@ -251,6 +251,10 @@ class appService {
 		return isMatch
 	}
 
+	async createBlock(userId: UserData["id"], targetId: UserData["id"]) {
+		await this.repository.createBlock(userId, targetId)
+	}
+
 	async createReport(
 		userId: UserData["id"],
 		targetId: UserData["id"],
@@ -286,8 +290,11 @@ class appService {
 		return users
 	}
 
-	async getUser(userId: UserData["id"]) {
-		const user = await this.repository.getUser(userId)
+	async getUser(userId: UserData["id"], targetId?: UserData["id"]) {
+		if (targetId && (await this.repository.isUserBlocked(userId, targetId)))
+			throw new BadRequestException()
+
+		const user = await this.repository.getUser(targetId ?? userId)
 
 		if (user.firstName === "Ilyes") {
 			const signedUrl = await this.s3Service.getSignedURL(

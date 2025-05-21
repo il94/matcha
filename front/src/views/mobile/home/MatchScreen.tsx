@@ -1,7 +1,7 @@
 import { AnimatePresence, motion, useAnimation } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router"
+import useNavigateFrom from "@/hooks/useNavigateFrom"
 
 const radius = 80 // rayon du cercle en pixels
 const animationDuration = 8 // durée d’un tour complet en secondes
@@ -69,7 +69,7 @@ export default function MatchScreen({
 	userTarget,
 	newChatId,
 }: MatchScreenProps) {
-	const navigate = useNavigate()
+	const navigateFrom = useNavigateFrom()
 	const [disableButtons, setDisableButtons] = useState(true)
 
 	useEffect(() => {
@@ -116,7 +116,7 @@ export default function MatchScreen({
 					<div>
 						<Button
 							onClick={() => {
-								navigate(`/chat/${newChatId}`)
+								navigateFrom(`/chat/${newChatId}`)
 								onClose()
 							}}
 							disabled={disableButtons}

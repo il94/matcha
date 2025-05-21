@@ -147,7 +147,7 @@ class appRepository {
 	async getUserChatConversation(
 		userId: UserData["id"],
 		chatId: ChatData["id"],
-	): Promise<ChatData> {
+	): Promise<ChatData & Pick<UserData, "id">> {
 		const result = await this.db.query(
 			appQueries.getUserChatConversationQuery,
 			[userId, chatId],
@@ -303,7 +303,7 @@ class appRepository {
 				vote,
 			])
 			if (vote && (await this.isUserLiked(userId, targetId, transact))) {
-				const chat = await this.createChat(targetId, userId, transact)
+				const chat = await this.createChat(userId, targetId, transact)
 				return {
 					match: true,
 					chatId: chat.id,
@@ -311,6 +311,18 @@ class appRepository {
 			}
 
 			return { match: false }
+		})
+	}
+
+	async createBlock(userId: UserData["id"], targetId: UserData["id"]) {
+		return await this.db.transact(async (transact) => {
+			await transact.query(appQueries.createUserBlockMutation, [
+				userId,
+				targetId,
+			])
+			await this.deleteVote(userId, targetId, transact)
+			await this.deleteVote(targetId, userId, transact)
+			await this.deleteChatByUserIds(userId, targetId, transact)
 		})
 	}
 
@@ -356,6 +368,43 @@ class appRepository {
 
 		const [chat] = convertObjectKeysToCamelCase(result.rows)
 		return chat
+	}
+
+	async deleteChatByUserIds(
+		userId1: UserData["id"],
+		userId2: UserData["id"],
+		transact?: PoolClient,
+	) {
+		const executor = transact || this.db
+		await executor.query(appQueries.deleteChatByUserIdsMutation, [
+			userId1,
+			userId2,
+		])
+	}
+
+	async deleteVote(
+		userId: UserData["id"],
+		targetId: UserData["id"],
+		transact?: PoolClient,
+	) {
+		const executor = transact || this.db
+
+		await executor.query(appQueries.deleteVoteMutation, [userId, targetId])
+	}
+
+	async isUserBlocked(
+		userId: UserData["id"],
+		targetId: UserData["id"],
+		transact?: PoolClient,
+	): Promise<boolean> {
+		const executor = transact || this.db
+		const result = await executor.query(appQueries.isUserBlockedQuery, [
+			userId,
+			targetId,
+		])
+
+		const [block] = result.rows
+		return !!block
 	}
 
 	/* ============ Utils ============ */

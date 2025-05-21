@@ -13,9 +13,10 @@ import {
 } from "react"
 import useId from "@/hooks/useId"
 import { useQuery } from "@tanstack/react-query"
-import { useNavigate } from "react-router"
 import getUserChatConversation from "@/services/getUserChatConversation"
 import useAuthOutletContext from "@/hooks/useAuthOutletContext"
+import useNavigateFrom from "@/hooks/useNavigateFrom"
+import { useNavigate } from "react-router"
 
 type ChatDateProps = {
 	date: string
@@ -126,6 +127,7 @@ export default function ChatIdPage() {
 	}, [onMessage, socket])
 
 	const navigate = useNavigate()
+	const navigateFrom = useNavigateFrom()
 
 	if (isError) throw error
 
@@ -161,13 +163,16 @@ export default function ChatIdPage() {
 				<Button onClick={() => navigate(-1)} variant="ghost" size="icon">
 					<ArrowLeftIcon className="size-9" />
 				</Button>
-				<div className="ml-3 flex grow items-center gap-x-1.5">
+				<button
+					onClick={() => navigateFrom(`/preview/${chat?.id}`)}
+					className="ml-3 flex grow items-center gap-x-1.5"
+				>
 					<img
 						src={chat?.avatar}
 						className="size-9 rounded-full object-cover"
 					/>
 					<p className="text-lg font-bold">{chat?.title}</p>
-				</div>
+				</button>
 				<div className="flex items-center gap-x-3">
 					<PhoneIcon className="size-7" />
 					<VideoIcon className="size-8" />

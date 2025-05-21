@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router"
+import useNavigateFrom from "@/hooks/useNavigateFrom"
 
 type UserListItemProps = {
 	userId: User["id"]
@@ -11,12 +11,12 @@ export default function UserListItem({
 	src,
 	username,
 }: UserListItemProps) {
-	const navigate = useNavigate()
+	const navigateFrom = useNavigateFrom()
 
 	return (
 		<li className="last:pb-4">
 			<button
-				onClick={() => navigate(`/preview/${userId}`)}
+				onClick={() => navigateFrom(`/preview/${userId}`)}
 				className="flex w-full items-center gap-1.5 rounded-sm py-1.5 pl-1.5 transition-all hover:bg-muted/50"
 			>
 				<img src={src} className="size-10 rounded-full object-cover" />

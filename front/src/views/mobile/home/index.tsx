@@ -98,6 +98,10 @@ export default function HomePage() {
 
 	const today = useMemo(() => dayjs(), [])
 
+	const handleBlock = useCallback(async () => {
+		photoSectionRef.current?.dislike()
+	}, [photoSectionRef])
+
 	return (
 		<main className="relative flex h-full flex-col justify-between overflow-y-hidden bg-background p-3">
 			{isPending || currentCardIndex === users.length ? (
@@ -131,7 +135,10 @@ export default function HomePage() {
 						{users[currentCardIndex].tags.length ? (
 							<TagsSection tags={users[currentCardIndex].tags} />
 						) : null}
-						<WarningSection user={users[currentCardIndex]} />
+						<WarningSection
+							user={users[currentCardIndex]}
+							onBlock={handleBlock}
+						/>
 					</div>
 					<ActionButtons
 						onLike={() =>

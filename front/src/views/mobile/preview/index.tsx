@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
 import dayjs from "@/lib/dayjs"
 import BioSection from "@/views/mobile/home/BioSection"
 import EssentialsSection from "@/views/mobile/home/EssentialsSection"
@@ -9,7 +9,7 @@ import WarningSection from "@/views/mobile/home/WarningSection"
 import ActionButtons from "@/views/mobile/home/ActionButtons"
 import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 import getUser from "@/services/getUser"
-import { useNavigate, useParams } from "react-router"
+import { useLocation, useNavigate, useParams } from "react-router"
 import { Button } from "@/components/ui/button"
 
 export default function PreviewPage() {
@@ -17,6 +17,7 @@ export default function PreviewPage() {
 	const { user } = useAuthOutletContext()
 
 	const navigate = useNavigate()
+	const location = useLocation()
 
 	const {
 		data: userTarget,
@@ -29,11 +30,17 @@ export default function PreviewPage() {
 		enabled: !!userId,
 	})
 
-	if (isError) throw error // TODO Gestion d'erreur
+	if (isError) throw error // TODO Gestion d'erreur (surtout ici)
 
 	const userToDisplay = userId && userTarget ? userTarget : user
 
 	const today = useMemo(() => dayjs(), [])
+
+	const handleBlock = useCallback(() => {
+		if (location.state?.from.includes("/chat")) navigate("/chat")
+		else if (location.state?.from.includes("/profile")) navigate(-1)
+		else navigate("/home")
+	}, [navigate, location])
 
 	return (
 		<main className="relative flex h-full flex-col justify-between overflow-y-hidden bg-background p-3">
@@ -65,7 +72,9 @@ export default function PreviewPage() {
 						{userToDisplay.tags.length ? (
 							<TagsSection tags={userToDisplay.tags} />
 						) : null}
-						{userId && <WarningSection user={userToDisplay} />}
+						{userId && (
+							<WarningSection user={userToDisplay} onBlock={handleBlock} />
+						)}
 						<Button
 							onClick={() => navigate(-1)}
 							variant="dark"

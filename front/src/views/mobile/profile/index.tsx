@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
+import useNavigateFrom from "@/hooks/useNavigateFrom"
 import { cn } from "@/lib/utils"
 import getUser from "@/services/getUser"
 import { useQuery } from "@tanstack/react-query"
-import { useNavigate } from "react-router"
 
 type StatProps = {
 	value: number
@@ -11,14 +11,14 @@ type StatProps = {
 }
 
 function Stat({ value, label, isButton }: StatProps) {
-	const navigate = useNavigate()
+	const navigateFrom = useNavigateFrom()
 	const Parent = isButton ? "button" : "div"
 	const isClickable = isButton && value > 0
 
 	return (
 		<Parent
 			onClick={() => {
-				if (isClickable) navigate(label.toLowerCase())
+				if (isClickable) navigateFrom(label.toLowerCase())
 			}}
 			className={cn(
 				"flex w-20 flex-col items-center",
@@ -39,7 +39,7 @@ function Stat({ value, label, isButton }: StatProps) {
 }
 
 export default function ProfilePage() {
-	const navigate = useNavigate()
+	const navigateFrom = useNavigateFrom()
 
 	const {
 		data: user,
@@ -75,14 +75,14 @@ export default function ProfilePage() {
 
 			<div className="w-full space-y-3">
 				<Button
-					onClick={() => navigate("/settings")}
+					onClick={() => navigateFrom("/settings")}
 					variant="dark"
 					className="h-10 w-full rounded-xl"
 				>
 					Edit profile
 				</Button>
 				<Button
-					onClick={() => navigate("/preview")}
+					onClick={() => navigateFrom("/preview")}
 					variant="dark"
 					className="h-10 w-full rounded-xl"
 				>

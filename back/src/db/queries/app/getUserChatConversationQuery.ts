@@ -1,5 +1,6 @@
 export const getUserChatConversationQuery = `
 	SELECT
+		users.id,
 		users.first_name AS title,
 		pictures.name AS avatar,
 		(
@@ -18,7 +19,7 @@ export const getUserChatConversationQuery = `
 			LIMIT 10
 		) AS messages
 	FROM chats
-	LEFT JOIN users ON users.id = user_id_1 OR users.id = user_id_2 AND users.id != $1
+	LEFT JOIN users ON (users.id = user_id_1 AND users.id != $1) OR (users.id = user_id_2 AND users.id != $1)
 	LEFT JOIN pictures ON users.id = pictures.user_id AND pictures.is_principal = true
 	WHERE chats.id = $2;
 `

@@ -112,6 +112,17 @@ export const createReport = {
 	},
 } as const satisfies FastifyRouteSchema
 
+export const createBlock = {
+	body: {
+		type: "object",
+		properties: {
+			targetId: schemasModels.id,
+		},
+		required: ["targetId"],
+		additionalProperties: false,
+	},
+} as const satisfies FastifyRouteSchema
+
 export const getUsers = {
 	querystring: {
 		type: "object",

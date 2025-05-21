@@ -1,6 +1,6 @@
 import axios from "@/lib/axios"
 
-type CreateVoteParams = {
+type CreateReportParams = {
 	targetId: User["id"]
 	reason: string
 }
@@ -8,7 +8,7 @@ type CreateVoteParams = {
 export default async function createReport({
 	targetId,
 	reason,
-}: CreateVoteParams) {
+}: CreateReportParams) {
 	const response = await axios.post(`/user/report`, {
 		targetId,
 		reason,

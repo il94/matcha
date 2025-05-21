@@ -7,7 +7,7 @@ type UserListProps = {
 
 export default function UserList({ users }: UserListProps) {
 	return (
-		<ScrollArea className="pt-1">
+		<ScrollArea className="h-full py-1">
 			<ol>
 				{users.map((user) => (
 					<UserListItem

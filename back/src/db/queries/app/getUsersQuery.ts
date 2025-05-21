@@ -23,6 +23,14 @@ export const getUsersQuery = `
 			FROM votes
 			WHERE user_id = $1
 		)
+		AND users.id NOT IN (
+		SELECT CASE 
+			WHEN user_id_1 = $1 THEN user_id_2
+			WHEN user_id_2 = $1 THEN user_id_1
+		END
+		FROM user_blocks
+		WHERE user_id_1 = $1 OR user_id_2 = $1
+	)
 	GROUP BY users.id
 	OFFSET ($2 - 1) * $3
 	LIMIT $3;

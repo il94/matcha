@@ -10,6 +10,7 @@ export * from "./createGenderEnumMutation"
 export * from "./createSexualOrientationEnumMutation"
 export * from "./createVotesTableMutation"
 export * from "./createReportsTableMutation"
+export * from "./createUserBlocksTableMutation"
 
 export * from "./createUserMutation"
 export * from "./createChatMutation"

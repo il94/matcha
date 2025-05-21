@@ -8,29 +8,33 @@ import {
 } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
 import toast from "@/lib/toast"
+import createBlock from "@/services/createBlock"
 import createReport from "@/services/createReport"
 import { useMutation } from "@tanstack/react-query"
 import { FormEvent, useCallback, useState } from "react"
+import { useNavigate } from "react-router"
 
 type WarningDialogProps = {
 	userId: User["id"]
 	firstName: User["firstName"]
+	onBlock?: () => void
 }
 
-function BlockDialog({ userId, firstName }: WarningDialogProps) {
+function BlockDialog({ userId, firstName, onBlock }: WarningDialogProps) {
+	const navigate = useNavigate()
 	const [isOpen, setIsOpen] = useState(false)
 
-	// const { mutate: createBlockMutation } = useMutation({
-	// 	mutationFn: createBlock,
-	// 	onSuccess: () => {
-	// 		toast.success("Block sent")
-	// 		setIsOpen(false)
-	// 		setReason("")
-	// 	},
-	// 	onError: (error) => {
-	// 		console.error(error) // TODO
-	// 	},
-	// })
+	const { mutate: createBlockMutation } = useMutation({
+		mutationFn: createBlock,
+		onSuccess: () => {
+			toast.success("User blocked")
+			onBlock?.()
+			navigate(0)
+		},
+		onError: (error) => {
+			console.error(error) // TODO
+		},
+	})
 
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -47,6 +51,7 @@ function BlockDialog({ userId, firstName }: WarningDialogProps) {
 						CONSEQUENCES
 					</DialogDescription>
 					<Button
+						onClick={() => createBlockMutation({ targetId: userId })}
 						variant="destructiveDark"
 						className="h-10 w-fit self-end rounded-xl"
 					>
@@ -121,20 +126,17 @@ function ReportDialog({ userId, firstName }: WarningDialogProps) {
 
 type WarningSectionProps = {
 	user: User
-	isPreview?: boolean
+	onBlock?: () => void
 }
 
-export default function WarningSection({ user }: WarningSectionProps) {
+export default function WarningSection({ user, onBlock }: WarningSectionProps) {
 	return (
 		<div className="space-y-3">
-			{/* <Button
-				variant="destructiveDark"
-				disabled={isPreview}
-				className="h-10 w-full rounded-xl"
-			>
-				Block {user.firstName}
-			</Button> */}
-			<BlockDialog userId={user.id} firstName={user.firstName} />
+			<BlockDialog
+				userId={user.id}
+				firstName={user.firstName}
+				onBlock={onBlock}
+			/>
 			<ReportDialog userId={user.id} firstName={user.firstName} />
 		</div>
 	)
