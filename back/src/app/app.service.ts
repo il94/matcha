@@ -234,7 +234,9 @@ class appService {
 		completingSessionId: NonNullable<UserData["sessionId"]>,
 		userId: UserData["id"],
 	) {
-		await this.repository.updateUserSessionId(userId, null)
+		await this.repository.updateUser(userId, {
+			sessionId: null,
+		})
 		await this.redisService.deleteSession(sessionId)
 		await this.redisService.deleteCompletingSession(completingSessionId)
 	}

@@ -11,6 +11,7 @@ import {
 } from "react"
 import { motion } from "framer-motion"
 import { FramerCallback } from "@/types"
+import dayjs from "dayjs"
 
 function shufflePictures(pictures: Picture[]) {
 	for (let i = pictures.length - 1; i > 0; i--) {
@@ -28,7 +29,8 @@ type SwipeableCardProps = {
 	firstName: User["firstName"]
 	age: number
 	location: string
-	status: string // TODO Definir
+	isOnline: boolean
+	lastConnexion?: string
 	principalPicture: User["principalPicture"]
 	pictures: User["pictures"]
 	setNextCard: () => void
@@ -41,7 +43,8 @@ export default forwardRef(function SwipeableCard(
 		firstName,
 		age,
 		location,
-		status,
+		isOnline,
+		lastConnexion,
 		principalPicture,
 		pictures,
 		setNextCard,
@@ -128,6 +131,8 @@ export default forwardRef(function SwipeableCard(
 				animate: { x: cardX, rotate: cardRotation },
 			}
 
+	const dayjsLastConnexion = dayjs.utc(lastConnexion).tz(dayjs.tz.guess())
+
 	return (
 		<motion.div
 			{...dragProps}
@@ -186,10 +191,25 @@ export default forwardRef(function SwipeableCard(
 					<MapPinIcon className="ml-0.5 size-4" />
 					<p>{location}</p>
 				</div>
-				<div className="flex items-center gap-2 pl-0.5">
-					<AnimateHalo size={4} />
-					<p>{status}</p>
-				</div>
+				{isOnline ? (
+					<div className="flex items-center gap-2 pl-0.5">
+						<AnimateHalo size={4} />
+						<p>Online</p>
+					</div>
+				) : lastConnexion ? (
+					<div className="flex items-center gap-2 pl-0.5">
+						<AnimateHalo size={4} off />
+						<p className="text-sm">
+							Last connection : {dayjsLastConnexion.format("LL")} at{" "}
+							{dayjsLastConnexion.format("HH:mm")}
+						</p>
+					</div>
+				) : (
+					<div className="flex items-center gap-2 pl-0.5">
+						<AnimateHalo size={4} off />
+						<p>Offline</p>
+					</div>
+				)}
 			</div>
 		</motion.div>
 	)

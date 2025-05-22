@@ -17,7 +17,9 @@ export const updateUserMutation = `
 			THEN (($2::jsonb)->>'sexualOrientation')::sexual_orientation 
 			ELSE sexual_orientation 
 		END,
-		bio = COALESCE(($2::jsonb)->>'bio', bio)
+		bio = COALESCE(($2::jsonb)->>'bio', bio),
+		is_online = COALESCE((($2::jsonb)->>'isOnline')::boolean, is_online),
+		last_connexion = COALESCE((($2::jsonb)->>'lastConnexion')::timestamp, last_connexion)
 	WHERE id = $1
 	RETURNING *;
 `

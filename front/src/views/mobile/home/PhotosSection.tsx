@@ -69,7 +69,6 @@ export default forwardRef(function PhotosSection(
 			{[...users].reverse().map((user, index) => {
 				const age = today.diff(user.birthDate, "year")
 				const location = "Paris" // TODO Definir
-				const status = "En ligne" // TODO Definir
 
 				return (
 					<SwipeableCard
@@ -77,7 +76,8 @@ export default forwardRef(function PhotosSection(
 						firstName={user.firstName}
 						age={age}
 						location={location}
-						status={status}
+						isOnline={user.isOnline}
+						lastConnexion={user.lastConnexion}
 						principalPicture={user.principalPicture}
 						pictures={user.pictures}
 						setNextCard={setNextCard}

@@ -63,6 +63,12 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 		const { sessionId, completingSessionId, userId } = request
 
 		await service.logout(sessionId, completingSessionId, userId)
+		const client = app.clients.get(userId)
+		if (client) {
+			client.close()
+			app.clients.delete(userId)
+		}
+
 		return reply
 			.clearCookie("sessionId")
 			.clearCookie("completingSessionId")

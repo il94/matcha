@@ -23,6 +23,9 @@ declare global {
 
 		tags: Tag[]
 
+		isOnline: boolean
+		lastConnexion?: string
+
 		views: number
 		likes: number
 		elo: number

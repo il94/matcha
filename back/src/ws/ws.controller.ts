@@ -1,9 +1,9 @@
 import appService from "@/app/app.service"
 import { HttpException } from "@/lib/HttpException"
+import dayjs from "@/lib/dayjs"
 import { FastifyPluginAsync } from "fastify"
 
 const RED = "\x1b[31m"
-
 const END = "\x1b[0m"
 
 const print = (color: string, message: string) => {
@@ -17,6 +17,8 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 		const { userId } = request
 
 		app.clients.set(userId, socket)
+
+		service.updateUser(userId, { isOnline: true })
 
 		socket.on("message", async (raw) => {
 			try {
@@ -75,6 +77,15 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 				}
 			}
 		})
+
+		socket.onclose = () => {
+			app.clients.delete(userId)
+
+			service.updateUser(userId, {
+				isOnline: false,
+				lastConnexion: dayjs().utc().toISOString(),
+			})
+		}
 	})
 }
 

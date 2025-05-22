@@ -69,8 +69,6 @@ export default function PreviewPage() {
 
 	const userToDisplay = userId && userTarget ? userTarget : user
 
-	console.log("userToDisplay", userId)
-
 	const today = useMemo(() => dayjs(), [])
 
 	const handleBlock = useCallback(() => {

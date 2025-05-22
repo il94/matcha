@@ -16,6 +16,9 @@ export const createUsersTableMutation = `
 		bio VARCHAR(256) DEFAULT NULL,
 		elo SMALLINT DEFAULT 0 NOT NULL CHECK (elo >= 0 AND elo <= 1000),
 
+		is_online BOOLEAN DEFAULT FALSE NOT NULL,
+		last_connexion TIMESTAMP,
+		
 		activated BOOLEAN DEFAULT FALSE NOT NULL,
 		completed BOOLEAN DEFAULT FALSE NOT NULL
 	);

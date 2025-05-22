@@ -28,6 +28,9 @@ declare global {
 		matchs: number
 		elo: number
 
+		isOnline: boolean
+		lastConnexion?: string
+
 		activated: boolean
 		completed: boolean
 
