@@ -172,6 +172,17 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 		},
 	)
 
+	app.delete(
+		"/user/vote/:targetId",
+		{ schema: schemas.deleteVote },
+		(request) => {
+			const userId = request.userId
+			const { targetId } = request.params
+
+			return service.deleteVote(userId, targetId)
+		},
+	)
+
 	/* ============ Chats ============ */
 
 	app.get(

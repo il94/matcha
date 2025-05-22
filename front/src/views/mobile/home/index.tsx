@@ -153,6 +153,9 @@ export default function HomePage() {
 								vote: false,
 							})
 						}
+						isLiked={users[currentCardIndex].isLiked}
+						heLiked={users[currentCardIndex].heLiked}
+						isMatched={users[currentCardIndex].isMatched}
 					/>
 				</>
 			)}

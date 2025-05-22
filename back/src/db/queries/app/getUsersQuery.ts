@@ -11,7 +11,13 @@ export const getUsersQuery = `
 		users.elo,
 		JSONB_AGG(JSONB_BUILD_OBJECT('name', pictures.name)) FILTER (WHERE pictures.is_principal = TRUE) -> 0 AS principal_picture,
 		COALESCE(JSON_AGG(DISTINCT JSONB_BUILD_OBJECT('name', pictures.name)) FILTER (WHERE pictures.is_principal = FALSE), '[]') AS pictures,
-		COALESCE(JSON_AGG(DISTINCT tags) FILTER (WHERE tags IS NOT NULL), '[]') AS tags
+		COALESCE(JSON_AGG(DISTINCT tags) FILTER (WHERE tags IS NOT NULL), '[]') AS tags,
+
+		EXISTS(SELECT 1 FROM votes WHERE user_id = $1 AND target_id = users.id AND liked = TRUE) AS is_liked,
+		EXISTS(SELECT 1 FROM votes WHERE user_id = $1 AND target_id = users.id AND liked = false) AS is_disliked,
+		EXISTS(SELECT 1 FROM votes WHERE user_id = users.id AND target_id = $1 AND liked = TRUE) AS he_liked,
+		EXISTS(SELECT 1 FROM votes v1 JOIN votes v2 ON v1.user_id = v2.target_id AND v1.target_id = v2.user_id WHERE v1.user_id = $1 AND v1.target_id = users.id AND v1.liked = TRUE AND v2.liked = TRUE) AS is_matched
+
 	FROM users
 	LEFT JOIN pictures ON pictures.user_id = users.id
 	LEFT JOIN user_tags ON user_tags.user_id = users.id

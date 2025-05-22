@@ -191,6 +191,17 @@ export const updateUserPictures = {
 	},
 } as const satisfies FastifyRouteSchema
 
+export const deleteVote = {
+	params: {
+		type: "object",
+		properties: {
+			targetId: schemasModels.id,
+		},
+		required: ["targetId"],
+		additionalProperties: false,
+	},
+} as const satisfies FastifyRouteSchema
+
 export const complete = {
 	body: {
 		type: "object",

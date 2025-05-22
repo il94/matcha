@@ -1,37 +1,59 @@
 import AnimateHeart from "@/components/AnimateHeart"
 import { Button } from "@/components/ui/button"
-import { XIcon } from "lucide-react"
+import ActionButtonsDialog from "./ActionButtonsDialog"
+import AnimateDislike from "@/components/AnimateDislike"
 
 type ActionButtonsProps = {
 	onLike?: () => void
+	onDeleteLike?: () => void
 	onDislike?: () => void
-	isPreview?: boolean
+	isLiked?: boolean
+	isDisliked?: boolean
+	heLiked?: boolean
+	isMatched?: boolean
+	disabled?: boolean
 }
 
 export default function ActionButtons({
 	onLike,
+	onDeleteLike,
 	onDislike,
-	isPreview,
+	isLiked,
+	isDisliked,
+	heLiked,
+	isMatched,
+	disabled,
 }: ActionButtonsProps) {
 	return (
-		<div className="flex h-16 w-full items-center justify-evenly">
+		<div className="flex h-16 w-full items-center justify-center gap-4">
 			<Button
-				onClick={onDislike}
+				onClick={isLiked || isMatched ? onDeleteLike : onDislike}
 				size="icon"
 				variant="ghost"
-				disabled={isPreview}
+				disabled={disabled || isDisliked}
 				className="size-16 rounded-full"
 			>
-				<XIcon className="size-10 stroke-red-400 stroke-[3.5]" />
+				<AnimateDislike
+					isLiked={isLiked}
+					isDisliked={isDisliked}
+					isMatched={false}
+				/>
 			</Button>
+
+			<ActionButtonsDialog />
+
 			<Button
 				onClick={onLike}
 				size="icon"
 				variant="ghost"
-				disabled={isPreview}
+				disabled={disabled || isMatched || isLiked}
 				className="size-16 rounded-full"
 			>
-				<AnimateHeart />
+				<AnimateHeart
+					isLiked={isLiked}
+					heLiked={heLiked}
+					isMatched={isMatched}
+				/>
 			</Button>
 		</div>
 	)

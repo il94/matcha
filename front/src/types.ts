@@ -27,6 +27,11 @@ declare global {
 		likes: number
 		elo: number
 		matchs: number
+
+		isLiked?: boolean
+		isDisliked?: boolean
+		heLiked?: boolean
+		isMatched?: boolean
 	}
 
 	type Picture = {

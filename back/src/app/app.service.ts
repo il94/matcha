@@ -294,7 +294,10 @@ class appService {
 		if (targetId && (await this.repository.isUserBlocked(userId, targetId)))
 			throw new BadRequestException()
 
-		const user = await this.repository.getUser(targetId ?? userId)
+		const user = await this.repository.getUser(
+			targetId ?? userId,
+			targetId ? userId : undefined,
+		)
 
 		if (user.firstName === "Ilyes") {
 			const signedUrl = await this.s3Service.getSignedURL(
@@ -472,6 +475,10 @@ class appService {
 				.map((picture) => picture.name)
 				.filter((picture) => !finalPictures.includes(picture)),
 		)
+	}
+
+	async deleteVote(userId: UserData["id"], targetId: UserData["id"]) {
+		await this.repository.deleteVote(userId, targetId)
 	}
 
 	async changeEmail(token: string) {

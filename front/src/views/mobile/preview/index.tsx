@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query"
-import { useCallback, useMemo } from "react"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useCallback, useMemo, useState } from "react"
 import dayjs from "@/lib/dayjs"
 import BioSection from "@/views/mobile/home/BioSection"
 import EssentialsSection from "@/views/mobile/home/EssentialsSection"
@@ -11,6 +11,9 @@ import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 import getUser from "@/services/getUser"
 import { useLocation, useNavigate, useParams } from "react-router"
 import { Button } from "@/components/ui/button"
+import createVote from "@/services/createVote"
+import deleteVote from "@/services/deleteVote"
+import MatchScreen from "../home/MatchScreen"
 
 export default function PreviewPage() {
 	const { userId } = useParams<{ userId?: string }>()
@@ -18,6 +21,9 @@ export default function PreviewPage() {
 
 	const navigate = useNavigate()
 	const location = useLocation()
+
+	const [isMatch, setIsMatch] = useState(false)
+	const [newChatId, setNewChatId] = useState("")
 
 	const {
 		data: userTarget,
@@ -30,9 +36,40 @@ export default function PreviewPage() {
 		enabled: !!userId,
 	})
 
+	const queryClient = useQueryClient()
+
+	const { mutate: createVoteMutation } = useMutation({
+		mutationFn: createVote,
+		onSuccess: (data, variables) => {
+			queryClient.invalidateQueries({ queryKey: ["user", userId] })
+			if (variables.vote) {
+				if (data.match) {
+					queryClient.invalidateQueries({ queryKey: ["chats"] })
+					setNewChatId(data.chatId)
+					setIsMatch(true)
+				}
+			}
+		},
+		onError: (error) => {
+			console.error("Error creating vote MUTATION:", error) // TODO
+		},
+	})
+
+	const { mutate: deleteVoteMutation } = useMutation({
+		mutationFn: deleteVote,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["user", userId] })
+		},
+		onError: (error) => {
+			console.error("Error deleting vote MUTATION:", error) // TODO
+		},
+	})
+
 	if (isError) throw error // TODO Gestion d'erreur (surtout ici)
 
 	const userToDisplay = userId && userTarget ? userTarget : user
+
+	console.log("userToDisplay", userId)
 
 	const today = useMemo(() => dayjs(), [])
 
@@ -83,7 +120,38 @@ export default function PreviewPage() {
 							Back
 						</Button>
 					</div>
-					<ActionButtons isPreview />
+					<ActionButtons
+						onLike={() =>
+							createVoteMutation({
+								targetId: userToDisplay.id,
+								vote: true,
+							})
+						}
+						onDeleteLike={() => {
+							deleteVoteMutation({
+								targetId: userToDisplay.id,
+							})
+						}}
+						onDislike={() =>
+							createVoteMutation({
+								targetId: userToDisplay.id,
+								vote: false,
+							})
+						}
+						isLiked={userToDisplay.isLiked}
+						isDisliked={userToDisplay.isDisliked}
+						heLiked={userToDisplay.heLiked}
+						isMatched={userToDisplay.isMatched}
+						disabled={!userId}
+					/>
+					<MatchScreen
+						open={isMatch}
+						onClose={() => setIsMatch(false)}
+						user={user}
+						userTarget={userToDisplay}
+						newChatId={newChatId}
+						isPreview
+					/>
 				</>
 			)}
 		</main>

@@ -81,8 +81,14 @@ class appRepository {
 		}
 	}
 
-	async getUser(userId: UserData["id"]): Promise<UserData> {
-		const result = await this.db.query(appQueries.getUserQuery, [userId])
+	async getUser(
+		targetId: UserData["id"],
+		userId?: UserData["id"],
+	): Promise<UserData> {
+		const result = await this.db.query(appQueries.getUserQuery, [
+			targetId,
+			userId,
+		])
 
 		const [user] = convertObjectKeysToCamelCase(result.rows)
 		return user
@@ -390,6 +396,9 @@ class appRepository {
 		const executor = transact || this.db
 
 		await executor.query(appQueries.deleteVoteMutation, [userId, targetId])
+
+		if (await this.isUserLiked(userId, targetId, transact))
+			await this.deleteChatByUserIds(userId, targetId, transact)
 	}
 
 	async isUserBlocked(

@@ -7,7 +7,8 @@ export const createVotesTableMutation = `
 		
 		PRIMARY KEY (user_id, target_id),
 		CONSTRAINT fk_votes_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
-		CONSTRAINT fk_votes_target_id FOREIGN KEY(target_id) REFERENCES users(id) ON DELETE CASCADE
+		CONSTRAINT fk_votes_target_id FOREIGN KEY(target_id) REFERENCES users(id) ON DELETE CASCADE,
+		CONSTRAINT no_self_vote CHECK (user_id <> target_id)
 	);
 	CREATE INDEX IF NOT EXISTS idx_votes_user_id ON votes(user_id);
 	CREATE INDEX IF NOT EXISTS idx_votes_target_id ON votes(target_id);

@@ -34,6 +34,11 @@ declare global {
 		principalPicture: PictureData
 		pictures: PictureData[]
 		tags: TagData["id"][]
+
+		isLiked?: boolean
+		isDisliked?: boolean
+		heLiked?: boolean
+		isMatched?: boolean
 	}
 
 	type PictureData = {

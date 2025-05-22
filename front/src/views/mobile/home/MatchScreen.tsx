@@ -60,6 +60,7 @@ type MatchScreenProps = {
 	user: User
 	userTarget: User
 	newChatId: Chat["id"]
+	isPreview?: boolean
 }
 
 export default function MatchScreen({
@@ -68,6 +69,7 @@ export default function MatchScreen({
 	user,
 	userTarget,
 	newChatId,
+	isPreview = false,
 }: MatchScreenProps) {
 	const navigateFrom = useNavigateFrom()
 	const [disableButtons, setDisableButtons] = useState(true)
@@ -130,7 +132,7 @@ export default function MatchScreen({
 							disabled={disableButtons}
 							className="mt-4 w-full max-w-[300px] select-none"
 						>
-							Keep swiping
+							{isPreview ? "Back" : "Keep swiping"}
 						</Button>
 					</div>
 				</motion.div>

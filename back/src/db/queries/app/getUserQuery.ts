@@ -16,7 +16,12 @@ export const getUserQuery = `
 			WHERE uv1.target_id = users.id
 				AND uv1.liked = TRUE
 				AND uv2.liked = TRUE
-		) AS matchs
+		) AS matchs,
+		
+		EXISTS(SELECT 1 FROM votes WHERE user_id = $2 AND target_id = $1 AND liked = TRUE) AS is_liked,
+		EXISTS(SELECT 1 FROM votes WHERE user_id = $2 AND target_id = $1 AND liked = FALSE) AS is_disliked,
+		EXISTS(SELECT 1 FROM votes WHERE user_id = $1 AND target_id = $2 AND liked = TRUE) AS he_liked,
+		EXISTS(SELECT 1 FROM votes v1 JOIN votes v2 ON v1.user_id = v2.target_id AND v1.target_id = v2.user_id WHERE v1.user_id = $2 AND v1.target_id = $1 AND v1.liked = TRUE AND v2.liked = TRUE) AS is_matched
 
 	FROM users
 	LEFT JOIN pictures ON pictures.user_id = users.id
