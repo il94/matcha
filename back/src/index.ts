@@ -59,7 +59,9 @@ const start = async () => {
 
 	try {
 		await app.listen({
-			port: process.env.BACK_PORT ? parseInt(process.env.BACK_PORT) : 3000,
+			port: process.env.API_BACK_PORT
+				? parseInt(process.env.API_BACK_PORT)
+				: 3000,
 			host: "0.0.0.0",
 		})
 	} catch (error) {

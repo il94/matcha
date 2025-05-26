@@ -44,7 +44,7 @@ export default function ForgotPasswordDialog({
 
 	const { mutate: forgotMutation } = useMutation({
 		mutationFn: forgot,
-		onSuccess: (data, params) => {
+		onSuccess: (_, params) => {
 			setIsSent(params.email)
 		},
 		onError: () => {
