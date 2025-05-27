@@ -26,7 +26,7 @@ services:
       dockerfile: Dockerfile
     env_file: ./back/.env
     ports:
-      - "3009:3009"
+      - "3000:3000"
     restart: on-failure
     # Supprimer les volumes en prod
     volumes:
@@ -42,7 +42,7 @@ services:
     env_file: ./front/.env
     ports:
       - "5173:5173"
-      - "4009:4009"
+      - "4173:4173"
     # Supprimer les volumes en prod
     volumes:
       - ./front:/app
