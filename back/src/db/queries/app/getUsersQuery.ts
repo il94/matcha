@@ -6,6 +6,8 @@ export const getUsersQuery = `
 		users.username,
 		users.birth_date,
 		users.sexual_orientation,
+		users.location_label,
+		users.location_source,
 		users.gender,
 		users.bio,
 		users.elo,

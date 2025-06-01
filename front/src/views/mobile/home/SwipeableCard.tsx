@@ -188,8 +188,8 @@ export default forwardRef(function SwipeableCard(
 					{firstName} <span className="text-2xl">{age}</span>
 				</p>
 				<div className="flex items-center gap-2">
-					<MapPinIcon className="ml-0.5 size-4" />
-					<p>{location}</p>
+					<MapPinIcon className="ml-0.5 size-4 shrink-0" />
+					<p className="whitespace-nowrap">{location}</p>
 				</div>
 				{isOnline ? (
 					<div className="flex items-center gap-2 pl-0.5">
@@ -197,9 +197,9 @@ export default forwardRef(function SwipeableCard(
 						<p>Online</p>
 					</div>
 				) : lastConnexion ? (
-					<div className="flex items-center gap-2 pl-0.5">
+					<div className="flex items-center gap-2 pl-0.5 pt-1">
 						<AnimateHalo size={4} off />
-						<p className="text-sm">
+						<p className="text-xs">
 							Last connection : {dayjsLastConnexion.format("LL")} at{" "}
 							{dayjsLastConnexion.format("HH:mm")}
 						</p>
