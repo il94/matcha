@@ -320,9 +320,9 @@ class appService {
 				{
 					...userData,
 					sessionId,
-					longitude: userData.longitude!,
-					latitude: userData.latitude!,
-					locationLabel: userData.locationLabel!,
+					longitude: userData.longitude,
+					latitude: userData.latitude,
+					locationLabel: userData.locationLabel,
 					locationSource,
 				},
 				pictureNames,
@@ -495,6 +495,7 @@ class appService {
 				newPassword: string
 			}
 		>,
+		userIp?: string,
 		tagIds?: number[],
 	) {
 		const user = await this.repository.getUser(userId)
@@ -523,6 +524,22 @@ class appService {
 				!(await bcrypt.compare(userData.currentPassword, user.password)))
 		)
 			throw new ForbiddenException("INVALID_PASSWORD")
+
+		if (userData.longitude && userData.latitude) {
+			userData.locationLabel = await this.getLocationByCoordinates(
+				userData.latitude,
+				userData.longitude,
+			)
+			userData.locationSource = "gps"
+		} else if (userIp) {
+			const { latitude, longitude, locationLabel } =
+				await this.getLocationByIP(userIp)
+
+			userData.longitude = longitude
+			userData.latitude = latitude
+			userData.locationSource = userData.locationLabel ? "manual" : "ip"
+			userData.locationLabel = userData.locationLabel || locationLabel
+		}
 
 		await this.repository.updateUser(
 			userId,

@@ -1,0 +1,218 @@
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { Form, FormMessage } from "@/components/ui/form"
+import { Button } from "@/components/ui/button"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { cn } from "@/lib/utils"
+import updateUser from "@/services/updateUser"
+import toast from "@/lib/toast"
+import Step4LocationDialog from "../complete/Step4LocationDialog"
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react"
+import InputSelect from "@/components/InputSelect"
+import useDebouncedCallback from "@/hooks/useDebouncedCallback"
+import getLocationByCoordinates from "@/services/getLocationByCoordinates"
+import getLocationByIP from "@/services/getLocationByIP"
+import getLocationSuggestions from "@/services/getLocationSuggestions"
+
+export const formSchema = z.object({
+	longitude: z.number().optional(),
+	latitude: z.number().optional(),
+	locationLabel: z.string().optional(),
+})
+
+type LocationSliderProps = {
+	initialValue: {
+		locationLabel: User["locationLabel"]
+		locationSource: User["locationSource"]
+	}
+	onClose: () => void
+	className?: string
+}
+
+export default function LocationSlider({
+	initialValue,
+	onClose,
+	className,
+}: LocationSliderProps) {
+	const queryClient = useQueryClient()
+
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			locationLabel: initialValue.locationLabel,
+		},
+		mode: "onTouched",
+	})
+
+	const { mutate: updateUserMutation } = useMutation({
+		mutationFn: updateUser,
+		onSuccess: () => {
+			toast.success("Location successfully updated !")
+			queryClient.invalidateQueries({ queryKey: ["verify"] })
+			onClose()
+		},
+		onError: () => {
+			form.setError("root", {
+				message:
+					"Looks like something went wrong. Don't worry, we're on it try again shortly.",
+			})
+		},
+	})
+
+	const message = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
+
+	const { data } = useQuery({
+		queryKey: ["ipLocation"],
+		queryFn: getLocationByIP,
+	})
+
+	const ipLocation = useMemo(() => {
+		if (!data) return "Loading location..."
+		return data.locationLabel || "Unknown location"
+	}, [data])
+
+	const [enableLocationButton, setEnableLocationButton] = useState(false)
+	useEffect(() => {
+		navigator.permissions.query({ name: "geolocation" }).then((result) => {
+			if (result.state === "granted" || result.state === "prompt")
+				setEnableLocationButton(true)
+			else setEnableLocationButton(false)
+		})
+	}, [])
+
+	const [input, setInput] = useState(initialValue.locationLabel)
+
+	const getLocation = useCallback(() => {
+		navigator.geolocation.getCurrentPosition(
+			async (position) => {
+				const { latitude, longitude } = position.coords
+
+				const locationLabel = await getLocationByCoordinates({
+					latitude,
+					longitude,
+				})
+
+				setInput(locationLabel)
+				setSuggestions(undefined)
+				form.setValue("locationLabel", locationLabel)
+				form.setValue("latitude", latitude)
+				form.setValue("longitude", longitude)
+			},
+			() => {
+				setEnableLocationButton(false)
+			},
+			{
+				enableHighAccuracy: true,
+				timeout: 5000,
+				maximumAge: 0,
+			},
+		)
+	}, [form])
+
+	const [suggestions, setSuggestions] = useState<string[]>()
+	const getSuggestions = useDebouncedCallback(async (input: string) => {
+		if (input.trim().length === 0) {
+			setSuggestions(undefined)
+			return
+		}
+
+		const suggestions = await getLocationSuggestions({
+			label: input,
+		})
+
+		setSuggestions(suggestions)
+	}, 500)
+
+	const handleInputChange = useCallback(
+		(event: ChangeEvent<HTMLTextAreaElement>) => {
+			setInput(event.target.value)
+			form.setValue(
+				"locationLabel",
+				event.target.value.length !== 0 ? "typing" : event.target.value,
+			)
+			form.setValue("latitude", undefined)
+			form.setValue("longitude", undefined)
+
+			getSuggestions(event.target.value)
+		},
+		[getSuggestions, form],
+	)
+
+	const handleSelectSuggestion = useCallback(
+		(suggestion: string) => {
+			form.setValue("locationLabel", suggestion)
+			form.setValue("latitude", undefined)
+			form.setValue("longitude", undefined)
+
+			setSuggestions(undefined)
+			setInput(suggestion)
+		},
+		[form],
+	)
+
+	return (
+		<div className={cn(className)}>
+			<Form {...form}>
+				<form
+					onSubmit={form.handleSubmit((values) =>
+						updateUserMutation({
+							latitude: values.latitude,
+							longitude: values.longitude,
+							locationLabel: values.locationLabel,
+						}),
+					)}
+					className="flex h-full flex-col justify-between"
+				>
+					<div className="flex h-full flex-col gap-6">
+						<div>
+							<h2 className="text-lg font-medium">Location</h2>
+							<p className="text-sm text-muted-foreground">
+								Sharing your location allows us to suggest more relevant matches
+								based on geographic proximity. You can always adjust or disable
+								it later in your profile settings.&nbsp;
+								<Step4LocationDialog />
+							</p>
+						</div>
+
+						<Button
+							onClick={getLocation}
+							type="button"
+							disabled={!enableLocationButton}
+							className="disabled:bg-accent"
+						>
+							{enableLocationButton
+								? "Use my current location"
+								: "Location access denied"}
+						</Button>
+						<InputSelect
+							onInput={handleInputChange}
+							onSelect={handleSelectSuggestion}
+							input={input}
+							items={suggestions}
+							placeholder={ipLocation}
+							className={cn(
+								((suggestions ?? []).length > 0 || input.length > 0) &&
+									"rounded-b-none",
+							)}
+						/>
+
+						<FormMessage className="h-5 px-1">{message}</FormMessage>
+					</div>
+
+					<Button
+						variant="dark"
+						type="submit"
+						disabled={
+							!form.formState.isValid ||
+							form.getValues().locationLabel === "typing" ||
+							form.getValues().locationLabel === initialValue.locationLabel
+						}
+					>
+						Save
+					</Button>
+				</form>
+			</Form>
+		</div>
+	)
+}

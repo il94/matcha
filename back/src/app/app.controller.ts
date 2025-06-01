@@ -173,6 +173,7 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 	app.patch("/user", { schema: schemas.updateUser }, (request) => {
 		const userId = request.userId
 		const userData = request.body
+		const userIp = request.ip
 
 		return service.updateUser(
 			userId,
@@ -184,10 +185,14 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 				currentPassword: userData.currentPassword,
 				newPassword: userData.newPassword,
 				birthDate: userData.birthDate,
+				longitude: userData.longitude,
+				latitude: userData.latitude,
+				locationLabel: userData.locationLabel,
 				gender: userData.gender,
 				sexualOrientation: userData.sexualOrientation,
 				bio: userData.bio,
 			},
+			userIp,
 			userData.tags as unknown as number[],
 		)
 	})

@@ -57,6 +57,10 @@ export default function SettingsPage() {
 					onClick={() => setSettingSelected("birth_date")}
 					label="Birth date"
 				/>
+				<SectionButton
+					onClick={() => setSettingSelected("location")}
+					label="Location"
+				/>
 			</div>
 
 			<div className="w-full space-y-2">

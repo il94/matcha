@@ -12,6 +12,7 @@ import TagsSlider from "./TagsSlider"
 import BioSlider from "./BioSlider"
 import PicturesSlider from "./PicturesSlider"
 import useAuthOutletContext from "@/hooks/useAuthOutletContext"
+import LocationSlider from "./LocationSlider"
 
 type SettingSliderProps = {
 	settingSelected: string
@@ -65,11 +66,21 @@ export default function SettingSlider({
 				)
 			case "password":
 				return <PasswordSlider onClose={onClose} className={className} />
-
 			case "birth_date":
 				return (
 					<BirthDateSlider
 						initialValue={user.birthDate}
+						onClose={onClose}
+						className={className}
+					/>
+				)
+			case "location":
+				return (
+					<LocationSlider
+						initialValue={{
+							locationLabel: user.locationLabel,
+							locationSource: user.locationSource,
+						}}
 						onClose={onClose}
 						className={className}
 					/>

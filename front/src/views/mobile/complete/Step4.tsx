@@ -1,14 +1,14 @@
 import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
 import useDebouncedCallback from "@/hooks/useDebouncedCallback"
 import { cn } from "@/lib/utils"
-import getGeolocation from "@/services/getLocationByCoordinates"
-import getLocationByIP from "@/services/getLocationByIP"
-import getGeolocationSearch from "@/services/getLocationSuggestions"
 import { useQuery } from "@tanstack/react-query"
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import Step4LocationDialog from "./Step4LocationDialog"
+import InputSelect from "@/components/InputSelect"
+import getLocationByIP from "@/services/getLocationByIP"
+import getLocationByCoordinates from "@/services/getLocationByCoordinates"
+import getLocationSuggestions from "@/services/getLocationSuggestions"
 
 export default function Step4() {
 	const { data } = useQuery({
@@ -39,7 +39,10 @@ export default function Step4() {
 			async (position) => {
 				const { latitude, longitude } = position.coords
 
-				const locationLabel = await getGeolocation({ latitude, longitude })
+				const locationLabel = await getLocationByCoordinates({
+					latitude,
+					longitude,
+				})
 
 				setInput(locationLabel)
 				setSuggestions(undefined)
@@ -65,7 +68,7 @@ export default function Step4() {
 			return
 		}
 
-		const suggestions = await getGeolocationSearch({
+		const suggestions = await getLocationSuggestions({
 			label: input,
 		})
 
@@ -99,8 +102,6 @@ export default function Step4() {
 		[form],
 	)
 
-	const [isFocusInput, setIsFocusInput] = useState(false)
-
 	return (
 		<div className="flex max-w-full flex-col gap-10">
 			<h1 className="text-4xl">Where are you ?</h1>
@@ -121,52 +122,18 @@ export default function Step4() {
 						? "Use my current location"
 						: "Location access denied"}
 				</Button>
-				<div
-					className={cn(
-						"flex max-w-full flex-col overflow-hidden rounded-lg",
-						isFocusInput && "outline-none ring-1 ring-ring",
-					)}
-				>
-					<Textarea
-						onInput={handleInputChange}
-						onFocus={() => setIsFocusInput(true)}
-						onBlur={() => setIsFocusInput(false)}
-						value={input}
-						placeholder={`${ipLocation}`}
-						autoSize
-						className={cn(
-							"h-[78px] text-sm",
-							((suggestions ?? []).length > 0 || input.length > 0) &&
-								"rounded-b-none",
-						)}
-					/>
-					{suggestions?.map((suggestion, index) => (
-						<Button
-							key={index}
-							onClick={() => handleSelectSuggestion(suggestion)}
-							type="button"
-							variant="outline"
-							className={cn(
-								"justify-start rounded-none px-3 py-1 last:rounded-b-lg",
-							)}
-						>
-							<p className="truncate">{suggestion}</p>
-						</Button>
-					))}
 
-					{suggestions?.length === 0 && (
-						<Button
-							type="button"
-							variant="outline"
-							disabled
-							className={cn(
-								"justify-start rounded-none px-3 py-1 last:rounded-b-lg",
-							)}
-						>
-							<p className="truncate">No results found</p>
-						</Button>
+				<InputSelect
+					onInput={handleInputChange}
+					onSelect={handleSelectSuggestion}
+					input={input}
+					items={suggestions}
+					placeholder={ipLocation}
+					className={cn(
+						((suggestions ?? []).length > 0 || input.length > 0) &&
+							"rounded-b-none",
 					)}
-				</div>
+				/>
 			</div>
 		</div>
 	)

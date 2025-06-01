@@ -14,7 +14,10 @@ declare global {
 		username: string
 		email: string
 
-		locationLabel?: string
+		latitude?: number
+		longitude?: number
+		locationLabel: string
+		locationSource: "gps" | "ip" | "manual"
 
 		birthDate: string
 		gender: string
