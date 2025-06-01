@@ -19,6 +19,11 @@ declare global {
 		username: string
 		email: string
 
+		longitude?: number
+		latitude?: number
+		locationLabel?: string
+		locationSource: "gps" | "ip" | "manual"
+
 		birthDate?: string
 		sexualOrientation?: string
 		gender?: string
@@ -73,4 +78,27 @@ declare global {
 
 		content: string
 	}
+}
+
+export type NominatimLocation = {
+	lat: string
+	lon: string
+	address: {
+		road?: string
+		suburb?: string
+		city?: string
+		region?: string
+		postcode?: string
+		country: string
+	}
+	error: string | null
+}
+
+export type IpInfoLocation = {
+	city: string
+	region: string
+	country: string
+	loc: string
+	postal: string
+	bogon?: boolean
 }

@@ -13,6 +13,9 @@ declare global {
 		lastName: string
 		username: string
 		email: string
+
+		locationLabel?: string
+
 		birthDate: string
 		gender: string
 		sexualOrientation: string

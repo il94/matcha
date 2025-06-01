@@ -6,6 +6,10 @@ export const updateUserMutation = `
 		username = COALESCE(($2::jsonb)->>'username', username),
 		email = COALESCE(($2::jsonb)->>'email', email),
 		password = COALESCE(($2::jsonb)->>'password', password),
+		longitude = COALESCE((($2::jsonb)->>'longitude')::double precision, longitude),
+		latitude = COALESCE((($2::jsonb)->>'latitude')::double precision, latitude),
+		location_label = COALESCE(($2::jsonb)->>'locationLabel', location_label),
+		location_source = COALESCE(($2::jsonb)->>'locationSource', location_source),
 		birth_date = COALESCE(($2::jsonb)->>'birthDate', birth_date),
 		gender = CASE 
 			WHEN ($2::jsonb)->>'gender' IS NOT NULL 

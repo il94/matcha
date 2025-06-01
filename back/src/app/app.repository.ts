@@ -214,7 +214,12 @@ class appRepository {
 		userData: Pick<
 			UserData,
 			"id" | "sessionId" | "birthDate" | "gender" | "sexualOrientation" | "bio"
-		>,
+		> & {
+			latitude: UserData["latitude"]
+			longitude: UserData["longitude"]
+			locationLabel: UserData["locationLabel"]
+			locationSource: UserData["locationSource"]
+		},
 		pictureNames: PictureData["name"][],
 		tagIds: TagData["id"][],
 	) {
@@ -222,6 +227,12 @@ class appRepository {
 			await transact.query(appQueries.completeUserMutation, [
 				userData.id,
 				userData.sessionId,
+
+				userData.longitude,
+				userData.latitude,
+				userData.locationLabel,
+				userData.locationSource,
+
 				userData.birthDate,
 				userData.gender,
 				userData.sexualOrientation,

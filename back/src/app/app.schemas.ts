@@ -123,6 +123,29 @@ export const createBlock = {
 	},
 } as const satisfies FastifyRouteSchema
 
+export const getLocationByCoordinates = {
+	querystring: {
+		type: "object",
+		properties: {
+			latitude: { type: "number" },
+			longitude: { type: "number" },
+		},
+		required: ["latitude", "longitude"],
+		additionalProperties: false,
+	},
+} as const satisfies FastifyRouteSchema
+
+export const getLocationSuggestions = {
+	querystring: {
+		type: "object",
+		properties: {
+			label: { type: "string" },
+		},
+		required: ["label"],
+		additionalProperties: false,
+	},
+} as const satisfies FastifyRouteSchema
+
 export const getUsers = {
 	querystring: {
 		type: "object",
@@ -216,8 +239,18 @@ export const complete = {
 			secondaryPicture2: schemasModels.secondaryPicture2,
 			secondaryPicture3: schemasModels.secondaryPicture3,
 			secondaryPicture4: schemasModels.secondaryPicture4,
+			longitude: schemasModels.longitude,
+			latitude: schemasModels.latitude,
+			locationLabel: schemasModels.locationLabel,
 		},
-		required: ["birthDate", "gender", "sexualOrientation", "tags", "bio"],
+		required: [
+			"birthDate",
+			"gender",
+			"sexualOrientation",
+			"tags",
+			"bio",
+			"principalPicture",
+		],
 		additionalProperties: false,
 	},
 } as const satisfies FastifyRouteSchema

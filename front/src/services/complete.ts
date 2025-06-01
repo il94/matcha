@@ -13,6 +13,9 @@ type completeParams = {
 	secondaryPicture2?: Blob
 	secondaryPicture3?: Blob
 	secondaryPicture4?: Blob
+	longitude?: number
+	latitude?: number
+	locationLabel?: string
 }
 
 export default async function complete({
@@ -26,6 +29,9 @@ export default async function complete({
 	secondaryPicture2,
 	secondaryPicture3,
 	secondaryPicture4,
+	longitude,
+	latitude,
+	locationLabel,
 }: completeParams) {
 	const formData = new FormData()
 
@@ -39,6 +45,9 @@ export default async function complete({
 	if (secondaryPicture2) formData.append("secondaryPicture2", secondaryPicture2)
 	if (secondaryPicture3) formData.append("secondaryPicture3", secondaryPicture3)
 	if (secondaryPicture4) formData.append("secondaryPicture4", secondaryPicture4)
+	if (longitude) formData.append("longitude", longitude.toString())
+	if (latitude) formData.append("latitude", latitude.toString())
+	if (locationLabel) formData.append("locationLabel", locationLabel)
 
 	const response = await axios.put(`/complete`, formData, {
 		headers: {

@@ -12,6 +12,8 @@ import bcrypt from "bcrypt"
 import redisService from "@/redis/redis.service"
 import mailerService from "@/mailer/mailer.service"
 import s3Service from "@/s3/s3.service"
+import axios from "axios"
+import { IpInfoLocation, NominatimLocation } from "@/types"
 
 class appService {
 	private repository
@@ -191,32 +193,148 @@ class appService {
 
 	/* ============= PRIVATE CONTROLLER ============= */
 
+	async getLocationByCoordinates(latitude: number, longitude: number) {
+		const response = await axios.get<NominatimLocation>(
+			`https://nominatim.openstreetmap.org/reverse`,
+			{
+				params: {
+					lat: latitude,
+					lon: longitude,
+					format: "json",
+				},
+			},
+		)
+
+		if (response.data.error) throw new NotFoundException("LOCATION_NOT_FOUND")
+
+		const locationLabel = this.getLocationLabel(response.data)
+
+		return locationLabel
+	}
+
+	async getLocationCoordinatesByLabel(label: string) {
+		const response = await axios.get<NominatimLocation[]>(
+			"https://nominatim.openstreetmap.org/search",
+			{
+				params: {
+					q: label,
+					format: "json",
+					addressdetails: 1,
+					limit: 1,
+				},
+			},
+		)
+		const [location] = response.data
+
+		if (!location) throw new NotFoundException("LOCATION_NOT_FOUND")
+
+		return {
+			latitude: location.lat,
+			longitude: location.lon,
+		}
+	}
+
+	async getLocationByIP(userIp: string) {
+		const response = await axios.get<IpInfoLocation>(
+			`https://ipinfo.io/${userIp}/json?token=f598d872c37c2e`,
+		)
+
+		const location = response.data
+
+		if (!location) throw new NotFoundException("LOCATION_NOT_FOUND")
+		else if (location.bogon) {
+			const defaultLocation = await this.getLocationByCoordinates(
+				48.897029876708984,
+				2.320889472961426,
+			)
+
+			return {
+				locationLabel: defaultLocation,
+			}
+		}
+
+		const [latitude, longitude] = location.loc.split(",")
+
+		return {
+			latitude: parseFloat(latitude),
+			longitude: parseFloat(longitude),
+			locationLabel: this.getIPLocationLabel(location),
+		}
+	}
+
+	async getLocationSuggestions(label: string) {
+		const response = await axios.get<NominatimLocation[]>(
+			"https://nominatim.openstreetmap.org/search",
+			{
+				params: {
+					q: label,
+					format: "json",
+					addressdetails: 1,
+					limit: 2,
+				},
+			},
+		)
+
+		const suggestions = Array.from(
+			new Set(
+				response.data.map((suggestion) => this.getLocationLabel(suggestion)),
+			),
+		) as string[]
+
+		return suggestions
+	}
+
 	async complete(
 		userData: Pick<
 			UserData,
 			"id" | "sessionId" | "birthDate" | "gender" | "sexualOrientation" | "bio"
-		>,
+		> & { longitude?: number; latitude?: number; locationLabel?: string },
+		userIp: string,
 		picturesBuffer: Buffer[],
 		tagIds: TagData["id"][],
 	) {
 		const sessionId = randomUUID()
+		let locationSource: "gps" | "ip" | "manual"
+		let pictureNames: string[] = []
 
 		try {
-			await this.redisService.createSession(userData.id, sessionId)
-			const pictureNames = await this.s3Service.uploadFiles(picturesBuffer)
+			if (userData.longitude && userData.latitude) {
+				userData.locationLabel = await this.getLocationByCoordinates(
+					userData.latitude,
+					userData.longitude,
+				)
+				locationSource = "gps"
+			} else {
+				const { latitude, longitude, locationLabel } =
+					await this.getLocationByIP(userIp)
+
+				userData.longitude = longitude
+				userData.latitude = latitude
+				locationSource = userData.locationLabel ? "manual" : "ip"
+				userData.locationLabel = userData.locationLabel || locationLabel
+			}
+
+			pictureNames = await this.s3Service.uploadFiles(picturesBuffer)
 
 			await this.repository.completeUser(
 				{
 					...userData,
 					sessionId,
+					longitude: userData.longitude!,
+					latitude: userData.latitude!,
+					locationLabel: userData.locationLabel!,
+					locationSource,
 				},
 				pictureNames,
 				tagIds,
 			)
+
+			await this.redisService.createSession(userData.id, sessionId)
 			await this.redisService.deleteCompletingSession(userData.sessionId)
 
 			return sessionId
 		} catch (error) {
+			await this.s3Service.deleteFiles(pictureNames)
 			await this.redisService.deleteSession(sessionId)
 
 			throw error
@@ -539,6 +657,15 @@ class appService {
 
 	getRandomToken(length = 32) {
 		return randomBytes(length).toString("hex")
+	}
+
+	getLocationLabel(location: NominatimLocation) {
+		if (!location.address) return ""
+		return `${location.address.road ? `${location.address.road + ", "}` : ""}${location.address.suburb ? `${location.address.suburb + ", "}` : ""}${location.address.city ? `${location.address.city + ", "}` : ""}${location.address.country ?? ``}`
+	}
+
+	getIPLocationLabel(location: IpInfoLocation) {
+		return `${location.city ? `${location.city + ", "}` : ""}${location.region ? `${location.region + ", "}` : ""}${location.country ?? ``}`
 	}
 }
 

@@ -15,6 +15,7 @@ import SexualOrientation from "@/data/SexualOrientation"
 import dayjs from "@/lib/dayjs"
 import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 import useNavigateFrom from "@/hooks/useNavigateFrom"
+import Step4 from "./Step4"
 
 export const formSchema = z.object({
 	birthDate: z
@@ -47,9 +48,15 @@ export const formSchema = z.object({
 	secondaryPicture2: z.instanceof(Blob).optional(),
 	secondaryPicture3: z.instanceof(Blob).optional(),
 	secondaryPicture4: z.instanceof(Blob).optional(),
+	longitude: z.number().optional(),
+	latitude: z.number().optional(),
+	locationLabel: z.string().optional(),
 })
 
 export default function CompletePage() {
+	const MIN_STEP = 1
+	const MAX_STEP = 4
+
 	const { logout } = useAuthOutletContext()
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -71,7 +78,7 @@ export default function CompletePage() {
 	})
 
 	const [searchParams, setSearchParams] = useSearchParams()
-	const currentStep = Number(searchParams.get("step")) || 1
+	const currentStep = Number(searchParams.get("step")) || MIN_STEP
 
 	const changeStep = (newStep: number) => {
 		const params = new URLSearchParams(searchParams)
@@ -100,17 +107,20 @@ export default function CompletePage() {
 					{currentStep === 1 && <Step1 />}
 					{currentStep === 2 && <Step2 />}
 					{currentStep === 3 && <Step3 />}
+					{currentStep === 4 && <Step4 />}
 					<FormMessage className="px-1">{error}</FormMessage>
 
 					<div className="flex w-full flex-col items-center pb-12">
 						<Button
 							onClick={
-								currentStep < 3 ? () => changeStep(currentStep + 1) : undefined
+								currentStep < MAX_STEP
+									? () => changeStep(currentStep + 1)
+									: undefined
 							}
 							variant="dark"
 							size="lg"
 							className="font-semibold"
-							type={currentStep < 3 ? "button" : "submit"}
+							type={currentStep < MAX_STEP ? "button" : "submit"}
 							disabled={
 								currentStep === 1
 									? !watched.birthDate ||
@@ -120,10 +130,12 @@ export default function CompletePage() {
 										? watched.bio.length > 256
 										: currentStep === 3
 											? watched.principalPicture === undefined
-											: true
+											: currentStep === 4
+												? watched.locationLabel === "typing"
+												: true
 							}
 						>
-							{currentStep < 3 ? "Next" : "Submit"}
+							{currentStep < MAX_STEP ? "Next" : "Submit"}
 						</Button>
 						<Button
 							onClick={logout}

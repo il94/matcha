@@ -17,6 +17,32 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 
 	/* ============ Auth ============ */
 
+	app.get(
+		"/location",
+		{ schema: schemas.getLocationByCoordinates },
+		(request, reply) => {
+			const { latitude, longitude } = request.query
+
+			return service.getLocationByCoordinates(latitude, longitude)
+		},
+	)
+
+	app.get("/location/ip", (request) => {
+		const userIp = request.ip
+
+		return service.getLocationByIP(userIp)
+	})
+
+	app.get(
+		"/location/search",
+		{ schema: schemas.getLocationSuggestions },
+		(request, reply) => {
+			const { label } = request.query
+
+			return service.getLocationSuggestions(label)
+		},
+	)
+
 	app.put("/complete", { schema: schemas.complete }, async (request, reply) => {
 		if (!request.isMultipart) throw new BadRequestException()
 
@@ -32,7 +58,11 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 			secondaryPicture2,
 			secondaryPicture3,
 			secondaryPicture4,
+			longitude,
+			latitude,
+			locationLabel,
 		} = request.body
+		const userIp = request.ip
 
 		const sessionId = await service.complete(
 			{
@@ -42,7 +72,11 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 				gender,
 				sexualOrientation,
 				bio,
+				longitude,
+				latitude,
+				locationLabel,
 			},
+			userIp,
 			[
 				principalPicture as unknown as Buffer,
 				secondaryPicture1 as unknown as Buffer,

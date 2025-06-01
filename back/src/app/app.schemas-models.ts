@@ -44,6 +44,9 @@ const schemasModels = {
 	secondaryPicture2: { type: "object" } as const,
 	secondaryPicture3: { type: "object" } as const,
 	secondaryPicture4: { type: "object" } as const,
+	longitude: { type: "number" } as const,
+	latitude: { type: "number" } as const,
+	locationLabel: { type: "string" } as const,
 }
 
 export default schemasModels
