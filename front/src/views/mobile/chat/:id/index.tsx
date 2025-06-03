@@ -17,6 +17,7 @@ import getUserChatConversation from "@/services/getUserChatConversation"
 import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 import useNavigateFrom from "@/hooks/useNavigateFrom"
 import { useNavigate } from "react-router"
+import socketSend from "@/lib/socketSend"
 
 type ChatDateProps = {
 	date: string
@@ -134,12 +135,10 @@ export default function ChatIdPage() {
 	function handleSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault()
 
-		socket.send(
-			JSON.stringify({
-				content: input,
-				chatId,
-			}),
-		)
+		socketSend(socket, "message", {
+			content: input,
+			chatId,
+		})
 
 		setMessages((prevMessages) => {
 			if (!prevMessages) return []

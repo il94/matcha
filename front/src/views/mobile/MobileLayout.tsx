@@ -4,10 +4,16 @@ import FooterNavbar from "./FooterNavbar"
 import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 
 export default function MobileLayout() {
+	const authOutletContext = useAuthOutletContext()
+
 	return (
 		<main className="flex h-dvh flex-col justify-between">
 			<HeaderNavbar />
-			<Outlet context={useAuthOutletContext()} />
+			{!authOutletContext.isReady ? (
+				<p>Connecting ...</p> // TODO
+			) : (
+				<Outlet context={authOutletContext} />
+			)}
 			<FooterNavbar />
 		</main>
 	)
