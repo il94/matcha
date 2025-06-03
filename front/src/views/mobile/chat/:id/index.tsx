@@ -178,7 +178,7 @@ export default function ChatIdPage() {
 				</div>
 			</div>
 
-			<ScrollArea className="w-full overflow-y-scroll px-3">
+			<ScrollArea className="w-full px-3">
 				<div className="relative space-y-2.5 py-2.5 pb-16">
 					{isPending ? (
 						<p>load</p>

@@ -61,7 +61,7 @@ export default function ChatPage() {
 					Dates
 				</Button>
 			</div>
-			<ScrollArea className="my-4 overflow-y-scroll px-3">
+			<ScrollArea className="my-4 px-3">
 				{chats.map((chat) => {
 					return (
 						<Link to={`/chat/${chat.id}`} key={chat.id}>
