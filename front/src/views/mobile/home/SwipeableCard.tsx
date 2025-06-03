@@ -9,7 +9,7 @@ import {
 	useMemo,
 	useState,
 } from "react"
-import { motion } from "framer-motion"
+import { motion, MotionProps } from "framer-motion"
 import { FramerCallback } from "@/types"
 import dayjs from "dayjs"
 
@@ -133,6 +133,21 @@ export default forwardRef(function SwipeableCard(
 
 	const dayjsLastConnexion = dayjs.utc(lastConnexion).tz(dayjs.tz.guess())
 
+	const textOptions: MotionProps | undefined =
+		location.length > 35
+			? {
+					animate: { x: "-50%" },
+					transition: {
+						duration: 7.5,
+						delay: 2.5,
+						ease: "linear",
+						repeat: Infinity,
+						repeatType: "reverse",
+						repeatDelay: 2.5,
+					},
+				}
+			: undefined
+
 	return (
 		<motion.div
 			{...dragProps}
@@ -189,7 +204,14 @@ export default forwardRef(function SwipeableCard(
 				</p>
 				<div className="flex items-center gap-2">
 					<MapPinIcon className="ml-0.5 size-4 shrink-0" />
-					<p className="whitespace-nowrap">{location}</p>
+					<div className="w-full overflow-hidden">
+						<motion.p
+							{...textOptions}
+							className="inline-block w-fit whitespace-nowrap"
+						>
+							{location}
+						</motion.p>
+					</div>
 				</div>
 				{isOnline ? (
 					<div className="flex items-center gap-2 pl-0.5">
