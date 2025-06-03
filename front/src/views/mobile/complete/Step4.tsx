@@ -130,6 +130,7 @@ export default function Step4() {
 					items={suggestions}
 					placeholder={ipLocation}
 					className={cn(
+						"min-h-20",
 						((suggestions ?? []).length > 0 || input.length > 0) &&
 							"rounded-b-none",
 					)}

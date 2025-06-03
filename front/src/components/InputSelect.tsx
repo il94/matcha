@@ -37,7 +37,7 @@ export default function InputSelect({
 				value={input}
 				placeholder={placeholder}
 				autoSize
-				className={cn("h-[78px] text-sm", className)}
+				className={cn("text-sm", className)}
 			/>
 			{items?.map((suggestion, index) => (
 				<Button

@@ -18,11 +18,10 @@ const Textarea = React.forwardRef<
 				autoSize && "resize-none",
 				className,
 			)}
-			onInput={
-				autoSize
-					? (e) => autoResize(e.target as HTMLTextAreaElement)
-					: props.onInput
-			}
+			onChange={(e) => {
+				props.onChange?.(e)
+				if (autoSize) autoResize(e.target as HTMLTextAreaElement)
+			}}
 			ref={ref}
 			{...props}
 		/>
