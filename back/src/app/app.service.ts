@@ -212,7 +212,7 @@ class appService {
 		return locationLabel
 	}
 
-	async getLocationCoordinatesByLabel(label: string) {
+	async getLocationByLabel(label: string) {
 		const response = await axios.get<NominatimLocation[]>(
 			"https://nominatim.openstreetmap.org/search",
 			{
@@ -229,8 +229,8 @@ class appService {
 		if (!location) throw new NotFoundException("LOCATION_NOT_FOUND")
 
 		return {
-			latitude: location.lat,
-			longitude: location.lon,
+			latitude: parseFloat(location.lat),
+			longitude: parseFloat(location.lon),
 		}
 	}
 
@@ -243,12 +243,17 @@ class appService {
 
 		if (!location) throw new NotFoundException("LOCATION_NOT_FOUND")
 		else if (location.bogon) {
+			const defaultLatitude = 48.897029876708984
+			const defaultLongitude = 2.320889472961426
+
 			const defaultLocation = await this.getLocationByCoordinates(
-				48.897029876708984,
-				2.320889472961426,
+				defaultLatitude,
+				defaultLongitude,
 			)
 
 			return {
+				latitude: defaultLatitude,
+				longitude: defaultLongitude,
 				locationLabel: defaultLocation,
 			}
 		}
@@ -304,14 +309,21 @@ class appService {
 					userData.longitude,
 				)
 				locationSource = "gps"
+			} else if (userData.locationLabel) {
+				const { latitude, longitude } = await this.getLocationByLabel(
+					userData.locationLabel,
+				)
+				userData.longitude = longitude
+				userData.latitude = latitude
+				locationSource = "manual"
 			} else {
 				const { latitude, longitude, locationLabel } =
 					await this.getLocationByIP(userIp)
 
 				userData.longitude = longitude
 				userData.latitude = latitude
-				locationSource = userData.locationLabel ? "manual" : "ip"
-				userData.locationLabel = userData.locationLabel || locationLabel
+				locationSource = "ip"
+				userData.locationLabel = locationLabel
 			}
 
 			pictureNames = await this.s3Service.uploadFiles(picturesBuffer)
@@ -531,14 +543,21 @@ class appService {
 				userData.longitude,
 			)
 			userData.locationSource = "gps"
+		} else if (userData.locationLabel) {
+			const { latitude, longitude } = await this.getLocationByLabel(
+				userData.locationLabel,
+			)
+			userData.longitude = longitude
+			userData.latitude = latitude
+			userData.locationSource = "manual"
 		} else if (userIp) {
 			const { latitude, longitude, locationLabel } =
 				await this.getLocationByIP(userIp)
 
 			userData.longitude = longitude
 			userData.latitude = latitude
-			userData.locationSource = userData.locationLabel ? "manual" : "ip"
-			userData.locationLabel = userData.locationLabel || locationLabel
+			userData.locationSource = "ip"
+			userData.locationLabel = locationLabel
 		}
 
 		await this.repository.updateUser(
