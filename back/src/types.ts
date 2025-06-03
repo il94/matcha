@@ -23,6 +23,7 @@ declare global {
 		latitude?: number
 		locationLabel?: string
 		locationSource: "gps" | "ip" | "manual"
+		distance: number
 
 		birthDate?: string
 		sexualOrientation?: string

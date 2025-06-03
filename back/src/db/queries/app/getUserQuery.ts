@@ -5,8 +5,17 @@ export const getUserQuery = `
 		users.last_name,
 		users.username,
 		users.birth_date,
+		users.longitude,
+		users.latitude,
 		users.location_label,
 		users.location_source,
+		(
+			6371 * acos(
+				cos(radians(ref_user.latitude)) * cos(radians(users.latitude)) *
+				cos(radians(users.longitude) - radians(ref_user.longitude)) +
+				sin(radians(ref_user.latitude)) * sin(radians(users.latitude))
+			)
+		) AS distance,
 		users.gender,
 		users.sexual_orientation,
 		users.bio,
@@ -36,10 +45,11 @@ export const getUserQuery = `
 		EXISTS(SELECT 1 FROM votes v1 JOIN votes v2 ON v1.user_id = v2.target_id AND v1.target_id = v2.user_id WHERE v1.user_id = $2 AND v1.target_id = $1 AND v1.liked = TRUE AND v2.liked = TRUE) AS is_matched
 
 	FROM users
+	JOIN (SELECT latitude, longitude FROM users WHERE id = $2) AS ref_user ON TRUE
 	LEFT JOIN pictures ON pictures.user_id = users.id
 	LEFT JOIN user_tags ON user_tags.user_id = users.id
 	LEFT JOIN tags ON tags.id = user_tags.tag_id
 	LEFT JOIN votes ON votes.target_id = users.id
 	WHERE users.id = $1
-	GROUP BY users.id;
+  GROUP BY users.id, ref_user.latitude, ref_user.longitude;
 `

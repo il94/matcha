@@ -75,6 +75,7 @@ export default forwardRef(function PhotosSection(
 						firstName={user.firstName}
 						age={age}
 						location={user.locationLabel}
+						distance={user.distance}
 						isOnline={user.isOnline}
 						lastConnexion={user.lastConnexion}
 						principalPicture={user.principalPicture}

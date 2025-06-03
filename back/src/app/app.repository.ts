@@ -87,7 +87,7 @@ class appRepository {
 	): Promise<UserData> {
 		const result = await this.db.query(appQueries.getUserQuery, [
 			targetId,
-			userId,
+			userId ?? targetId,
 		])
 
 		const [user] = convertObjectKeysToCamelCase(result.rows)

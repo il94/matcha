@@ -12,6 +12,7 @@ import {
 import { motion, MotionProps } from "framer-motion"
 import { FramerCallback } from "@/types"
 import dayjs from "dayjs"
+import getDistanceLabel from "@/lib/getDistanceLabel"
 
 function shufflePictures(pictures: Picture[]) {
 	for (let i = pictures.length - 1; i > 0; i--) {
@@ -29,6 +30,7 @@ type SwipeableCardProps = {
 	firstName: User["firstName"]
 	age: number
 	location: string
+	distance: number
 	isOnline: boolean
 	lastConnexion?: string
 	principalPicture: User["principalPicture"]
@@ -43,6 +45,7 @@ export default forwardRef(function SwipeableCard(
 		firstName,
 		age,
 		location,
+		distance,
 		isOnline,
 		lastConnexion,
 		principalPicture,
@@ -205,12 +208,16 @@ export default forwardRef(function SwipeableCard(
 				<div className="flex items-center gap-2">
 					<MapPinIcon className="ml-0.5 size-4 shrink-0" />
 					<div className="w-full overflow-hidden">
-						<motion.p
-							{...textOptions}
-							className="inline-block w-fit whitespace-nowrap"
-						>
-							{location}
-						</motion.p>
+						{displayedPicture % 2 ? (
+							<p>{getDistanceLabel(distance)}</p>
+						) : (
+							<motion.p
+								{...textOptions}
+								className="inline-block w-fit whitespace-nowrap"
+							>
+								{location}
+							</motion.p>
+						)}
 					</div>
 				</div>
 				{isOnline ? (
