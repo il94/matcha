@@ -5,5 +5,5 @@ export const getUserByUsernameQuery = `
 		session_id,
 		completed
 	FROM users
-	WHERE username = $1;
+	WHERE username = $1 AND activated = TRUE;
 `
