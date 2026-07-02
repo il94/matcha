@@ -1,6 +1,5 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
-import { pictures } from "./data/pictures"
-import { users } from "./data/users"
+import { pictures, users, SEED_PASSWORD } from "./data/generateUsers"
 import bcrypt from "bcrypt"
 
 import * as adminQueries from "@/db/queries/admin"
@@ -38,6 +37,9 @@ class adminRepository {
 			this.log.info("DB: Create user_tags table")
 			await transact.query(adminQueries.createUserTagsTableMutation)
 
+			this.log.info("DB: Create user_blocks table")
+			await transact.query(adminQueries.createUserBlocksTableMutation)
+
 			this.log.info("DB: Create chats table")
 			await transact.query(adminQueries.createChatsTableMutation)
 
@@ -53,20 +55,23 @@ class adminRepository {
 			this.log.info("DB: Get tags")
 			const tagsDb = await transact.query(appQueries.getTagsQuery)
 
+			// Tous les comptes seed partagent le même mot de passe : on le hache
+			// une seule fois au lieu de 500+ bcrypt (≈ 30 s économisées).
+			const hashedPassword = await bcrypt.hash(SEED_PASSWORD, 10)
+
+			this.log.info(`DB: Create ${users.length} users`)
 			const userIds = []
 
 			for (let i = 0; i < users.length; i++) {
 				const { tags, data } = users[i]
 
-				this.log.info("DB: Create user")
 				const createUserResult = await transact.query(
 					adminQueries.createUserMutation,
-					[await bcrypt.hash(data[0] as string, 10), ...[...data].splice(1)],
+					[hashedPassword, ...data.slice(1)],
 				)
 				const userCreated = createUserResult.rows[0]
 				userIds.push(userCreated.id)
 				for (let j = 0; j < pictures[i].length; j++) {
-					this.log.info("DB: Create picture")
 					await transact.query(appQueries.createPictureMutation, [
 						userCreated.id,
 						pictures[i][j],
@@ -76,12 +81,14 @@ class adminRepository {
 
 				for (const tag of tags) {
 					const { id: tagId } = tagsDb.rows.find((tagDb) => tagDb.name === tag)
-					this.log.info("DB: Create user tag")
 					await transact.query(appQueries.createUserTagMutation, [
 						userCreated.id,
 						tagId,
 					])
 				}
+
+				if ((i + 1) % 50 === 0)
+					this.log.info(`DB: ${i + 1}/${users.length} users created`)
 			}
 		})
 	}

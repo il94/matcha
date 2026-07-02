@@ -407,23 +407,14 @@ class appService {
 		const users = await this.repository.getUsers(userId, page, limit)
 
 		for (const user of users.users) {
-			const pictures = []
-
-			if (user.firstName === "Ilyes") {
-				const signedUrl = await this.s3Service.getSignedURL(
-					user.principalPicture.name,
-				)
-				user.principalPicture.name = signedUrl
-			}
+			user.principalPicture.name = await this.resolvePictureUrl(
+				user.principalPicture.name,
+			)
 
 			for (let i = 0; i < user.pictures.length; i++) {
-				// TODO Retirer condition temporaire
-				if (user.firstName === "Ilyes") {
-					const signedUrl = await this.s3Service.getSignedURL(
-						user.pictures[i].name,
-					)
-					user.pictures[i].name = signedUrl
-				}
+				user.pictures[i].name = await this.resolvePictureUrl(
+					user.pictures[i].name,
+				)
 			}
 		}
 
@@ -439,21 +430,14 @@ class appService {
 			targetId ? userId : undefined,
 		)
 
-		if (user.firstName === "Ilyes") {
-			const signedUrl = await this.s3Service.getSignedURL(
-				user.principalPicture.name,
-			)
-			user.principalPicture.name = signedUrl
-		}
+		user.principalPicture.name = await this.resolvePictureUrl(
+			user.principalPicture.name,
+		)
 
 		for (let i = 0; i < user.pictures.length; i++) {
-			// TODO Retirer condition temporaire
-			if (user.firstName === "Ilyes") {
-				const signedUrl = await this.s3Service.getSignedURL(
-					user.pictures[i].name,
-				)
-				user.pictures[i].name = signedUrl
-			}
+			user.pictures[i].name = await this.resolvePictureUrl(
+				user.pictures[i].name,
+			)
 		}
 
 		return user
@@ -462,7 +446,7 @@ class appService {
 	async getUserChats(userId: UserData["id"]) {
 		const chats = await this.repository.getUserChats(userId)
 		for (const chat of chats) {
-			chat.avatar = await this.s3Service.getSignedURL(chat.avatar)
+			chat.avatar = await this.resolvePictureUrl(chat.avatar)
 		}
 
 		return chats
@@ -472,10 +456,9 @@ class appService {
 		const users = await this.repository.getUserViews(userId)
 
 		for (const user of users) {
-			const signedUrl = await this.s3Service.getSignedURL(
+			user.principalPicture.name = await this.resolvePictureUrl(
 				user.principalPicture.name,
 			)
-			user.principalPicture.name = signedUrl
 		}
 
 		return users
@@ -485,10 +468,9 @@ class appService {
 		const users = await this.repository.getUserLikes(userId)
 
 		for (const user of users) {
-			const signedUrl = await this.s3Service.getSignedURL(
+			user.principalPicture.name = await this.resolvePictureUrl(
 				user.principalPicture.name,
 			)
-			user.principalPicture.name = signedUrl
 		}
 
 		return users
@@ -502,7 +484,7 @@ class appService {
 			userId,
 			chatId,
 		)
-		conversation.avatar = await this.s3Service.getSignedURL(conversation.avatar)
+		conversation.avatar = await this.resolvePictureUrl(conversation.avatar)
 
 		return conversation
 	}
@@ -701,6 +683,11 @@ class appService {
 
 	getRandomToken(length = 32) {
 		return randomBytes(length).toString("hex")
+	}
+
+	async resolvePictureUrl(name: string) {
+		if (/^https?:\/\//.test(name)) return name
+		return this.s3Service.getSignedURL(name)
 	}
 
 	getLocationLabel(location: NominatimLocation) {
