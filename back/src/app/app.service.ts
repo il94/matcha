@@ -385,6 +385,9 @@ class appService {
 		if (targetId && (await this.repository.isUserBlocked(userId, targetId)))
 			throw new BadRequestException()
 
+		if (targetId && targetId !== userId)
+			await this.repository.createView(userId, targetId)
+
 		const user = await this.repository.getUser(
 			targetId ?? userId,
 			targetId ? userId : undefined,

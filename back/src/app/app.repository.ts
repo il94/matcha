@@ -355,6 +355,10 @@ class appRepository {
 		])
 	}
 
+	async createView(userId: UserData["id"], targetId: UserData["id"]) {
+		await this.db.query(appQueries.createViewMutation, [userId, targetId])
+	}
+
 	async isUserLiked(
 		userId: UserData["id"],
 		targetId: UserData["id"],

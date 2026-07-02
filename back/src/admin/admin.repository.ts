@@ -49,6 +49,9 @@ class adminRepository {
 			this.log.info("DB: Create votes table")
 			await transact.query(adminQueries.createVotesTableMutation)
 
+			this.log.info("DB: Create views table")
+			await transact.query(adminQueries.createViewsTableMutation)
+
 			this.log.info("DB: Create reports table")
 			await transact.query(adminQueries.createReportsTableMutation)
 

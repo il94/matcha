@@ -27,7 +27,7 @@ export const getUserQuery = `
 		COALESCE(JSON_AGG(DISTINCT tags) FILTER (WHERE tags IS NOT NULL), '[]') AS tags,
 
 		COUNT(DISTINCT votes.user_id) FILTER (WHERE votes.liked = TRUE) AS likes,
-		COUNT(DISTINCT votes.user_id) AS views,
+		(SELECT COUNT(*) FROM views WHERE views.target_id = users.id) AS views,
 		(
 			SELECT COUNT(*)
 			FROM votes uv1

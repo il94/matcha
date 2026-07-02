@@ -9,6 +9,7 @@ export * from "./dropDatabaseMutation"
 export * from "./createGenderEnumMutation"
 export * from "./createSexualOrientationEnumMutation"
 export * from "./createVotesTableMutation"
+export * from "./createViewsTableMutation"
 export * from "./createReportsTableMutation"
 export * from "./createUserBlocksTableMutation"
 
