@@ -84,7 +84,7 @@ export default function InputImageFileField<T extends FieldValues>({
 									} catch {
 										control.setError(name, {
 											message:
-												"This file doesn't seem ready to shine—try another one !",
+												"This file doesn't seem ready to shine, try another one !",
 										})
 									}
 								}}

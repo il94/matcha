@@ -18,7 +18,7 @@ export const formSchema = z.object({
 			message: "A little lowercase letter never hurt anyone. Try adding one.",
 		})
 		.refine((password) => /[A-Z]/.test(password), {
-			message: "An uppercase letter adds some strength—don't skip it !",
+			message: "An uppercase letter adds some strength, don't skip it !",
 		})
 		.refine((password) => /[0-9]/.test(password), {
 			message: "Numbers make everything more secure. Add one in there.",

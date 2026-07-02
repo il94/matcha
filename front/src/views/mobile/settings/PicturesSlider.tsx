@@ -14,7 +14,7 @@ const formSchema = z.object({
 	principalPicture: z.union([
 		z.string(),
 		z.instanceof(Blob, {
-			message: "A picture is worth a thousand words—don't skip this one !",
+			message: "A picture is worth a thousand words, don't skip this one !",
 		}),
 	]),
 	secondaryPicture1: z.union([z.string(), z.instanceof(Blob)]).optional(),

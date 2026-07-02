@@ -16,25 +16,25 @@ const formSchema = z.object({
 	email: z
 		.string()
 		.min(1, "We need your email to send you those sweet updates !")
-		.max(256, "Your email must be under 256 characters—brevity is charming !")
+		.max(256, "Your email must be under 256 characters, brevity is charming !")
 		.email("Hmm, that doesn't look like a valid email address. Try again ?"),
 	firstName: z
 		.string()
-		.min(1, "Your first name is the spark of your charm—let it shine !")
+		.min(1, "Your first name is the spark of your charm, let it shine !")
 		.max(64, "Keep your first name under 64 characters; simple is stylish."),
 	lastName: z
 		.string()
-		.min(1, "Your last name completes your story—share it with us !")
+		.min(1, "Your last name completes your story, share it with us !")
 		.max(
 			64,
 			"Please limit your last name to 64 characters; elegance in simplicity !",
 		),
 	username: z
 		.string()
-		.min(1, "Your username is your stage name—make it memorable !")
+		.min(1, "Your username is your stage name, make it memorable !")
 		.max(
 			32,
-			"A short username is easier to remember—stick to 32 characters or less !",
+			"A short username is easier to remember, stick to 32 characters or less !",
 		),
 	password: z
 		.string()
@@ -87,17 +87,17 @@ export default function RegisterPage() {
 				if (error.response.data.message === "EMAIL_ALREADY_TAKEN")
 					form.setError("email", {
 						message:
-							"This email is already spoken for—try a different one to stay unique !",
+							"This email is already spoken for, try a different one to stay unique !",
 					})
 				else if (error.response.data.message === "USERNAME_ALREADY_TAKEN")
 					form.setError("username", {
 						message:
-							"Someone else snagged this username—it's popular ! Try a new one.",
+							"Someone else snagged this username, it's popular ! Try a new one.",
 					})
 				else if (error.response.data.message === "WORD_IN_PASSWORD")
 					form.setError("password", {
 						message:
-							"Your password contains a common word—let's make it more unique !",
+							"Your password contains a common word, let's make it more unique !",
 					})
 				else
 					form.setError("root", {

@@ -56,7 +56,7 @@ export const users = [
 			"1975-10-05",
 			"Straight",
 			"Female",
-			"Actress, storyteller, and passionate about living authentically. I believe in kindness, adventure, and meaningful connections. Life’s too short for anything less than real moments—let’s create one together.",
+			"Actress, storyteller, and passionate about living authentically. I believe in kindness, adventure, and meaningful connections. Life’s too short for anything less than real moments, let’s create one together.",
 			1000,
 			false,
 			date6,

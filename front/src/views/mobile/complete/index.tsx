@@ -21,7 +21,7 @@ export const formSchema = z.object({
 	birthDate: z
 		.string()
 		.regex(/^\d{4}-\d{2}-\d{2}$/, {
-			message: "Every story has a timeline—choose a date that makes sense.",
+			message: "Every story has a timeline, choose a date that makes sense.",
 		})
 		.refine(
 			(value) => {
@@ -32,17 +32,17 @@ export const formSchema = z.object({
 			},
 		),
 	gender: z.nativeEnum(Gender, {
-		message: "Gender is part of your identity—pick what feels right.",
-		required_error: "Everyone has a story—let's start with your gender.",
+		message: "Gender is part of your identity, pick what feels right.",
+		required_error: "Everyone has a story, let's start with your gender.",
 	}),
 	sexualOrientation: z.nativeEnum(SexualOrientation, {
-		message: "Love is love—choose what best represents you.",
-		required_error: "Everyone has a type—don't leave this blank !",
+		message: "Love is love, choose what best represents you.",
+		required_error: "Everyone has a type, don't leave this blank !",
 	}),
 	tags: z.array(z.number()),
-	bio: z.string().max(256, "Keep it short and impactful—get to the point !"),
+	bio: z.string().max(256, "Keep it short and impactful, get to the point !"),
 	principalPicture: z.instanceof(Blob, {
-		message: "A picture is worth a thousand words—don't skip this one !",
+		message: "A picture is worth a thousand words, don't skip this one !",
 	}),
 	secondaryPicture1: z.instanceof(Blob).optional(),
 	secondaryPicture2: z.instanceof(Blob).optional(),

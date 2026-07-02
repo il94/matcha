@@ -12,7 +12,7 @@ import toast from "@/lib/toast"
 const formSchema = z.object({
 	firstName: z
 		.string()
-		.min(1, "Your first name is the spark of your charm—let it shine!")
+		.min(1, "Your first name is the spark of your charm, let it shine!")
 		.max(64, "Keep your first name under 64 characters; simple is stylish."),
 })
 

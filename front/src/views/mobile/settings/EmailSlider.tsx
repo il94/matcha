@@ -14,7 +14,7 @@ const formSchema = z.object({
 	email: z
 		.string()
 		.min(1, "We need your email to send you those sweet updates !")
-		.max(256, "Your email must be under 256 characters—brevity is charming !")
+		.max(256, "Your email must be under 256 characters, brevity is charming !")
 		.email("Hmm, that doesn't look like a valid email address. Try again ?"),
 })
 
@@ -50,7 +50,7 @@ export default function EmailSlider({
 			) {
 				form.setError("email", {
 					message:
-						"This email is already spoken for—try a different one to stay unique !",
+						"This email is already spoken for, try a different one to stay unique !",
 				})
 			} else {
 				form.setError("root", {

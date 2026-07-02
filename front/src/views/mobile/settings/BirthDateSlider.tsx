@@ -14,7 +14,7 @@ const formSchema = z.object({
 	birthDate: z
 		.string()
 		.regex(/^\d{4}-\d{2}-\d{2}$/, {
-			message: "Every story has a timeline—choose a date that makes sense.",
+			message: "Every story has a timeline, choose a date that makes sense.",
 		})
 		.refine((value) => dayjs().diff(value, "year") >= 18, {
 			message: "You must be at least 18 years old to use this app.",
