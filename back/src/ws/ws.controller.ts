@@ -16,7 +16,6 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 
 	app.get("/", { websocket: true }, (socket, request) => {
 		const { userId } = request
-		const userIp = request.socket.remoteAddress
 
 		app.clients.set(userId, socket)
 
@@ -28,7 +27,7 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 
 				if (message.type === "message") await onReceiveMessage(message)
 				else if (message.type === "location")
-					await onReceiveLocation(userId, message, userIp)
+					await onReceiveLocation(userId, message)
 				else throw new BadRequestException("INVALID_SOCKET_MESSAGE_TYPE")
 			} catch (error) {
 				onError(error)
@@ -60,19 +59,14 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 		const onReceiveLocation = async (
 			userId: UserData["id"],
 			location: SocketMessage,
-			userIp?: string,
 		) => {
 			const user = await service.getUser(userId)
 
 			if (user.locationSource !== "manual") {
-				await service.updateUser(
-					userId,
-					{
-						longitude: location.longitude,
-						latitude: location.latitude,
-					},
-					userIp,
-				)
+				await service.updateUser(userId, {
+					longitude: location.longitude,
+					latitude: location.latitude,
+				})
 			}
 
 			socketSend(socket, "location")

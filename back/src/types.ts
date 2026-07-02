@@ -22,7 +22,7 @@ declare global {
 		longitude?: number
 		latitude?: number
 		locationLabel?: string
-		locationSource: "gps" | "ip" | "manual"
+		locationSource: "gps" | "manual"
 		distance: number
 
 		birthDate?: string
@@ -93,13 +93,4 @@ export type NominatimLocation = {
 		country: string
 	}
 	error: string | null
-}
-
-export type IpInfoLocation = {
-	city: string
-	region: string
-	country: string
-	loc: string
-	postal: string
-	bogon?: boolean
 }

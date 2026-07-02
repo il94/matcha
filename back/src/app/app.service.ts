@@ -13,7 +13,7 @@ import redisService from "@/redis/redis.service"
 import mailerService from "@/mailer/mailer.service"
 import s3Service from "@/s3/s3.service"
 import axios from "axios"
-import { IpInfoLocation, NominatimLocation } from "@/types"
+import { NominatimLocation } from "@/types"
 
 class appService {
 	private repository
@@ -241,39 +241,6 @@ class appService {
 		}
 	}
 
-	async getLocationByIP(userIp: string) {
-		const response = await axios.get<IpInfoLocation>(
-			`https://ipinfo.io/${userIp}/json?token=${process.env.NOMINATIM_URL}`,
-		)
-
-		const location = response.data
-
-		if (!location) throw new NotFoundException("LOCATION_NOT_FOUND")
-		else if (location.bogon) {
-			const defaultLatitude = 48.897029876708984
-			const defaultLongitude = 2.320889472961426
-
-			const defaultLocation = await this.getLocationByCoordinates(
-				defaultLatitude,
-				defaultLongitude,
-			)
-
-			return {
-				latitude: defaultLatitude,
-				longitude: defaultLongitude,
-				locationLabel: defaultLocation,
-			}
-		}
-
-		const [latitude, longitude] = location.loc.split(",")
-
-		return {
-			latitude: parseFloat(latitude),
-			longitude: parseFloat(longitude),
-			locationLabel: this.getIPLocationLabel(location),
-		}
-	}
-
 	async getLocationSuggestions(label: string) {
 		const response = await axios.get<NominatimLocation[]>(
 			"https://nominatim.openstreetmap.org/search",
@@ -302,12 +269,11 @@ class appService {
 			UserData,
 			"id" | "sessionId" | "birthDate" | "gender" | "sexualOrientation" | "bio"
 		> & { longitude?: number; latitude?: number; locationLabel?: string },
-		userIp: string,
 		picturesBuffer: Buffer[],
 		tagIds: TagData["id"][],
 	) {
 		const sessionId = randomUUID()
-		let locationSource: "gps" | "ip" | "manual"
+		let locationSource: "gps" | "manual"
 		let pictureNames: string[] = []
 
 		try {
@@ -325,13 +291,7 @@ class appService {
 				userData.latitude = latitude
 				locationSource = "manual"
 			} else {
-				const { latitude, longitude, locationLabel } =
-					await this.getLocationByIP(userIp)
-
-				userData.longitude = longitude
-				userData.latitude = latitude
-				locationSource = "ip"
-				userData.locationLabel = locationLabel
+				throw new BadRequestException("LOCATION_REQUIRED")
 			}
 
 			pictureNames = await this.s3Service.uploadFiles(picturesBuffer)
@@ -497,7 +457,6 @@ class appService {
 				newPassword: string
 			}
 		>,
-		userIp?: string,
 		tagIds?: number[],
 	) {
 		const user = await this.repository.getUser(userId)
@@ -540,14 +499,6 @@ class appService {
 			userData.longitude = longitude
 			userData.latitude = latitude
 			userData.locationSource = "manual"
-		} else if (userIp) {
-			const { latitude, longitude, locationLabel } =
-				await this.getLocationByIP(userIp)
-
-			userData.longitude = longitude
-			userData.latitude = latitude
-			userData.locationSource = "ip"
-			userData.locationLabel = locationLabel
 		}
 
 		await this.repository.updateUser(
@@ -693,10 +644,6 @@ class appService {
 	getLocationLabel(location: NominatimLocation) {
 		if (!location.address) return ""
 		return `${location.address.road ? `${location.address.road + ", "}` : ""}${location.address.suburb ? `${location.address.suburb + ", "}` : ""}${location.address.city ? `${location.address.city + ", "}` : ""}${location.address.country ?? ``}`
-	}
-
-	getIPLocationLabel(location: IpInfoLocation) {
-		return `${location.city ? `${location.city + ", "}` : ""}${location.region ? `${location.region + ", "}` : ""}${location.country ?? ``}`
 	}
 }
 

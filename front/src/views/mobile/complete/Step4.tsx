@@ -1,26 +1,14 @@
 import { Button } from "@/components/ui/button"
 import useDebouncedCallback from "@/hooks/useDebouncedCallback"
 import { cn } from "@/lib/utils"
-import { useQuery } from "@tanstack/react-query"
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react"
+import { ChangeEvent, useCallback, useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import Step4LocationDialog from "./Step4LocationDialog"
 import InputSelect from "@/components/InputSelect"
-import getLocationByIP from "@/services/getLocationByIP"
 import getLocationByCoordinates from "@/services/getLocationByCoordinates"
 import getLocationSuggestions from "@/services/getLocationSuggestions"
 
 export default function Step4() {
-	const { data } = useQuery({
-		queryKey: ["ipLocation"],
-		queryFn: getLocationByIP,
-	})
-
-	const ipLocation = useMemo(() => {
-		if (!data) return "Loading location..."
-		return data.locationLabel || "Unknown location"
-	}, [data])
-
 	const form = useFormContext()
 
 	const [enableLocationButton, setEnableLocationButton] = useState(false)
@@ -128,7 +116,7 @@ export default function Step4() {
 					onSelect={handleSelectSuggestion}
 					input={input}
 					items={suggestions}
-					placeholder={ipLocation}
+					placeholder="Enter your city or neighbourhood"
 					className={cn(
 						"min-h-20",
 						((suggestions ?? []).length > 0 || input.length > 0) &&

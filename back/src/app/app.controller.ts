@@ -27,12 +27,6 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 		},
 	)
 
-	app.get("/location/ip", (request) => {
-		const userIp = request.ip
-
-		return service.getLocationByIP(userIp)
-	})
-
 	app.get(
 		"/location/search",
 		{ schema: schemas.getLocationSuggestions },
@@ -62,7 +56,6 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 			latitude,
 			locationLabel,
 		} = request.body
-		const userIp = request.ip
 
 		const sessionId = await service.complete(
 			{
@@ -76,7 +69,6 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 				latitude,
 				locationLabel,
 			},
-			userIp,
 			[
 				principalPicture as unknown as Buffer,
 				secondaryPicture1 as unknown as Buffer,
@@ -173,7 +165,6 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 	app.patch("/user", { schema: schemas.updateUser }, (request) => {
 		const userId = request.userId
 		const userData = request.body
-		const userIp = request.ip
 
 		return service.updateUser(
 			userId,
@@ -192,7 +183,6 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 				sexualOrientation: userData.sexualOrientation,
 				bio: userData.bio,
 			},
-			userIp,
 			userData.tags as unknown as number[],
 		)
 	})

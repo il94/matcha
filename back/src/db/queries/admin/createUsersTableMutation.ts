@@ -13,7 +13,7 @@ export const createUsersTableMutation = `
 		longitude DOUBLE PRECISION DEFAULT NULL,
 		latitude DOUBLE PRECISION DEFAULT NULL,
 		location_label TEXT DEFAULT NULL,
-		location_source TEXT CHECK (location_source IN ('gps', 'manual', 'ip')) DEFAULT 'gps',
+		location_source TEXT CHECK (location_source IN ('gps', 'manual')) DEFAULT 'gps',
 		
 		birth_date VARCHAR DEFAULT NULL,
 		gender gender DEFAULT NULL,

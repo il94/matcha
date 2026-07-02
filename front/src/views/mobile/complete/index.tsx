@@ -131,7 +131,8 @@ export default function CompletePage() {
 										: currentStep === 3
 											? watched.principalPicture === undefined
 											: currentStep === 4
-												? watched.locationLabel === "typing"
+												? !watched.locationLabel ||
+													watched.locationLabel === "typing"
 												: true
 							}
 						>

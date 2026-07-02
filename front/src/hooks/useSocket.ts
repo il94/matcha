@@ -2,16 +2,19 @@ import socketSend from "@/lib/socketSend"
 import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 
-function emitLocation(socket: WebSocket) {
+async function refreshLocationIfConsented(socket: WebSocket) {
+	if (!navigator.permissions || !navigator.geolocation) return
+
+	const permission = await navigator.permissions.query({ name: "geolocation" })
+	if (permission.state !== "granted") return
+
 	navigator.geolocation.getCurrentPosition(
 		(position) => {
 			const { latitude, longitude } = position.coords
 
 			socketSend(socket, "location", { latitude, longitude })
 		},
-		() => {
-			socketSend(socket, "location")
-		},
+		() => {},
 		{
 			enableHighAccuracy: true,
 			timeout: 5000,
@@ -40,7 +43,8 @@ export default function useSocket() {
 		}
 
 		newSocket.onopen = () => {
-			emitLocation(newSocket)
+			setIsReady(true)
+			refreshLocationIfConsented(newSocket)
 		}
 
 		return () => {

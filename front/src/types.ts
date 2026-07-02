@@ -17,7 +17,7 @@ declare global {
 		latitude?: number
 		longitude?: number
 		locationLabel: string
-		locationSource: "gps" | "ip" | "manual"
+		locationSource: "gps" | "manual"
 		distance: number
 
 		birthDate: string

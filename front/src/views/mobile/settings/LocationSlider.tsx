@@ -3,16 +3,15 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Form, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { cn } from "@/lib/utils"
 import updateUser from "@/services/updateUser"
 import toast from "@/lib/toast"
 import Step4LocationDialog from "../complete/Step4LocationDialog"
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react"
+import { ChangeEvent, useCallback, useEffect, useState } from "react"
 import InputSelect from "@/components/InputSelect"
 import useDebouncedCallback from "@/hooks/useDebouncedCallback"
 import getLocationByCoordinates from "@/services/getLocationByCoordinates"
-import getLocationByIP from "@/services/getLocationByIP"
 import getLocationSuggestions from "@/services/getLocationSuggestions"
 
 export const formSchema = z.object({
@@ -61,16 +60,6 @@ export default function LocationSlider({
 	})
 
 	const message = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
-
-	const { data } = useQuery({
-		queryKey: ["ipLocation"],
-		queryFn: getLocationByIP,
-	})
-
-	const ipLocation = useMemo(() => {
-		if (!data) return "Loading location..."
-		return data.locationLabel || "Unknown location"
-	}, [data])
 
 	const [enableLocationButton, setEnableLocationButton] = useState(false)
 	useEffect(() => {
@@ -190,7 +179,7 @@ export default function LocationSlider({
 							onSelect={handleSelectSuggestion}
 							input={input}
 							items={suggestions}
-							placeholder={ipLocation}
+							placeholder="Enter your city or neighbourhood"
 							className={cn(
 								"min-h-20",
 								((suggestions ?? []).length > 0 || input.length > 0) &&

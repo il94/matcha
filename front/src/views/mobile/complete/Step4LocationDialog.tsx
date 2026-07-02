@@ -33,15 +33,11 @@ export default function Step4LocationDialog() {
 						</p>
 						<ul className="mb-4 list-disc pl-5">
 							<li>
-								<strong>GPS:</strong> Precise location if enabled.
+								<strong>GPS:</strong> Precise location if you consent.
 							</li>
 							<li>
-								<strong>IP Address:</strong> Approximate location if GPS is
-								unavailable.
-							</li>
-							<li>
-								<strong>Manual Input:</strong> You can enter your location
-								manually.
+								<strong>Manual Input:</strong> If you decline GPS, enter your
+								city or neighbourhood manually.
 							</li>
 						</ul>
 						<p className="mb-4">
