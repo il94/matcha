@@ -21,6 +21,11 @@ class appService {
 	private redisService
 	private mailerService
 
+	private NOMINATIM_HEADERS = {
+		"User-Agent":
+			"Matcha (matcha school project - contact: system.matcha@gmail.com)",
+	}
+
 	constructor(app: FastifyInstance, options: FastifyPluginOptions) {
 		this.repository = new appRepository(app, options)
 		this.s3Service = new s3Service(app, options)
@@ -202,6 +207,7 @@ class appService {
 					lon: longitude,
 					format: "json",
 				},
+				headers: this.NOMINATIM_HEADERS,
 			},
 		)
 
@@ -222,6 +228,7 @@ class appService {
 					addressdetails: 1,
 					limit: 1,
 				},
+				headers: this.NOMINATIM_HEADERS,
 			},
 		)
 		const [location] = response.data
@@ -236,7 +243,7 @@ class appService {
 
 	async getLocationByIP(userIp: string) {
 		const response = await axios.get<IpInfoLocation>(
-			`https://ipinfo.io/${userIp}/json?token=f598d872c37c2e`,
+			`https://ipinfo.io/${userIp}/json?token=${process.env.NOMINATIM_URL}`,
 		)
 
 		const location = response.data
@@ -277,6 +284,7 @@ class appService {
 					addressdetails: 1,
 					limit: 2,
 				},
+				headers: this.NOMINATIM_HEADERS,
 			},
 		)
 
