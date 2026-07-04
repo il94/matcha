@@ -9,7 +9,10 @@ export const FEMALE_PICTURE_URL =
 
 export const SEED_PASSWORD = "password"
 
-const GENERATED_COUNT = 5
+// randomuser.me expose des portraits numérotés de 0 à 99 par sexe.
+const PICTURE_POOL_SIZE = 100
+
+const GENERATED_COUNT = 50
 
 const GENDERS = Object.values(Gender)
 const ORIENTATIONS = Object.values(SexualOrientation)
@@ -72,6 +75,17 @@ function pictureForSex(sex: "male" | "female") {
 	return sex === "male" ? MALE_PICTURE_URL : FEMALE_PICTURE_URL
 }
 
+function picturesForSex(sex: "male" | "female", count: number): string[] {
+	const numbers = faker.helpers.arrayElements(
+		Array.from({ length: PICTURE_POOL_SIZE }, (_, i) => i),
+		count,
+	)
+	return numbers.map(
+		(n) =>
+			`https://randomuser.me/api/portraits/${sex === "male" ? "men" : "women"}/${n}.jpg`,
+	)
+}
+
 // "sex" (male/female) ne sert qu'à choisir le prénom et la photo, séparément
 // du "gender" stocké en base : il n'y a pas de photo "Other", donc on tire un
 // sexe au hasard dans ce cas.
@@ -92,7 +106,8 @@ function buildUser(
 	email: string,
 	gender: (typeof GENDERS)[number],
 	sex: "male" | "female",
-): { user: SeedUser; picture: string } {
+	pictureCount = 1,
+): { user: SeedUser; pictures: string[] } {
 	const city = faker.helpers.arrayElement(cities)
 	const longitude = city.longitude + jitter()
 	const latitude = city.latitude + jitter()
@@ -124,7 +139,12 @@ function buildUser(
 		tags: faker.helpers.arrayElements(TAG_NAMES, { min: 2, max: 5 }),
 	}
 
-	return { user, picture: pictureForSex(sex) }
+	const pictures =
+		pictureCount === 1
+			? [pictureForSex(sex)]
+			: picturesForSex(sex, pictureCount)
+
+	return { user, pictures }
 }
 
 // Comptes de test fixes (préservent POST /admin/chats et un login connu).
@@ -165,7 +185,7 @@ function generate(): { users: SeedUser[]; pictures: string[][] } {
 	const pictures: string[][] = []
 
 	for (const account of FIXED_ACCOUNTS) {
-		const { user, picture } = buildUser(
+		const { user, pictures: userPictures } = buildUser(
 			account.firstName,
 			account.lastName,
 			account.username,
@@ -174,7 +194,7 @@ function generate(): { users: SeedUser[]; pictures: string[][] } {
 			sexForGender(account.gender),
 		)
 		users.push(user)
-		pictures.push([picture])
+		pictures.push(userPictures)
 	}
 
 	for (let i = 0; i < GENERATED_COUNT; i++) {
@@ -187,17 +207,19 @@ function generate(): { users: SeedUser[]; pictures: string[][] } {
 		const username =
 			`${firstName.toLowerCase().replace(/[^a-z0-9]/g, "")}${i}`.slice(0, 32)
 		const email = `user${i}@matcha.fr`
+		const pictureCount = faker.number.int({ min: 1, max: 3 })
 
-		const { user, picture } = buildUser(
+		const { user, pictures: userPictures } = buildUser(
 			firstName,
 			lastName,
 			username,
 			email,
 			gender,
 			sex,
+			pictureCount,
 		)
 		users.push(user)
-		pictures.push([picture])
+		pictures.push(userPictures)
 	}
 
 	return { users, pictures }
