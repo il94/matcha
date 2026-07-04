@@ -223,10 +223,7 @@ export default forwardRef(function SwipeableCard(
 				</p>
 				<div className="flex items-center gap-2">
 					<MapPinIcon className="ml-0.5 size-4 shrink-0" />
-					<div
-						ref={locationContainerRef}
-						className="w-full overflow-hidden"
-					>
+					<div ref={locationContainerRef} className="w-full overflow-hidden">
 						<motion.p
 							ref={locationTextRef}
 							{...textOptions}
@@ -236,14 +233,14 @@ export default forwardRef(function SwipeableCard(
 						</motion.p>
 					</div>
 				</div>
-				<p className="pl-7 text-sm">{getDistanceLabel(distance)}</p>
+				<p className="pl-7 text-sm opacity-75">{getDistanceLabel(distance)}</p>
 				{isOnline ? (
-					<div className="flex items-center gap-2 pl-0.5 h-6">
+					<div className="flex h-6 items-center gap-2 pl-0.5">
 						<AnimateHalo size={4} />
 						<p>Online</p>
 					</div>
 				) : lastConnexion ? (
-					<div className="flex items-center gap-2 pl-0.5 min-h-6">
+					<div className="flex min-h-6 items-center gap-2 pl-0.5">
 						<AnimateHalo size={4} off />
 						<p className="text-xs">
 							Last connection : {dayjsLastConnexion.format("LL")} at{" "}

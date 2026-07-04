@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { cn } from "@/lib/utils"
 import SelectField from "@/components/FormFields/SelectField"
+import Gender from "@/data/Gender"
 import SexualOrientation from "@/data/SexualOrientation"
 import updateUser from "@/services/updateUser"
 import { toast } from "sonner"
@@ -16,16 +17,20 @@ const formSchema = z.object({
 
 type SexualOrientationSliderProps = {
 	initialValue: string
+	gender: string
 	onClose: () => void
 	className?: string
 }
 
 export default function SexualOrientationSlider({
 	initialValue,
+	gender,
 	onClose,
 	className,
 }: SexualOrientationSliderProps) {
 	const queryClient = useQueryClient()
+
+	const isGenderUndefined = gender === Gender.UNDEFINED
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -79,9 +84,16 @@ export default function SexualOrientationSlider({
 									label: item,
 									value: item,
 								}))}
+								disabled={isGenderUndefined}
 								className="h-12"
 							/>
-							<FormMessage className="h-5 px-1">{message}</FormMessage>
+							{isGenderUndefined ? (
+								<p className="px-1 text-sm text-muted-foreground">
+									Orientation is locked to Bi while your gender is undefined.
+								</p>
+							) : (
+								<FormMessage className="h-5 px-1">{message}</FormMessage>
+							)}
 						</div>
 					</div>
 
@@ -89,6 +101,7 @@ export default function SexualOrientationSlider({
 						variant="dark"
 						type="submit"
 						disabled={
+							isGenderUndefined ||
 							!form.formState.isValid ||
 							form.getValues().sexualOrientation === initialValue
 						}

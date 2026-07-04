@@ -123,7 +123,9 @@ function buildUser(
 				.birthdate({ min: 18, max: 80, mode: "age" })
 				.toISOString()
 				.slice(0, 10),
-			faker.helpers.arrayElement(ORIENTATIONS),
+			gender === Gender.UNDEFINED
+				? SexualOrientation.BI
+				: faker.helpers.arrayElement(ORIENTATIONS),
 			gender,
 			faker.lorem.sentences(2).slice(0, 256),
 			faker.number.int({ min: 0, max: 1000 }),

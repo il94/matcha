@@ -1,7 +1,7 @@
 enum Gender {
 	MALE = "Male",
 	FEMALE = "Female",
-	OTHER = "Other",
+	UNDEFINED = "Undefined",
 }
 
 export default Gender

@@ -97,6 +97,7 @@ export default function SettingSlider({
 				return (
 					<SexualOrientationSlider
 						initialValue={user.sexualOrientation!}
+						gender={user.gender}
 						onClose={onClose}
 						className={className}
 					/>

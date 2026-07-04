@@ -15,6 +15,8 @@ import s3Service from "@/s3/s3.service"
 import axios from "axios"
 import { NominatimLocation } from "@/types"
 import { GetUsersFilters } from "@/db/queries/app"
+import Gender from "@/data/Gender"
+import SexualOrientation from "@/data/SexualOrientation"
 
 class appService {
 	private repository
@@ -273,6 +275,12 @@ class appService {
 		picturesBuffer: Buffer[],
 		tagIds: TagData["id"][],
 	) {
+		if (
+			userData.gender === Gender.UNDEFINED &&
+			userData.sexualOrientation !== SexualOrientation.BI
+		)
+			throw new BadRequestException("ORIENTATION_LOCKED_FOR_UNDEFINED_GENDER")
+
 		const sessionId = randomUUID()
 		let locationSource: "gps" | "manual"
 		let pictureNames: string[] = []
@@ -469,6 +477,17 @@ class appService {
 		tagIds?: number[],
 	) {
 		const user = await this.repository.getUser(userId)
+
+		const nextGender = userData.gender ?? user.gender
+		if (nextGender === Gender.UNDEFINED) {
+			if (
+				userData.sexualOrientation &&
+				userData.sexualOrientation !== SexualOrientation.BI
+			)
+				throw new BadRequestException("ORIENTATION_LOCKED_FOR_UNDEFINED_GENDER")
+			if (userData.gender === Gender.UNDEFINED)
+				userData.sexualOrientation = SexualOrientation.BI
+		}
 
 		if (userData.email) {
 			if (await this.repository.getUserByEmail(userData.email))

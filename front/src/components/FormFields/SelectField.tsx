@@ -36,6 +36,7 @@ export default function SelectField<T extends FieldValues>({
 	label,
 	description,
 	defaultValues,
+	disabled,
 	...props
 }: FieldProps<T>) {
 	return (
@@ -57,7 +58,8 @@ export default function SelectField<T extends FieldValues>({
 							) : (
 								<Select
 									onValueChange={field.onChange}
-									defaultValue={field.value}
+									value={field.value}
+									disabled={disabled}
 								>
 									<SelectTrigger>
 										<SelectValue {...props} />

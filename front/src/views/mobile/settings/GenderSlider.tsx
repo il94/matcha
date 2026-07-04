@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { cn } from "@/lib/utils"
 import SelectField from "@/components/FormFields/SelectField"
 import Gender from "@/data/Gender"
+import SexualOrientation from "@/data/SexualOrientation"
 import updateUser from "@/services/updateUser"
 import { toast } from "sonner"
 
@@ -56,7 +57,14 @@ export default function GenderSlider({
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit((values) =>
-						updateUserMutation({ gender: values.gender }),
+						updateUserMutation(
+							values.gender === Gender.UNDEFINED
+								? {
+										gender: values.gender,
+										sexualOrientation: SexualOrientation.BI,
+									}
+								: { gender: values.gender },
+						),
 					)}
 					className="flex h-full flex-col justify-between"
 				>

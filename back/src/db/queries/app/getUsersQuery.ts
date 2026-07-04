@@ -53,7 +53,7 @@ export const getUsersQuery = `
 			EXISTS(SELECT 1 FROM votes v1 JOIN votes v2 ON v1.user_id = v2.target_id AND v1.target_id = v2.user_id WHERE v1.user_id = $1 AND v1.target_id = users.id AND v1.liked = TRUE AND v2.liked = TRUE) AS is_matched
 
 		FROM users
-		JOIN (SELECT latitude, longitude FROM users WHERE id = $1) AS ref_user ON TRUE
+		JOIN (SELECT latitude, longitude, gender, sexual_orientation FROM users WHERE id = $1) AS ref_user ON TRUE
 		LEFT JOIN pictures ON pictures.user_id = users.id
 		LEFT JOIN user_tags ON user_tags.user_id = users.id
 		LEFT JOIN tags ON tags.id = user_tags.tag_id
@@ -72,6 +72,20 @@ export const getUsersQuery = `
 			FROM user_blocks
 			WHERE user_id_1 = $1 OR user_id_2 = $1
 		)
+			AND (
+				ref_user.sexual_orientation IS NULL
+				OR ref_user.sexual_orientation = 'Bi'
+				OR ref_user.gender IS NULL OR ref_user.gender = 'Undefined'
+				OR (ref_user.sexual_orientation = 'Straight' AND users.gender IN ('Male', 'Female') AND users.gender <> ref_user.gender)
+				OR (ref_user.sexual_orientation = 'Gay'      AND users.gender = ref_user.gender)
+			)
+			AND (
+				users.sexual_orientation IS NULL
+				OR users.sexual_orientation = 'Bi'
+				OR users.gender IS NULL OR users.gender = 'Undefined'
+				OR (users.sexual_orientation = 'Straight' AND ref_user.gender IN ('Male', 'Female') AND ref_user.gender <> users.gender)
+				OR (users.sexual_orientation = 'Gay'      AND ref_user.gender = users.gender)
+			)
 		GROUP BY users.id, ref_user.latitude, ref_user.longitude
 	) AS sub
 	WHERE ($4::int IS NULL OR sub.age >= $4)

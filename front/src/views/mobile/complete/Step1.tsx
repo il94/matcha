@@ -6,9 +6,21 @@ import getTags from "@/services/getTags"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "@/lib/dayjs"
 import { useFormContext } from "react-hook-form"
+import { useEffect } from "react"
 
 export default function Step1() {
 	const form = useFormContext()
+	const { setValue, watch } = form
+
+	const gender = watch("gender")
+	const isGenderUndefined = gender === Gender.UNDEFINED
+
+	useEffect(() => {
+		if (isGenderUndefined)
+			setValue("sexualOrientation", SexualOrientation.BI, {
+				shouldValidate: true,
+			})
+	}, [isGenderUndefined, setValue])
 
 	const {
 		data: tags,
@@ -53,6 +65,7 @@ export default function Step1() {
 						label: item,
 						value: item,
 					}))}
+					disabled={isGenderUndefined}
 					className="h-12"
 				/>
 				<SelectField
