@@ -6,7 +6,9 @@ import {
 	MouseEvent,
 	useCallback,
 	useImperativeHandle,
+	useLayoutEffect,
 	useMemo,
+	useRef,
 	useState,
 } from "react"
 import { motion, MotionProps } from "framer-motion"
@@ -136,12 +138,26 @@ export default forwardRef(function SwipeableCard(
 
 	const dayjsLastConnexion = dayjs.utc(lastConnexion).tz(dayjs.tz.guess())
 
+	const locationContainerRef = useRef<HTMLDivElement>(null)
+	const locationTextRef = useRef<HTMLParagraphElement>(null)
+	const [locationOverflow, setLocationOverflow] = useState(0)
+
+	useLayoutEffect(() => {
+		const container = locationContainerRef.current
+		const text = locationTextRef.current
+		if (!container || !text) return
+
+		const scrollEndOffset = 6 // Marge arbitraire pour éviter que la fin du texte reste coupée
+		const overflow = text.scrollWidth - container.clientWidth
+		setLocationOverflow(overflow > 0 ? overflow + scrollEndOffset : 0)
+	}, [location])
+
 	const textOptions: MotionProps | undefined =
-		location.length > 35
+		locationOverflow > 0
 			? {
-					animate: { x: "-50%" },
+					animate: { x: -locationOverflow },
 					transition: {
-						duration: 7.5,
+						duration: locationOverflow / 30,
 						delay: 2.5,
 						ease: "linear",
 						repeat: Infinity,
@@ -207,26 +223,27 @@ export default forwardRef(function SwipeableCard(
 				</p>
 				<div className="flex items-center gap-2">
 					<MapPinIcon className="ml-0.5 size-4 shrink-0" />
-					<div className="w-full overflow-hidden">
-						{displayedPicture % 2 ? (
-							<p>{getDistanceLabel(distance)}</p>
-						) : (
-							<motion.p
-								{...textOptions}
-								className="inline-block w-fit whitespace-nowrap"
-							>
-								{location}
-							</motion.p>
-						)}
+					<div
+						ref={locationContainerRef}
+						className="w-full overflow-hidden"
+					>
+						<motion.p
+							ref={locationTextRef}
+							{...textOptions}
+							className="inline-block w-fit whitespace-nowrap"
+						>
+							{location}
+						</motion.p>
 					</div>
 				</div>
+				<p className="pl-7 text-sm">{getDistanceLabel(distance)}</p>
 				{isOnline ? (
-					<div className="flex items-center gap-2 pl-0.5">
+					<div className="flex items-center gap-2 pl-0.5 h-6">
 						<AnimateHalo size={4} />
 						<p>Online</p>
 					</div>
 				) : lastConnexion ? (
-					<div className="flex items-center gap-2 pl-0.5 pt-1">
+					<div className="flex items-center gap-2 pl-0.5 min-h-6">
 						<AnimateHalo size={4} off />
 						<p className="text-xs">
 							Last connection : {dayjsLastConnexion.format("LL")} at{" "}
