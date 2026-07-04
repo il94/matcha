@@ -14,6 +14,7 @@ import mailerService from "@/mailer/mailer.service"
 import s3Service from "@/s3/s3.service"
 import axios from "axios"
 import { NominatimLocation } from "@/types"
+import { GetUsersFilters } from "@/db/queries/app"
 
 class appService {
 	private repository
@@ -363,8 +364,13 @@ class appService {
 		await this.repository.createReport(userId, targetId, reason)
 	}
 
-	async getUsers(userId: UserData["id"], page: number, limit: number) {
-		const users = await this.repository.getUsers(userId, page, limit)
+	async getUsers(
+		userId: UserData["id"],
+		page: number,
+		limit: number,
+		filters: GetUsersFilters = {},
+	) {
+		const users = await this.repository.getUsers(userId, page, limit, filters)
 
 		for (const user of users.users) {
 			user.principalPicture.name = await this.resolvePictureUrl(

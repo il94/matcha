@@ -126,9 +126,29 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 
 	app.get("/users", { schema: schemas.getUsers }, (request) => {
 		const userId = request.userId
-		const { page, limit } = request.query
+		const {
+			page,
+			limit,
+			minAge,
+			maxAge,
+			maxDistance,
+			minElo,
+			maxElo,
+			tags,
+			sortBy,
+			order,
+		} = request.query
 
-		return service.getUsers(userId, page, limit)
+		return service.getUsers(userId, page, limit, {
+			minAge,
+			maxAge,
+			maxDistance,
+			minElo,
+			maxElo,
+			tags: tags ? (JSON.parse(tags) as number[]) : undefined,
+			sortBy,
+			order,
+		})
 	})
 
 	app.get("/user", (request) => {

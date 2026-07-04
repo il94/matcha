@@ -31,7 +31,7 @@ import PreviewPage from "./views/mobile/preview"
 
 function App() {
 	return (
-		<ThemeProvider>
+		<ThemeProvider defaultTheme="dark">
 			<ReactQueryProvider>
 				<BrowserRouter>
 					<Routes>

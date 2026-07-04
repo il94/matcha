@@ -13,6 +13,8 @@ type OutletAuthContext = {
 	isError: boolean
 	logout: () => void
 	publicLogout: () => void
+
+	filters: GetUsersFilters
 }
 
 export default function useAuthOutletContext() {

@@ -62,6 +62,7 @@ class appRepository {
 		userId: UserData["id"],
 		page: number,
 		limit: number,
+		filters: appQueries.GetUsersFilters = {},
 	): Promise<{
 		users: UserData[]
 		nextPage: number | null
@@ -70,6 +71,14 @@ class appRepository {
 			userId,
 			page,
 			limit,
+			filters.minAge ?? null,
+			filters.maxAge ?? null,
+			filters.maxDistance ?? null,
+			filters.minElo ?? null,
+			filters.maxElo ?? null,
+			filters.tags ?? null,
+			filters.sortBy ?? null,
+			filters.order ?? null,
 		])
 
 		const users = convertObjectKeysToCamelCase(result.rows)

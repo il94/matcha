@@ -53,6 +53,19 @@ declare global {
 		name: string
 	}
 
+	type GetUsersSortBy = "age" | "distance" | "elo" | "tags"
+
+	type GetUsersFilters = {
+		minAge?: number
+		maxAge?: number
+		maxDistance?: number
+		minElo?: number
+		maxElo?: number
+		tags?: number[]
+		sortBy?: GetUsersSortBy
+		order?: "asc" | "desc"
+	}
+
 	type Chat = {
 		id: string
 		title: User["firstName"]

@@ -5,7 +5,7 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query"
 import getUsers from "@/services/getUsers"
-import { useCallback, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import dayjs from "@/lib/dayjs"
 import BioSection from "./BioSection"
 import EssentialsSection from "./EssentialsSection"
@@ -18,6 +18,8 @@ import createVote from "@/services/createVote"
 import MatchScreen from "./MatchScreen"
 
 export default function HomePage() {
+	const { user, filters } = useAuthOutletContext()
+
 	const {
 		data,
 		isPending,
@@ -26,11 +28,12 @@ export default function HomePage() {
 
 		fetchNextPage,
 	} = useInfiniteQuery({
-		queryKey: ["users"],
+		queryKey: ["users", filters],
 		queryFn: ({ pageParam: page }) =>
 			getUsers({
 				page,
 				limit: 15,
+				filters,
 			}),
 
 		initialPageParam: 1,
@@ -40,7 +43,6 @@ export default function HomePage() {
 		placeholderData: keepPreviousData,
 	})
 
-	const { user } = useAuthOutletContext()
 	const queryClient = useQueryClient()
 
 	const [isMatch, setIsMatch] = useState<number | undefined>()
@@ -74,6 +76,10 @@ export default function HomePage() {
 	}, [data])
 
 	const [currentCardIndex, setCurrentCardIndex] = useState(0)
+
+	useEffect(() => {
+		setCurrentCardIndex(0)
+	}, [filters])
 
 	const photoSectionRef = useRef<{
 		like: () => void

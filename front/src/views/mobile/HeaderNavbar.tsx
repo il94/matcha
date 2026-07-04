@@ -2,7 +2,11 @@ import { Button } from "@/components/ui/button"
 import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 import { BellIcon, LogOutIcon, Settings2Icon } from "lucide-react"
 
-export default function HeaderNavbar() {
+type HeaderNavbarProps = {
+	onOpenSearch: () => void
+}
+
+export default function HeaderNavbar({ onOpenSearch }: HeaderNavbarProps) {
 	const { logout } = useAuthOutletContext()
 
 	return (
@@ -15,7 +19,12 @@ export default function HeaderNavbar() {
 				<Button size="icon" variant="ghost" className="size-6">
 					<BellIcon className="text-black" />
 				</Button>
-				<Button size="icon" variant="ghost" className="size-6">
+				<Button
+					onClick={onOpenSearch}
+					size="icon"
+					variant="ghost"
+					className="size-6"
+				>
 					<Settings2Icon className="text-black" />
 				</Button>
 				<Button onClick={logout} size="icon" variant="ghost" className="size-6">
