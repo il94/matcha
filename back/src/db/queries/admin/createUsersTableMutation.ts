@@ -19,7 +19,7 @@ export const createUsersTableMutation = `
 		gender gender DEFAULT NULL,
 		sexual_orientation sexual_orientation DEFAULT NULL,
 		bio VARCHAR(256) DEFAULT NULL,
-		elo SMALLINT DEFAULT 0 NOT NULL CHECK (elo >= 0 AND elo <= 1000),
+		elo SMALLINT DEFAULT 300 NOT NULL CHECK (elo >= 0 AND elo <= 1000),
 
 		is_online BOOLEAN DEFAULT FALSE NOT NULL,
 		last_connexion TIMESTAMP,
