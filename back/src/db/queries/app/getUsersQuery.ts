@@ -88,24 +88,23 @@ export const getUsersQuery = `
 			)
 		GROUP BY users.id, ref_user.latitude, ref_user.longitude
 	) AS sub
-	WHERE ($4::int IS NULL OR sub.age >= $4)
-		AND ($5::int IS NULL OR sub.age <= $5)
-		AND ($6::float8 IS NULL OR sub.distance <= $6)
-		AND ($7::int IS NULL OR sub.elo >= $7)
-		AND ($8::int IS NULL OR sub.elo <= $8)
-		AND ($9::int[] IS NULL OR sub.id IN (
-			SELECT user_id FROM user_tags WHERE tag_id = ANY($9::int[])
+	WHERE ($3::int IS NULL OR sub.age >= $3)
+		AND ($4::int IS NULL OR sub.age <= $4)
+		AND ($5::float8 IS NULL OR sub.distance <= $5)
+		AND ($6::int IS NULL OR sub.elo >= $6)
+		AND ($7::int IS NULL OR sub.elo <= $7)
+		AND ($8::int[] IS NULL OR sub.id IN (
+			SELECT user_id FROM user_tags WHERE tag_id = ANY($8::int[])
 		))
 	ORDER BY
-		CASE WHEN $10 = 'age'      AND $11 = 'asc'  THEN sub.age END ASC NULLS LAST,
-		CASE WHEN $10 = 'age'      AND $11 = 'desc' THEN sub.age END DESC NULLS LAST,
-		CASE WHEN $10 = 'distance' AND $11 = 'asc'  THEN sub.distance END ASC NULLS LAST,
-		CASE WHEN $10 = 'distance' AND $11 = 'desc' THEN sub.distance END DESC NULLS LAST,
-		CASE WHEN $10 = 'elo'      AND $11 = 'asc'  THEN sub.elo END ASC NULLS LAST,
-		CASE WHEN $10 = 'elo'      AND $11 = 'desc' THEN sub.elo END DESC NULLS LAST,
-		CASE WHEN $10 = 'tags'     AND $11 = 'asc'  THEN sub.common_tags END ASC NULLS LAST,
-		CASE WHEN $10 = 'tags'     AND $11 = 'desc' THEN sub.common_tags END DESC NULLS LAST,
+		CASE WHEN $9 = 'age'      AND $10 = 'asc'  THEN sub.age END ASC NULLS LAST,
+		CASE WHEN $9 = 'age'      AND $10 = 'desc' THEN sub.age END DESC NULLS LAST,
+		CASE WHEN $9 = 'distance' AND $10 = 'asc'  THEN sub.distance END ASC NULLS LAST,
+		CASE WHEN $9 = 'distance' AND $10 = 'desc' THEN sub.distance END DESC NULLS LAST,
+		CASE WHEN $9 = 'elo'      AND $10 = 'asc'  THEN sub.elo END ASC NULLS LAST,
+		CASE WHEN $9 = 'elo'      AND $10 = 'desc' THEN sub.elo END DESC NULLS LAST,
+		CASE WHEN $9 = 'tags'     AND $10 = 'asc'  THEN sub.common_tags END ASC NULLS LAST,
+		CASE WHEN $9 = 'tags'     AND $10 = 'desc' THEN sub.common_tags END DESC NULLS LAST,
 		sub.id ASC
-	OFFSET ($2 - 1) * $3
-	LIMIT $3;
+	LIMIT $2;
 `

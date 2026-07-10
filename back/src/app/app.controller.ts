@@ -127,7 +127,6 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 	app.get("/users", { schema: schemas.getUsers }, (request) => {
 		const userId = request.userId
 		const {
-			page,
 			limit,
 			minAge,
 			maxAge,
@@ -139,7 +138,7 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 			order,
 		} = request.query
 
-		return service.getUsers(userId, page, limit, {
+		return service.getUsers(userId, limit, {
 			minAge,
 			maxAge,
 			maxDistance,

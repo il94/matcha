@@ -374,13 +374,12 @@ class appService {
 
 	async getUsers(
 		userId: UserData["id"],
-		page: number,
 		limit: number,
 		filters: GetUsersFilters = {},
 	) {
-		const users = await this.repository.getUsers(userId, page, limit, filters)
+		const users = await this.repository.getUsers(userId, limit, filters)
 
-		for (const user of users.users) {
+		for (const user of users) {
 			user.principalPicture.name = await this.resolvePictureUrl(
 				user.principalPicture.name,
 			)

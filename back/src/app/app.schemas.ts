@@ -150,7 +150,6 @@ export const getUsers = {
 	querystring: {
 		type: "object",
 		properties: {
-			page: { type: "number", default: 1 },
 			limit: { type: "number", default: 5 },
 			minAge: { type: "number", minimum: 18 },
 			maxAge: { type: "number", minimum: 18 },

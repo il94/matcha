@@ -1,15 +1,13 @@
 import axios from "@/lib/axios"
 
 type GetUsersParams = {
-	page?: number
 	limit?: number
 	filters?: GetUsersFilters
 }
 
-function buildUsersQuery({ page, limit, filters = {} }: GetUsersParams) {
+function buildUsersQuery({ limit, filters = {} }: GetUsersParams) {
 	const params = new URLSearchParams()
 
-	if (page !== undefined) params.set("page", String(page))
 	if (limit !== undefined) params.set("limit", String(limit))
 
 	if (filters.minAge !== undefined) params.set("minAge", String(filters.minAge))
@@ -26,14 +24,10 @@ function buildUsersQuery({ page, limit, filters = {} }: GetUsersParams) {
 	return params.toString()
 }
 
-export default async function getUsers({
-	page,
-	limit,
-	filters,
-}: GetUsersParams) {
+export default async function getUsers({ limit, filters }: GetUsersParams) {
 	// TODO Gestion d'erreur
-	const response = await axios.get<{ users: User[]; nextPage: number | null }>(
-		`/users?${buildUsersQuery({ page, limit, filters })}`,
+	const response = await axios.get<User[]>(
+		`/users?${buildUsersQuery({ limit, filters })}`,
 	)
 
 	return response.data

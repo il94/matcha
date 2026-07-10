@@ -29,16 +29,15 @@ export default function HomePage() {
 		fetchNextPage,
 	} = useInfiniteQuery({
 		queryKey: ["users", filters],
-		queryFn: ({ pageParam: page }) =>
+		queryFn: () =>
 			getUsers({
-				page,
 				limit: 15,
 				filters,
 			}),
 
 		initialPageParam: 1,
-		getNextPageParam: (lastPage) => {
-			return lastPage.nextPage
+		getNextPageParam: (lastPage, _allPages, lastPageParam) => {
+			return lastPage.length === 15 ? lastPageParam + 1 : undefined
 		},
 		placeholderData: keepPreviousData,
 	})
@@ -72,7 +71,7 @@ export default function HomePage() {
 	if (isError) throw error // TODO Gestion d'erreur
 
 	const users = useMemo(() => {
-		return data?.pages.flatMap((page) => page.users) ?? []
+		return data?.pages.flatMap((page) => page) ?? []
 	}, [data])
 
 	const [currentCardIndex, setCurrentCardIndex] = useState(0)

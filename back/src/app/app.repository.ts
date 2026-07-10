@@ -60,16 +60,11 @@ class appRepository {
 
 	async getUsers(
 		userId: UserData["id"],
-		page: number,
 		limit: number,
 		filters: appQueries.GetUsersFilters = {},
-	): Promise<{
-		users: UserData[]
-		nextPage: number | null
-	}> {
+	): Promise<UserData[]> {
 		const result = await this.db.query(appQueries.getUsersQuery, [
 			userId,
-			page,
 			limit,
 			filters.minAge ?? null,
 			filters.maxAge ?? null,
@@ -82,12 +77,8 @@ class appRepository {
 		])
 
 		const users = convertObjectKeysToCamelCase(result.rows)
-		const nextPage = result.rows.length >= limit ? page + 1 : null
 
-		return {
-			users,
-			nextPage,
-		}
+		return users
 	}
 
 	async getUser(
