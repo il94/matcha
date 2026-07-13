@@ -326,6 +326,11 @@ class appRepository {
 			])
 
 			if (vote && (await this.isUserLiked(userId, targetId, transact))) {
+				await transact.query(appQueries.updateEloOnMatchMutation, [
+					userId,
+					targetId,
+					30,
+				])
 				const chat = await this.createChat(userId, targetId, transact)
 				return {
 					match: true,
