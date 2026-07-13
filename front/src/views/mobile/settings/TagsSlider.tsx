@@ -9,6 +9,7 @@ import SelectField from "@/components/FormFields/SelectField"
 import getTags from "@/services/getTags"
 import updateUser from "@/services/updateUser"
 import { toast } from "sonner"
+import { Loader2Icon } from "lucide-react"
 
 const formSchema = z.object({
 	tags: z.array(z.number()),
@@ -60,7 +61,13 @@ export default function TagsSlider({
 		},
 	})
 
-	if (isPending) return <p>Loading...</p>
+	if (isPending)
+		return (
+			<div className="flex h-full items-center justify-center">
+				<Loader2Icon className="size-8 animate-spin" />
+			</div>
+		)
+
 	if (isError) throw error
 
 	return (

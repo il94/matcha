@@ -12,6 +12,7 @@ import { Slider } from "@/components/ui/slider"
 import { Label } from "@/components/ui/label"
 import SelectField from "@/components/FormFields/SelectField"
 import getTags from "@/services/getTags"
+import { Skeleton } from "@/components/ui/skeleton"
 
 // Slider bounds shared by the form and the "is this filter active?" logic.
 // A slider left at its full range is treated as inactive (param not sent).
@@ -182,7 +183,7 @@ function FilterForm({ initialFilters, onApply, onReset }: FilterFormProps) {
 					<div className="space-y-3">
 						<Label>Tags</Label>
 						{isPending ? (
-							<p className="text-sm text-muted-foreground">Loading tags...</p>
+							<Skeleton className="h-10 w-full" />
 						) : (
 							<SelectField
 								control={form.control}
