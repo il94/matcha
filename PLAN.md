@@ -79,7 +79,7 @@ Légende : `[x]` fait · `[ ]` à faire · `(partiel)` commencé mais incomplet 
 ## IV.6 · Chat
 
 - [x] Chat en temps réel entre utilisateurs connectés (délai max 10 s)
-- [ ] Voir depuis **n'importe quelle page** la réception d'un nouveau message
+- [x] Voir depuis **n'importe quelle page** la réception d'un nouveau message
 - [ ] (BONUS) Chat vidéo ou audio pour les utilisateurs connectés
 - [ ] (BONUS) Planifier / organiser des rendez-vous ou événements réels entre matchés
 
