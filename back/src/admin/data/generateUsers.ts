@@ -28,6 +28,26 @@ function jitter() {
 	return faker.number.float({ min: -0.05, max: 0.05, fractionDigits: 4 })
 }
 
+// Score Elo réaliste : un nouveau profil démarre à 300 (le plancher) et peut
+// grimper jusqu'à 1000. On tire une valeur suivant une loi normale (courbe en
+// cloche) via Box-Muller, centrée bas et tronquée sur [300, 1000]. Résultat :
+// la grande majorité des profils reste dans la tranche basse/moyenne, une
+// minorité seulement atteint le sommet du classement — comme une vraie
+// population de notes Elo.
+const SCORE_MIN = 300
+const SCORE_MAX = 1000
+const SCORE_MEAN = 450
+const SCORE_STD = 140
+
+function realisticScore(): number {
+	const u1 = faker.number.float({ min: 1e-6, max: 1, fractionDigits: 6 })
+	const u2 = faker.number.float({ min: 0, max: 1, fractionDigits: 6 })
+	const normal = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2)
+
+	const score = Math.round(SCORE_MEAN + normal * SCORE_STD)
+	return Math.min(SCORE_MAX, Math.max(SCORE_MIN, score))
+}
+
 // Dérive un pseudo à partir de l'identité : nom de famille en priorité (le
 // plus proche d'un vrai pseudo public), puis prénom, puis les deux combinés,
 // avec un suffixe numérique en dernier recours pour garantir l'unicité.
@@ -135,7 +155,7 @@ function buildCharacterUser(row: CharacterRow, index: number): SeedUser {
 			orientation,
 			gender,
 			buildBio(domain, detail, index),
-			faker.number.int({ min: 0, max: 1000 }),
+			realisticScore(),
 			faker.datatype.boolean(),
 			faker.date.recent({ days: 30 }).toISOString(),
 			true,

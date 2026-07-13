@@ -14,16 +14,16 @@ L'importance d'un critère vit uniquement dans son poids ; la normalisation ne l
 
 ## Poids
 
-| Critère            | Variable             | Poids   | Basé sur                                     |
-| ------------------ | -------------------- | ------- | -------------------------------------------- |
-| Localisation       | `locationScore`      | 40      | `sub.distance` (km, paliers)                 |
-| Tags communs       | `commonTagsScore`    | 20      | `sub.common_tags`, plafonné à 5              |
-| Note (elo)         | `eloScore`           | 15      | `sub.elo` / 1000                             |
-| Âge                | `ageScore`           | 10      | `sub.age_gap` (paliers)                      |
-| Déjà liké          | `isLikedScore`       | 7       | `sub.he_liked` (0 ou 1)                      |
-| Dernière connexion | `lastConnexionScore` | 5       | `sub.last_connexion` + `is_online` (paliers) |
-| Nombre de photos   | `nbPicturesScore`    | 3       | `sub.pictures_count` / 5                     |
-| **Total**          |                      | **100** |                                              |
+| Critère            | Variable             | Poids   | Basé sur                                      |
+| ------------------ | -------------------- | ------- | --------------------------------------------- |
+| Localisation       | `locationScore`      | 40      | `sub.distance` (km, paliers)                  |
+| Tags communs       | `commonTagsScore`    | 20      | `sub.common_tags`, plafonné à 5               |
+| Note (elo)         | `eloScore`           | 15      | `sub.elo` normalisé min/max sur les candidats |
+| Âge                | `ageScore`           | 10      | `sub.age_gap` (paliers)                       |
+| Déjà liké          | `isLikedScore`       | 7       | `sub.he_liked` (0 ou 1)                       |
+| Dernière connexion | `lastConnexionScore` | 5       | `sub.last_connexion` + `is_online` (paliers)  |
+| Nombre de photos   | `nbPicturesScore`    | 3       | `sub.pictures_count` / 5                      |
+| **Total**          |                      | **100** |                                               |
 
 ## Conventions
 
@@ -32,7 +32,16 @@ L'importance d'un critère vit uniquement dans son poids ; la normalisation ne l
 - Le dernier palier ne vaut jamais `0` mais un résidu (`0.05`) pour rester classable.
 - Divisions forcées en flottant (`/ 5.0`, `/ 1000.0`) pour éviter la division entière.
 
+## Note sur l'elo (normalisation relative)
+
+L'elo est normalisé **min/max sur les profils candidats** (`(elo - min) / (max - min)`
+via `MIN/MAX ... OVER ()`), pas en absolu `/ 1000`. Comme la plupart des comptes
+stagnent autour de 300, une échelle absolue écrasait le critère ; en relatif, le plus
+populaire de la liste prend 15 et le moins populaire 0, donc l'elo trie vraiment.
+
+Conséquence : le score elo d'un profil **dépend du pool candidat** (filtres appliqués).
+Cas `max = min` (tous à égalité) → neutralisé à `0.5` pour éviter la division par zéro.
+
 ## À calibrer
 
 - Seuil des tags (`5`) et bornes des paliers : à ajuster sur données réelles.
-- Défaut elo à 300 : un nouveau compte démarre bas sur ce critère.

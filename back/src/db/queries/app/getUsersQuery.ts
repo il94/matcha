@@ -28,7 +28,12 @@ const commonTagsScore = `
 `
 
 const eloScore = `
-	15 * sub.elo / 1000.0
+	15 * CASE
+		-- tous les candidats ont le même elo → pas de tri possible, on neutralise
+		WHEN MAX(sub.elo) OVER () = MIN(sub.elo) OVER () THEN 0.5
+		ELSE (sub.elo - MIN(sub.elo) OVER ())::float8
+			/ (MAX(sub.elo) OVER () - MIN(sub.elo) OVER ())
+	END
 `
 
 const ageScore = `

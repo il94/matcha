@@ -39,7 +39,7 @@ Légende : `[x]` fait · `[ ]` à faire · `(partiel)` commencé mais incomplet 
 - [x] Modifier ces infos à tout moment (+ nom, prénom, email)
 - [x] Voir **qui a consulté** son profil · table `views` dédiée (liste + compteur)
 - [x] Voir qui l'a « liké »
-- [ ] **Note de popularité** publique (partiel : colonne `elo` présente mais jamais calculée)
+- [x] **Note de popularité** publique (partiel : colonne `elo` présente mais jamais calculée)
 - [x] Géoloc GPS jusqu'au quartier **avec consentement explicite** (v6/RGPD) · GPS déclenché au clic uniquement, refresh silencieux si déjà consenti, IP retirée
 - [x] Si refus du GPS → **saisie manuelle obligatoire** de la localisation (v6) · `LOCATION_REQUIRED` back + submit bloqué front
 - [x] Pouvoir modifier sa localisation à tout moment
