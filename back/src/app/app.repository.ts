@@ -125,6 +125,14 @@ class appRepository {
 		return pictures
 	}
 
+	async hasPrincipalPicture(userId: UserData["id"]): Promise<boolean> {
+		const result = await this.db.query(appQueries.hasPrincipalPictureQuery, [
+			userId,
+		])
+
+		return result.rows.length > 0
+	}
+
 	async getUserChats(userId: UserData["id"]): Promise<ChatData[]> {
 		const result = await this.db.query(appQueries.getUserChatsQuery, [userId])
 

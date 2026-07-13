@@ -389,6 +389,9 @@ class appService {
 		targetId: UserData["id"],
 		vote: boolean,
 	) {
+		if (vote && !(await this.repository.hasPrincipalPicture(userId)))
+			throw new ForbiddenException("PROFILE_PICTURE_REQUIRED")
+
 		const result = await this.repository.createVote(userId, targetId, vote)
 
 		if (vote)
