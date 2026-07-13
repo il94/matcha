@@ -114,6 +114,17 @@ class appRepository {
 		return user
 	}
 
+	async getUserPassword(
+		userId: UserData["id"],
+	): Promise<UserData["password"] | undefined> {
+		const result = await this.db.query(appQueries.getUserPasswordQuery, [
+			userId,
+		])
+
+		const [user] = result.rows
+		return user?.password
+	}
+
 	async getUserPictures(
 		userId: UserData["id"],
 	): Promise<Pick<PictureData, "id" | "name">[]> {
@@ -276,6 +287,9 @@ class appRepository {
 		userId: UserData["id"],
 		password: UserData["password"],
 	) {
+		if (this.isWordInPassword(password))
+			throw new ForbiddenException("WORD_IN_PASSWORD")
+
 		await this.db.query(appQueries.updateUserPasswordMutation, [
 			userId,
 			await bcrypt.hash(password, 10),

@@ -548,12 +548,19 @@ class appService {
 			}
 		}
 
-		if (
-			userData.newPassword &&
-			(!userData.currentPassword ||
-				!(await bcrypt.compare(userData.currentPassword, user.password)))
-		)
-			throw new ForbiddenException("INVALID_PASSWORD")
+		if (userData.newPassword) {
+			const currentHash = await this.repository.getUserPassword(userId)
+
+			if (
+				!userData.currentPassword ||
+				!currentHash ||
+				!(await bcrypt.compare(userData.currentPassword, currentHash))
+			)
+				throw new ForbiddenException("INVALID_PASSWORD")
+
+			if (this.repository.isWordInPassword(userData.newPassword))
+				throw new ForbiddenException("WORD_IN_PASSWORD")
+		}
 
 		if (userData.longitude && userData.latitude) {
 			userData.locationLabel = await this.getLocationByCoordinates(
