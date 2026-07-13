@@ -1,7 +1,7 @@
 import {
 	keepPreviousData,
-	useInfiniteQuery,
 	useMutation,
+	useQuery,
 	useQueryClient,
 } from "@tanstack/react-query"
 import getUsers from "@/services/getUsers"
@@ -17,28 +17,26 @@ import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 import createVote from "@/services/createVote"
 import MatchScreen from "./MatchScreen"
 
+const BATCH_LIMIT = 15
+const REFETCH_THRESHOLD = 5
+
 export default function HomePage() {
 	const { user, filters } = useAuthOutletContext()
 
 	const {
-		data,
+		data: batch,
 		isPending,
 		isError,
 		error,
-
-		fetchNextPage,
-	} = useInfiniteQuery({
+		isFetching,
+		refetch,
+	} = useQuery({
 		queryKey: ["users", filters],
 		queryFn: () =>
 			getUsers({
-				limit: 15,
+				limit: BATCH_LIMIT,
 				filters,
 			}),
-
-		initialPageParam: 1,
-		getNextPageParam: (lastPage, _allPages, lastPageParam) => {
-			return lastPage.length === 15 ? lastPageParam + 1 : undefined
-		},
 		placeholderData: keepPreviousData,
 	})
 
@@ -70,15 +68,24 @@ export default function HomePage() {
 
 	if (isError) throw error // TODO Gestion d'erreur
 
-	const users = useMemo(() => {
-		return data?.pages.flatMap((page) => page) ?? []
-	}, [data])
-
+	const [users, setUsers] = useState<User[]>([])
 	const [currentCardIndex, setCurrentCardIndex] = useState(0)
 
 	useEffect(() => {
+		setUsers([])
 		setCurrentCardIndex(0)
 	}, [filters])
+
+	useEffect(() => {
+		if (!batch) return
+
+		setUsers((prev) => {
+			const seen = new Set(prev.map((user) => user.id))
+			const fresh = batch.filter((user) => !seen.has(user.id))
+
+			return fresh.length ? [...prev, ...fresh] : prev
+		})
+	}, [batch])
 
 	const photoSectionRef = useRef<{
 		like: () => void
@@ -86,12 +93,14 @@ export default function HomePage() {
 	} | null>(null)
 
 	const setNextCard = useCallback(() => {
-		if (!users) return
+		if (
+			!isFetching &&
+			users.length - (currentCardIndex + 1) <= REFETCH_THRESHOLD
+		)
+			refetch()
 
-		if (currentCardIndex % 15 === 0) fetchNextPage()
-
-		setCurrentCardIndex((prev) => (prev === users.length ? prev : prev + 1))
-	}, [users, currentCardIndex, fetchNextPage])
+		setCurrentCardIndex((prev) => (prev >= users.length ? prev : prev + 1))
+	}, [users.length, currentCardIndex, isFetching, refetch])
 
 	const scrollToTop = useCallback(async () => {
 		scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })
@@ -109,7 +118,7 @@ export default function HomePage() {
 
 	return (
 		<main className="relative flex h-full flex-col justify-between overflow-y-hidden bg-background p-3">
-			{isPending || currentCardIndex === users.length ? (
+			{isPending || currentCardIndex >= users.length ? (
 				<h1>Load</h1> // TODO Loader
 			) : (
 				<>
