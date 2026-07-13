@@ -271,11 +271,14 @@ export default function SearchSettingsPanel({
 	return (
 		<div
 			className={cn(
-				"fixed top-12 z-20 flex h-[calc(100%-56px-48px)] w-full flex-col overflow-hidden bg-background p-2 transition-transform",
+				"fixed top-12 z-20 flex h-[calc(100%-56px-48px)] w-full flex-col overflow-hidden bg-background transition-transform",
 				isOpen ? "translate-x-0" : "translate-x-full",
 			)}
 		>
-			<ChevronLeftIcon onClick={onClose} className="size-8 shrink-0" />
+			<div className="flex shrink-0 items-center gap-2 border-b border-b-button p-2">
+				<ChevronLeftIcon onClick={onClose} className="size-8 shrink-0" />
+				<p className="text-lg font-bold">Preferences</p>
+			</div>
 
 			<div className="grow overflow-hidden p-4">
 				<FilterForm

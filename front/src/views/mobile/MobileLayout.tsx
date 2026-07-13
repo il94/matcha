@@ -50,11 +50,11 @@ export default function MobileLayout() {
 				unreadCount={unreadCount}
 				onOpenNotifications={() => {
 					setIsSearchOpen(false)
-					setIsNotificationsOpen(true)
+					setIsNotificationsOpen((prev) => !prev)
 				}}
 				onOpenSearch={() => {
 					setIsNotificationsOpen(false)
-					setIsSearchOpen(true)
+					setIsSearchOpen((prev) => !prev)
 				}}
 			/>
 			{!authOutletContext.isReady ? (
@@ -62,7 +62,12 @@ export default function MobileLayout() {
 			) : (
 				<Outlet context={{ ...authOutletContext, filters }} />
 			)}
-			<FooterNavbar onNavigate={() => setIsSearchOpen(false)} />
+			<FooterNavbar
+				onNavigate={() => {
+					setIsSearchOpen(false)
+					setIsNotificationsOpen(false)
+				}}
+			/>
 			<SearchSettingsPanel
 				isOpen={isSearchOpen}
 				initialFilters={filters}
