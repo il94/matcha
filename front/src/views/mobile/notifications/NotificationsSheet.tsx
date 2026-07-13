@@ -16,13 +16,13 @@ function notificationLabel(notification: Notification) {
 
 	switch (notification.type) {
 		case "like":
-			return <>{name} vous a liké.</>
+			return <>{name} liked you.</>
 		case "match":
-			return <>Nouveau match avec {name} !</>
+			return <>New match with {name}!</>
 		case "view":
-			return <>{name} a consulté votre profil.</>
+			return <>{name} viewed your profile.</>
 		case "unlike":
-			return <>{name} ne vous like plus.</>
+			return <>{name} no longer likes you.</>
 	}
 }
 
@@ -69,7 +69,7 @@ export default function NotificationsSheet({
 			<ScrollArea className="grow">
 				{notifications.length === 0 ? (
 					<p className="p-4 text-center text-sm text-muted-foreground">
-						Aucune notification pour le moment.
+						No notifications yet.
 					</p>
 				) : (
 					<ul className="p-2">
