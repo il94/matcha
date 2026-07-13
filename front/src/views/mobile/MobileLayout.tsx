@@ -39,7 +39,7 @@ export default function MobileLayout() {
 			) : (
 				<Outlet context={{ ...authOutletContext, filters }} />
 			)}
-			<FooterNavbar />
+			<FooterNavbar onNavigate={() => setIsSearchOpen(false)} />
 			<SearchSettingsPanel
 				isOpen={isSearchOpen}
 				initialFilters={filters}
