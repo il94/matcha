@@ -173,7 +173,7 @@ function buildDevUser(): SeedUser {
 			SexualOrientation.STRAIGHT,
 			Gender.MALE,
 			"Développeur de Matcha, ici pour tester l'application de bout en bout.",
-			500,
+			300,
 			true,
 			faker.date.recent({ days: 1 }).toISOString(),
 			true,
