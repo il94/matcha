@@ -30,7 +30,7 @@ export default function HeaderNavbar({
 				>
 					<BellIcon className="text-black" />
 					{unreadCount > 0 && (
-						<span className="absolute -right-0.5 -top-0.5 size-2.5 rounded-full bg-destructive ring-2 ring-primary" />
+						<span className="absolute -right-0.5 -top-0.5 size-2.5 rounded-full bg-pink-600 ring-2 ring-primary" />
 					)}
 				</Button>
 				<Button
