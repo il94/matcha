@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router"
+import { BrowserRouter, Routes, Route } from "react-router"
 import MobileLayout from "./views/mobile/MobileLayout"
 import { ThemeProvider } from "./providers/ThemeProvider"
 import HomePage from "./views/mobile/home"
@@ -18,6 +18,7 @@ import { Toaster } from "@/components/ui/sonner"
 import ProfileViewsPage from "./views/mobile/profile/views"
 import ProfileLikesPage from "./views/mobile/profile/likes"
 import PreviewPage from "./views/mobile/preview"
+import NotFoundPage from "./views/mobile/notFound"
 
 /*
 	TODO
@@ -57,7 +58,7 @@ function App() {
 								<Route path="preview/:userId" element={<PreviewPage />} />
 							</Route>
 						</Route>
-						<Route path="*" element={<Navigate to="/" replace />} />
+						<Route path="*" element={<NotFoundPage />} />
 					</Routes>
 				</BrowserRouter>
 				<Toaster />
