@@ -47,11 +47,16 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 			const receiverSocket = app.clients.get(response.receiverId)
 
 			if (receiverSocket) {
+				const author = await service.getUser(userId)
+
 				socketSend(receiverSocket, "message", {
 					authorId: response.message.authorId,
 					chatId: response.message.chatId,
 					createdAt: response.message.createdAt,
 					content: response.message.content,
+					authorUsername: author.username,
+					authorFirstName: author.firstName,
+					authorAvatar: author.principalPicture?.name,
 				})
 			}
 		}

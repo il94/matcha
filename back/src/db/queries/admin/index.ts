@@ -12,6 +12,7 @@ export * from "./createVotesTableMutation"
 export * from "./createViewsTableMutation"
 export * from "./createReportsTableMutation"
 export * from "./createUserBlocksTableMutation"
+export * from "./createNotificationsTableMutation"
 
 export * from "./createUserMutation"
 export * from "./createChatMutation"

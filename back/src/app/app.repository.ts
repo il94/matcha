@@ -365,6 +365,33 @@ class appRepository {
 		await this.db.query(appQueries.createViewMutation, [userId, targetId])
 	}
 
+	async createNotification(
+		userId: UserData["id"],
+		senderId: UserData["id"],
+		type: NotificationType,
+	) {
+		await this.db.query(appQueries.createNotificationMutation, [
+			userId,
+			senderId,
+			type,
+		])
+	}
+
+	async getUserNotifications(
+		userId: UserData["id"],
+	): Promise<NotificationData[]> {
+		const result = await this.db.query(appQueries.getUserNotificationsQuery, [
+			userId,
+		])
+
+		const notifications = convertObjectKeysToCamelCase(result.rows)
+		return notifications as NotificationData[]
+	}
+
+	async markNotificationsRead(userId: UserData["id"]) {
+		await this.db.query(appQueries.markNotificationsReadMutation, [userId])
+	}
+
 	async isUserLiked(
 		userId: UserData["id"],
 		targetId: UserData["id"],
@@ -413,13 +440,15 @@ class appRepository {
 		userId: UserData["id"],
 		targetId: UserData["id"],
 		transact?: PoolClient,
-	) {
+	): Promise<{ wasMatch: boolean }> {
 		const executor = transact || this.db
 
 		await executor.query(appQueries.deleteVoteMutation, [userId, targetId])
 
-		if (await this.isUserLiked(userId, targetId, transact))
-			await this.deleteChatByUserIds(userId, targetId, transact)
+		const wasMatch = await this.isUserLiked(userId, targetId, transact)
+		if (wasMatch) await this.deleteChatByUserIds(userId, targetId, transact)
+
+		return { wasMatch }
 	}
 
 	async isUserBlocked(

@@ -80,4 +80,19 @@ declare global {
 		content: string
 		avatar: Picture["name"]
 	}
+
+	type NotificationType = "like" | "match" | "view" | "unlike"
+
+	type Notification = {
+		id: string
+		type: NotificationType
+		read: boolean
+		createdAt: string
+		sender: {
+			id: User["id"]
+			username: User["username"]
+			firstName: User["firstName"]
+			avatar: Picture["name"]
+		}
+	}
 }

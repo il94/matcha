@@ -21,6 +21,7 @@ class dbRepository {
 		await this.db.query(adminQueries.createVotesTableMutation)
 		await this.db.query(adminQueries.createReportsTableMutation)
 		await this.db.query(adminQueries.createUserBlocksTableMutation)
+		await this.db.query(adminQueries.createNotificationsTableMutation)
 	}
 }
 

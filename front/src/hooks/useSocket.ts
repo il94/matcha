@@ -1,6 +1,9 @@
 import socketSend from "@/lib/socketSend"
+import MessageToast from "@/components/MessageToast"
 import { useQueryClient } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
+import { createElement, useEffect, useRef, useState } from "react"
+import { useLocation, useNavigate } from "react-router"
+import { toast } from "sonner"
 
 async function refreshLocationIfConsented(socket: WebSocket) {
 	if (!navigator.permissions || !navigator.geolocation) return
@@ -27,6 +30,15 @@ export default function useSocket() {
 	const [socket, setSocket] = useState<WebSocket>()
 	const [isReady, setIsReady] = useState(false)
 	const queryClient = useQueryClient()
+	const navigate = useNavigate()
+
+	// La socket est créée une seule fois : on lit le pathname courant via une ref
+	// pour ne pas afficher la bannière d'un message si on est déjà sur ce chat.
+	const location = useLocation()
+	const pathnameRef = useRef(location.pathname)
+	useEffect(() => {
+		pathnameRef.current = location.pathname
+	}, [location.pathname])
 
 	useEffect(() => {
 		const newSocket = new WebSocket(import.meta.env.VITE_API_BACK_WS)
@@ -34,9 +46,28 @@ export default function useSocket() {
 
 		newSocket.onmessage = (event) => {
 			const message = JSON.parse(event.data)
-			if (message.type === "message")
+
+			if (message.type === "message") {
 				queryClient.invalidateQueries({ queryKey: ["chats"] })
-			else if (message.type === "location") {
+
+				const isOnThisChat = pathnameRef.current === `/chat/${message.chatId}`
+				if (!isOnThisChat) {
+					toast.custom(
+						(id) =>
+							createElement(MessageToast, {
+								id,
+								authorUsername: message.authorUsername,
+								authorFirstName: message.authorFirstName,
+								avatar: message.authorAvatar,
+								content: message.content,
+								onOpen: () => navigate(`/chat/${message.chatId}`),
+							}),
+						{ position: "top-center", duration: 5000 },
+					)
+				}
+			} else if (message.type === "notification") {
+				queryClient.invalidateQueries({ queryKey: ["notifications"] })
+			} else if (message.type === "location") {
 				queryClient.invalidateQueries({ queryKey: ["verify"] })
 				setIsReady(true)
 			}
@@ -50,7 +81,7 @@ export default function useSocket() {
 		return () => {
 			newSocket.close()
 		}
-	}, [queryClient])
+	}, [queryClient, navigate])
 
 	return {
 		socket,

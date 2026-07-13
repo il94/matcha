@@ -79,6 +79,21 @@ declare global {
 
 		content: string
 	}
+
+	type NotificationType = "like" | "match" | "view" | "unlike"
+
+	type NotificationData = {
+		id: string
+		type: NotificationType
+		read: boolean
+		createdAt: string
+		sender: {
+			id: UserData["id"]
+			username: UserData["username"]
+			firstName: UserData["firstName"]
+			avatar: PictureData["name"]
+		}
+	}
 }
 
 export type NominatimLocation = {

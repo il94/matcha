@@ -1,5 +1,5 @@
 type SocketMessage = {
-	type: "message" | "location" | "error"
+	type: "message" | "location" | "notification" | "error"
 } & Partial<MessageData> & {
 		longitude?: number
 		latitude?: number

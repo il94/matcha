@@ -181,6 +181,18 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 		return service.getUserLikes(userId)
 	})
 
+	app.get("/user/notifications", (request) => {
+		const userId = request.userId
+
+		return service.getUserNotifications(userId)
+	})
+
+	app.patch("/user/notifications/read", (request) => {
+		const userId = request.userId
+
+		return service.markNotificationsRead(userId)
+	})
+
 	app.patch("/user", { schema: schemas.updateUser }, (request) => {
 		const userId = request.userId
 		const userData = request.body

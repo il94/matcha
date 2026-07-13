@@ -3,10 +3,16 @@ import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 import { BellIcon, LogOutIcon, Settings2Icon } from "lucide-react"
 
 type HeaderNavbarProps = {
+	unreadCount: number
+	onOpenNotifications: () => void
 	onOpenSearch: () => void
 }
 
-export default function HeaderNavbar({ onOpenSearch }: HeaderNavbarProps) {
+export default function HeaderNavbar({
+	unreadCount,
+	onOpenNotifications,
+	onOpenSearch,
+}: HeaderNavbarProps) {
 	const { logout } = useAuthOutletContext()
 
 	return (
@@ -16,8 +22,16 @@ export default function HeaderNavbar({ onOpenSearch }: HeaderNavbarProps) {
 				<p className="text-lg text-text">matcha</p>
 			</div>
 			<div className="flex gap-3">
-				<Button size="icon" variant="ghost" className="size-6">
+				<Button
+					onClick={onOpenNotifications}
+					size="icon"
+					variant="ghost"
+					className="relative size-6"
+				>
 					<BellIcon className="text-black" />
+					{unreadCount > 0 && (
+						<span className="absolute -right-0.5 -top-0.5 size-2.5 rounded-full bg-destructive ring-2 ring-primary" />
+					)}
 				</Button>
 				<Button
 					onClick={onOpenSearch}

@@ -17,8 +17,10 @@ import { NominatimLocation } from "@/types"
 import { GetUsersFilters } from "@/db/queries/app"
 import Gender from "@/data/Gender"
 import SexualOrientation from "@/data/SexualOrientation"
+import socketSend from "@/lib/socketSend"
 
 class appService {
+	private app
 	private repository
 	private s3Service
 	private redisService
@@ -30,10 +32,42 @@ class appService {
 	}
 
 	constructor(app: FastifyInstance, options: FastifyPluginOptions) {
+		this.app = app
 		this.repository = new appRepository(app, options)
 		this.s3Service = new s3Service(app, options)
 		this.redisService = new redisService(app, options)
 		this.mailerService = new mailerService(app, options)
+	}
+
+	/* ============= NOTIFICATIONS ============= */
+
+	private async notify(
+		recipientId: UserData["id"],
+		senderId: UserData["id"],
+		type: NotificationType,
+	) {
+		await this.repository.createNotification(recipientId, senderId, type)
+
+		const socket = this.app.clients.get(recipientId)
+		if (socket) socketSend(socket, "notification")
+	}
+
+	async getUserNotifications(userId: UserData["id"]) {
+		const notifications = await this.repository.getUserNotifications(userId)
+
+		for (const notification of notifications) {
+			if (notification.sender.avatar) {
+				notification.sender.avatar = await this.resolvePictureUrl(
+					notification.sender.avatar,
+				)
+			}
+		}
+
+		return notifications
+	}
+
+	async markNotificationsRead(userId: UserData["id"]) {
+		await this.repository.markNotificationsRead(userId)
 	}
 
 	/* ============= PUBLIC CONTROLLER ============= */
@@ -355,9 +389,12 @@ class appService {
 		targetId: UserData["id"],
 		vote: boolean,
 	) {
-		const isMatch = await this.repository.createVote(userId, targetId, vote)
+		const result = await this.repository.createVote(userId, targetId, vote)
 
-		return isMatch
+		if (vote)
+			await this.notify(targetId, userId, result.match ? "match" : "like")
+
+		return result
 	}
 
 	async createBlock(userId: UserData["id"], targetId: UserData["id"]) {
@@ -398,8 +435,10 @@ class appService {
 		if (targetId && (await this.repository.isUserBlocked(userId, targetId)))
 			throw new BadRequestException()
 
-		if (targetId && targetId !== userId)
+		if (targetId && targetId !== userId) {
 			await this.repository.createView(userId, targetId)
+			await this.notify(targetId, userId, "view")
+		}
 
 		const user = await this.repository.getUser(
 			targetId ?? userId,
@@ -602,7 +641,9 @@ class appService {
 	}
 
 	async deleteVote(userId: UserData["id"], targetId: UserData["id"]) {
-		await this.repository.deleteVote(userId, targetId)
+		const { wasMatch } = await this.repository.deleteVote(userId, targetId)
+
+		if (wasMatch) await this.notify(targetId, userId, "unlike")
 	}
 
 	async changeEmail(token: string) {

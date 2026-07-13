@@ -1,6 +1,6 @@
 export default function socketSend(
 	socket: WebSocket,
-	type: "message" | "location" | "error",
+	type: "message" | "location" | "notification" | "error",
 	data?: Record<string, unknown>,
 ) {
 	socket.send(

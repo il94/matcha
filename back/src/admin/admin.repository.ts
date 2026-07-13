@@ -55,6 +55,9 @@ class adminRepository {
 			this.log.info("DB: Create reports table")
 			await transact.query(adminQueries.createReportsTableMutation)
 
+			this.log.info("DB: Create notifications table")
+			await transact.query(adminQueries.createNotificationsTableMutation)
+
 			this.log.info("DB: Get tags")
 			const tagsDb = await transact.query(appQueries.getTagsQuery)
 
