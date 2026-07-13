@@ -23,6 +23,8 @@ function notificationLabel(notification: Notification) {
 			return <>{name} viewed your profile.</>
 		case "unlike":
 			return <>{name} no longer likes you.</>
+		case "message":
+			return <>{name} sent you a message.</>
 	}
 }
 

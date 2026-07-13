@@ -692,6 +692,8 @@ class appService {
 
 		const receiverId = userId === chat.userId1 ? chat.userId2 : chat.userId1
 
+		await this.notify(receiverId, userId, "message")
+
 		return {
 			receiverId,
 			message,

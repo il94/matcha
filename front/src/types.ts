@@ -81,7 +81,7 @@ declare global {
 		avatar: Picture["name"]
 	}
 
-	type NotificationType = "like" | "match" | "view" | "unlike"
+	type NotificationType = "like" | "match" | "view" | "unlike" | "message"
 
 	type Notification = {
 		id: string

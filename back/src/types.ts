@@ -80,7 +80,7 @@ declare global {
 		content: string
 	}
 
-	type NotificationType = "like" | "match" | "view" | "unlike"
+	type NotificationType = "like" | "match" | "view" | "unlike" | "message"
 
 	type NotificationData = {
 		id: string

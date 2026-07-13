@@ -4,7 +4,7 @@ export const createNotificationsTableMutation = `
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 		user_id UUID NOT NULL,
 		sender_id UUID NOT NULL,
-		type TEXT NOT NULL CHECK (type IN ('like', 'match', 'view', 'unlike')),
+		type TEXT NOT NULL CHECK (type IN ('like', 'match', 'view', 'unlike', 'message')),
 		read BOOLEAN DEFAULT FALSE NOT NULL,
 
 		CONSTRAINT fk_notifications_user_id FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
