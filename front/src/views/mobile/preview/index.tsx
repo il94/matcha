@@ -101,7 +101,6 @@ export default function PreviewPage() {
 							age={today.diff(userToDisplay.birthDate, "year")}
 							gender={userToDisplay.gender}
 							sexualOrientation={userToDisplay.sexualOrientation}
-							location={"Paris"}
 							elo={userToDisplay.elo}
 						/>
 						{userToDisplay.tags.length ? (

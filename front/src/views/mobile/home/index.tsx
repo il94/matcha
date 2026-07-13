@@ -134,7 +134,6 @@ export default function HomePage() {
 							age={today.diff(users[currentCardIndex].birthDate, "year")}
 							gender={users[currentCardIndex].gender}
 							sexualOrientation={users[currentCardIndex].sexualOrientation}
-							location={"Paris"}
 							elo={users[currentCardIndex].elo}
 						/>
 						{users[currentCardIndex].tags.length ? (

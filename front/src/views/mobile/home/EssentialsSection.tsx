@@ -3,7 +3,6 @@ import {
 	FlameIcon,
 	HeartIcon,
 	IdCardIcon,
-	MapPinIcon,
 	SquareUserIcon,
 	UserIcon,
 } from "lucide-react"
@@ -15,7 +14,6 @@ type EssentialsSectionProps = {
 	age: number
 	gender: User["gender"]
 	sexualOrientation: User["sexualOrientation"]
-	location: string
 	elo: User["elo"]
 }
 
@@ -26,7 +24,6 @@ export default function EssentialsSection({
 	age,
 	gender,
 	sexualOrientation,
-	location,
 	elo,
 }: EssentialsSectionProps) {
 	return (
@@ -56,10 +53,6 @@ export default function EssentialsSection({
 				<div className="flex items-center space-x-2">
 					<HeartIcon />
 					<p className="text-sm">{sexualOrientation}</p>
-				</div>
-				<div className="flex items-center space-x-2">
-					<MapPinIcon />
-					<p className="text-sm">{location}</p>
 				</div>
 				<div className="flex items-center space-x-2">
 					<FlameIcon />
