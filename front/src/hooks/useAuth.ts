@@ -15,7 +15,7 @@ export default function useAuth() {
 		retry: false,
 	})
 
-	const { socket, isReady } = useSocket()
+	const { socket, isReady } = useSocket(!!data?.isAuthenticated)
 
 	const { mutate: logoutMutation } = useMutation({
 		mutationFn: logout,

@@ -26,7 +26,7 @@ async function refreshLocationIfConsented(socket: WebSocket) {
 	)
 }
 
-export default function useSocket() {
+export default function useSocket(enabled: boolean) {
 	const [socket, setSocket] = useState<WebSocket>()
 	const [isReady, setIsReady] = useState(false)
 	const queryClient = useQueryClient()
@@ -41,6 +41,8 @@ export default function useSocket() {
 	}, [location.pathname])
 
 	useEffect(() => {
+		if (!enabled) return
+
 		const newSocket = new WebSocket(import.meta.env.VITE_API_BACK_WS)
 		setSocket(newSocket)
 
@@ -81,7 +83,7 @@ export default function useSocket() {
 		return () => {
 			newSocket.close()
 		}
-	}, [queryClient, navigate])
+	}, [enabled, queryClient, navigate])
 
 	return {
 		socket,
