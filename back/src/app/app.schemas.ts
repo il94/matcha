@@ -204,19 +204,19 @@ export const updateUserPictures = {
 		type: "object",
 		properties: {
 			principalPicture: {
-				anyOf: [schemasModels.principalPicture, { type: "object" }],
+				anyOf: [schemasModels.principalPicture, { type: "string" }],
 			},
 			secondaryPicture1: {
-				anyOf: [schemasModels.secondaryPicture1, { type: "object" }],
+				anyOf: [schemasModels.secondaryPicture1, { type: "string" }],
 			},
 			secondaryPicture2: {
-				anyOf: [schemasModels.secondaryPicture2, { type: "object" }],
+				anyOf: [schemasModels.secondaryPicture2, { type: "string" }],
 			},
 			secondaryPicture3: {
-				anyOf: [schemasModels.secondaryPicture3, { type: "object" }],
+				anyOf: [schemasModels.secondaryPicture3, { type: "string" }],
 			},
 			secondaryPicture4: {
-				anyOf: [schemasModels.secondaryPicture4, { type: "object" }],
+				anyOf: [schemasModels.secondaryPicture4, { type: "string" }],
 			},
 		},
 		required: ["principalPicture"],
