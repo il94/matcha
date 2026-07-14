@@ -4,6 +4,7 @@ import { z } from "zod"
 import { Form, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { Loader2Icon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import updateUser from "@/services/updateUser"
 import toast from "@/lib/toast"
@@ -44,7 +45,7 @@ export default function LocationSlider({
 		mode: "onTouched",
 	})
 
-	const { mutate: updateUserMutation } = useMutation({
+	const { mutate: updateUserMutation, isPending } = useMutation({
 		mutationFn: updateUser,
 		onSuccess: () => {
 			toast.success("Location successfully updated !")
@@ -194,11 +195,13 @@ export default function LocationSlider({
 						variant="dark"
 						type="submit"
 						disabled={
+							isPending ||
 							!form.formState.isValid ||
 							form.getValues().locationLabel === "typing" ||
 							form.getValues().locationLabel === initialValue.locationLabel
 						}
 					>
+						{isPending && <Loader2Icon className="animate-spin" />}
 						Save
 					</Button>
 				</form>

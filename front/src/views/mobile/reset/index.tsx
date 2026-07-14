@@ -2,9 +2,11 @@ import InputTextField from "@/components/FormFields/InputTextField"
 import { Button } from "@/components/ui/button"
 import { Form, FormMessage } from "@/components/ui/form"
 import useAuthOutletContext from "@/hooks/useAuthOutletContext"
+import { cn } from "@/lib/utils"
 import resetPassword from "@/services/resetPassword"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
+import { Loader2Icon } from "lucide-react"
 import { useCallback } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router"
@@ -48,7 +50,7 @@ export default function ResetPage() {
 
 	const navigate = useNavigate()
 
-	const { mutate: resetPasswordMutation } = useMutation({
+	const { mutate: resetPasswordMutation, isPending } = useMutation({
 		mutationFn: resetPassword,
 		onSuccess: () => {
 			navigate(0)
@@ -110,12 +112,14 @@ export default function ResetPage() {
 						<Button
 							variant="dark"
 							size="lg"
-							className="font-semibold"
+							className={cn("font-semibold", isPending && "pl-4 pr-5")}
 							disabled={
 								!form.formState.isValid ||
-								watched.password !== watched.retypePassword
+								watched.password !== watched.retypePassword ||
+								isPending
 							}
 						>
+							{isPending && <Loader2Icon className="animate-spin" />}
 							Reset
 						</Button>
 						<Button

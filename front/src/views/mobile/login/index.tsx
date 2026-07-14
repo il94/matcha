@@ -8,10 +8,12 @@ import { Form, FormMessage } from "@/components/ui/form"
 import login from "@/services/login"
 import { useMutation } from "@tanstack/react-query"
 import { AxiosError } from "axios"
+import { Loader2Icon } from "lucide-react"
 import { useCallback, useState } from "react"
 
 import ForgotPasswordDialog from "./ForgotPasswordDialog"
 import useNavigateFrom from "@/hooks/useNavigateFrom"
+import { cn } from "@/lib/utils"
 
 const formSchema = z.object({
 	username: z
@@ -38,7 +40,7 @@ export default function LoginPage() {
 
 	const navigateFrom = useNavigateFrom()
 
-	const { mutate: loginMutation } = useMutation({
+	const { mutate: loginMutation, isPending } = useMutation({
 		mutationFn: login,
 		onSuccess: () => {
 			navigateFrom("/home")
@@ -106,10 +108,11 @@ export default function LoginPage() {
 						<Button
 							variant="dark"
 							size="lg"
-							className="font-semibold"
+							className={cn("font-semibold", isPending && "pl-4 pr-5")}
 							type="submit"
-							disabled={!form.formState.isValid}
+							disabled={!form.formState.isValid || isPending}
 						>
+							{isPending && <Loader2Icon className="animate-spin" />}
 							Login
 						</Button>
 						<p>

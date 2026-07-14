@@ -9,7 +9,9 @@ import { useCallback, useState } from "react"
 import register from "@/services/register"
 import { useMutation } from "@tanstack/react-query"
 import { AxiosError } from "axios"
+import { Loader2Icon } from "lucide-react"
 import ActivationDialog from "./ActivationDialog"
+import { cn } from "@/lib/utils"
 
 // TODO voir si besoin d'interdire des chars
 const formSchema = z.object({
@@ -77,7 +79,7 @@ export default function RegisterPage() {
 		mode: "onTouched",
 	})
 
-	const { mutate: registerMutation } = useMutation({
+	const { mutate: registerMutation, isPending } = useMutation({
 		mutationFn: register,
 		onSuccess: () => {
 			setIsRegistered(form.getValues().email)
@@ -164,10 +166,11 @@ export default function RegisterPage() {
 						<Button
 							variant="dark"
 							size="lg"
-							className="font-semibold"
+							className={cn("font-semibold", isPending && "pl-4 pr-5")}
 							type="submit"
-							disabled={!form.formState.isValid}
+							disabled={!form.formState.isValid || isPending}
 						>
+							{isPending && <Loader2Icon className="animate-spin" />}
 							Register
 						</Button>
 						<p>

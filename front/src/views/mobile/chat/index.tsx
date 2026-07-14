@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Skeleton } from "@/components/ui/skeleton"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "@/lib/dayjs"
 import { Calendar, MapPinned } from "lucide-react"
@@ -35,19 +36,27 @@ function Chat({ chat }: ChatProps) {
 	)
 }
 
+function ChatSkeleton() {
+	return (
+		<div className="flex items-center gap-x-2.5 py-2">
+			<Skeleton className="size-14 shrink-0 rounded-full" />
+			<div className="w-full space-y-2">
+				<Skeleton className="h-4 w-1/3" />
+				<Skeleton className="h-4 w-2/3" />
+			</div>
+		</div>
+	)
+}
+
 export default function ChatPage() {
 	const {
 		data: chats,
 		isPending,
 		isError,
-		error,
 	} = useQuery({
 		queryKey: ["chats"],
 		queryFn: getUserChats,
 	})
-
-	if (isPending) return <div>Loading...</div> // TODO
-	if (isError) throw error // TODO
 
 	return (
 		<main className="flex h-full flex-col overflow-y-hidden">
@@ -62,13 +71,19 @@ export default function ChatPage() {
 				</Button>
 			</div>
 			<ScrollArea className="my-4 px-3">
-				{chats.map((chat) => {
-					return (
-						<Link to={`/chat/${chat.id}`} key={chat.id}>
-							<Chat chat={chat} />
-						</Link>
-					)
-				})}
+				{isPending ? (
+					Array.from({ length: 5 }).map((_, i) => <ChatSkeleton key={i} />)
+				) : isError ? (
+					<p className="py-8 text-center text-sm opacity-50">TODO ERROR</p>
+				) : (
+					chats.map((chat) => {
+						return (
+							<Link to={`/chat/${chat.id}`} key={chat.id}>
+								<Chat chat={chat} />
+							</Link>
+						)
+					})
+				)}
 			</ScrollArea>
 		</main>
 	)

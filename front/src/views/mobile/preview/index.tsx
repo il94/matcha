@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button"
 import createVote from "@/services/createVote"
 import deleteVote from "@/services/deleteVote"
 import MatchScreen from "../home/MatchScreen"
+import { Loader2Icon } from "lucide-react"
 
 export default function PreviewPage() {
 	const { userId } = useParams<{ userId?: string }>()
@@ -80,7 +81,9 @@ export default function PreviewPage() {
 	return (
 		<main className="relative flex h-full flex-col justify-between overflow-y-hidden bg-background p-3">
 			{userId && isPending ? (
-				<h1>Load</h1> // TODO Loader
+				<div className="flex h-full items-center justify-center">
+					<Loader2Icon className="size-8 animate-spin" />
+				</div>
 			) : (
 				<>
 					<div className="no-scrollbar relative h-full space-y-3 overflow-y-scroll">

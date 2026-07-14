@@ -35,6 +35,7 @@ export function DatePicker({
 	onSelect,
 	...props
 }: CalendarProps) {
+	const [open, setOpen] = React.useState(false)
 	const [date, setDate] = React.useState(initialValue)
 	const [month, setMonth] = React.useState<number>(
 		date
@@ -94,7 +95,7 @@ export function DatePicker({
 	}
 
 	return (
-		<Popover>
+		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
 				<Button
 					variant={"outline"}
@@ -154,6 +155,7 @@ export function DatePicker({
 							}
 							setDate(date)
 							onSelect(date)
+							setOpen(false)
 						}}
 						toDate={props.toDate}
 						defaultMonth={props.defaultMonth}

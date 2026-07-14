@@ -5,6 +5,7 @@ import { Form, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import InputTextField from "@/components/FormFields/InputTextField"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { Loader2Icon } from "lucide-react"
 import { AxiosError } from "axios"
 import { cn } from "@/lib/utils"
 import updateUser from "@/services/updateUser"
@@ -65,7 +66,7 @@ export default function PasswordSlider({
 		mode: "onTouched",
 	})
 
-	const { mutate: updatePasswordMutation } = useMutation({
+	const { mutate: updatePasswordMutation, isPending } = useMutation({
 		mutationFn: updateUser,
 		onSuccess: () => {
 			toast.success("Password successfully updated !")
@@ -144,8 +145,9 @@ export default function PasswordSlider({
 					<Button
 						variant="dark"
 						type="submit"
-						disabled={!form.formState.isValid}
+						disabled={isPending || !form.formState.isValid}
 					>
+						{isPending && <Loader2Icon className="animate-spin" />}
 						Save
 					</Button>
 				</form>

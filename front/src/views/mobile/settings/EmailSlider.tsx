@@ -5,6 +5,7 @@ import { Form, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import InputTextField from "@/components/FormFields/InputTextField"
 import { useMutation } from "@tanstack/react-query"
+import { Loader2Icon } from "lucide-react"
 import { AxiosError } from "axios"
 import { cn } from "@/lib/utils"
 import updateUser from "@/services/updateUser"
@@ -37,7 +38,7 @@ export default function EmailSlider({
 		mode: "onTouched",
 	})
 
-	const { mutate: updateUserMutation } = useMutation({
+	const { mutate: updateUserMutation, isPending } = useMutation({
 		mutationFn: updateUser,
 		onSuccess: () => {
 			toast.success("An email has been sent to verify your new email address.")
@@ -97,9 +98,12 @@ export default function EmailSlider({
 						variant="dark"
 						type="submit"
 						disabled={
-							!form.formState.isValid || form.getValues().email === initialValue
+							isPending ||
+							!form.formState.isValid ||
+							form.getValues().email === initialValue
 						}
 					>
+						{isPending && <Loader2Icon className="animate-spin" />}
 						Save
 					</Button>
 				</form>

@@ -7,9 +7,7 @@ export default function NotFoundPage() {
 	return (
 		<main className="flex h-dvh flex-col items-center justify-center gap-6 bg-background px-9 text-center">
 			<h1 className="text-7xl font-bold">404</h1>
-			<p className="text-lg text-muted-foreground">
-				This page does not exist.
-			</p>
+			<p className="text-lg text-muted-foreground">This page does not exist.</p>
 			<Button
 				onClick={() => navigate("/")}
 				variant="dark"

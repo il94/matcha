@@ -6,8 +6,25 @@ import { cn } from "@/lib/utils"
 import dayjs from "@/lib/dayjs"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Skeleton } from "@/components/ui/skeleton"
 import useNavigateFrom from "@/hooks/useNavigateFrom"
 import markNotificationsRead from "@/services/markNotificationsRead"
+
+function NotificationsSkeleton() {
+	return (
+		<ul className="p-2">
+			{Array.from({ length: 6 }).map((_, i) => (
+				<li key={i} className="flex items-center gap-3 p-2">
+					<Skeleton className="size-11 shrink-0 rounded-full" />
+					<div className="min-w-0 grow space-y-1.5">
+						<Skeleton className="h-4 w-3/5" />
+						<Skeleton className="h-3 w-16" />
+					</div>
+				</li>
+			))}
+		</ul>
+	)
+}
 
 function notificationLabel(notification: Notification) {
 	const name = (
@@ -31,12 +48,14 @@ function notificationLabel(notification: Notification) {
 type NotificationsSheetProps = {
 	isOpen: boolean
 	notifications: Notification[]
+	isPending: boolean
 	onClose: () => void
 }
 
 export default function NotificationsSheet({
 	isOpen,
 	notifications,
+	isPending,
 	onClose,
 }: NotificationsSheetProps) {
 	const navigateFrom = useNavigateFrom()
@@ -69,7 +88,9 @@ export default function NotificationsSheet({
 			</div>
 
 			<ScrollArea className="grow">
-				{notifications.length === 0 ? (
+				{isPending ? (
+					<NotificationsSkeleton />
+				) : notifications.length === 0 ? (
 					<p className="p-4 text-center text-sm text-muted-foreground">
 						No notifications yet.
 					</p>

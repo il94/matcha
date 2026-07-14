@@ -46,7 +46,7 @@ export default function TagsSlider({
 		queryFn: getTags,
 	})
 
-	const { mutate: updateUserMutation } = useMutation({
+	const { mutate: updateUserMutation, isPending: isUpdating } = useMutation({
 		mutationFn: updateUser,
 		onSuccess: () => {
 			toast.success("Tags successfully updated !")
@@ -109,11 +109,13 @@ export default function TagsSlider({
 						variant="dark"
 						type="submit"
 						disabled={
+							isUpdating ||
 							!form.formState.isValid ||
 							JSON.stringify(form.getValues().tags) ===
 								JSON.stringify(initialValue)
 						}
 					>
+						{isUpdating && <Loader2Icon className="animate-spin" />}
 						Save
 					</Button>
 				</form>

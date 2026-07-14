@@ -4,6 +4,7 @@ import { z } from "zod"
 import { Form, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { Loader2Icon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import SelectField from "@/components/FormFields/SelectField"
 import Gender from "@/data/Gender"
@@ -40,7 +41,7 @@ export default function SexualOrientationSlider({
 		mode: "onTouched",
 	})
 
-	const { mutate: updateUserMutation } = useMutation({
+	const { mutate: updateUserMutation, isPending } = useMutation({
 		mutationFn: updateUser,
 		onSuccess: () => {
 			toast.success("Sexual orientation successfully updated !")
@@ -101,11 +102,13 @@ export default function SexualOrientationSlider({
 						variant="dark"
 						type="submit"
 						disabled={
+							isPending ||
 							isGenderUndefined ||
 							!form.formState.isValid ||
 							form.getValues().sexualOrientation === initialValue
 						}
 					>
+						{isPending && <Loader2Icon className="animate-spin" />}
 						Save
 					</Button>
 				</form>

@@ -26,7 +26,7 @@ export default function MobileLayout() {
 	const [isSearchOpen, setIsSearchOpen] = useState(false)
 	const [isNotificationsOpen, setIsNotificationsOpen] = useState(false)
 
-	const { data: notifications } = useQuery({
+	const { data: notifications, isPending: isNotificationsPending } = useQuery({
 		queryKey: ["notifications"],
 		queryFn: getNotifications,
 	})
@@ -84,6 +84,7 @@ export default function MobileLayout() {
 			<NotificationsSheet
 				isOpen={isNotificationsOpen}
 				notifications={notifications ?? []}
+				isPending={isNotificationsPending}
 				onClose={() => setIsNotificationsOpen(false)}
 			/>
 		</main>

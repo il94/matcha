@@ -11,6 +11,7 @@ import toast from "@/lib/toast"
 import createBlock from "@/services/createBlock"
 import createReport from "@/services/createReport"
 import { useMutation } from "@tanstack/react-query"
+import { Loader2Icon } from "lucide-react"
 import { FormEvent, useCallback, useState } from "react"
 import { useNavigate } from "react-router"
 
@@ -24,7 +25,7 @@ function BlockDialog({ userId, firstName, onBlock }: WarningDialogProps) {
 	const navigate = useNavigate()
 	const [isOpen, setIsOpen] = useState(false)
 
-	const { mutate: createBlockMutation } = useMutation({
+	const { mutate: createBlockMutation, isPending } = useMutation({
 		mutationFn: createBlock,
 		onSuccess: () => {
 			toast.success("User blocked")
@@ -53,9 +54,11 @@ function BlockDialog({ userId, firstName, onBlock }: WarningDialogProps) {
 					</DialogDescription>
 					<Button
 						onClick={() => createBlockMutation({ targetId: userId })}
+						disabled={isPending}
 						variant="destructiveDark"
 						className="h-10 w-fit self-end rounded-xl"
 					>
+						{isPending && <Loader2Icon className="animate-spin" />}
 						Block
 					</Button>
 				</div>
@@ -68,7 +71,7 @@ function ReportDialog({ userId, firstName }: WarningDialogProps) {
 	const [isOpen, setIsOpen] = useState(false)
 	const [reason, setReason] = useState("")
 
-	const { mutate: createReportMutation } = useMutation({
+	const { mutate: createReportMutation, isPending } = useMutation({
 		mutationFn: createReport,
 		onSuccess: () => {
 			toast.success("Report sent")
@@ -115,9 +118,10 @@ function ReportDialog({ userId, firstName }: WarningDialogProps) {
 					/>
 					<Button
 						variant="destructiveDark"
-						disabled={!reason}
+						disabled={!reason || isPending}
 						className="h-10 w-fit self-end rounded-xl"
 					>
+						{isPending && <Loader2Icon className="animate-spin" />}
 						Report
 					</Button>
 				</form>

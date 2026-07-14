@@ -3,6 +3,7 @@ import { ArrowLeftIcon, PhoneIcon, SendIcon, VideoIcon } from "lucide-react"
 import dayjs from "@/lib/dayjs"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
 	FormEvent,
 	Fragment,
@@ -18,6 +19,7 @@ import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 import useNavigateFrom from "@/hooks/useNavigateFrom"
 import { useNavigate } from "react-router"
 import socketSend from "@/lib/socketSend"
+import { cn } from "@/lib/utils"
 
 type ChatDateProps = {
 	date: string
@@ -62,6 +64,34 @@ function ChatSender({ avatar, children }: ChatSenderProps) {
 				</p>
 			</div>
 		</div>
+	)
+}
+
+function MessagesSkeleton() {
+	const bubbles = [
+		"h-9 w-1/2",
+		"h-16 w-2/5",
+		"h-9 w-3/5",
+		"h-20 w-1/3",
+		"h-9 w-1/2",
+		"h-14 w-2/5",
+	]
+
+	return (
+		<>
+			{bubbles.map((bubble, index) =>
+				index % 2 === 0 ? (
+					<div key={index} className="flex items-end gap-x-2">
+						<Skeleton className="size-7 shrink-0 rounded-full" />
+						<Skeleton className={cn("rounded-2xl", bubble)} />
+					</div>
+				) : (
+					<div key={index} className="flex justify-end">
+						<Skeleton className={cn("rounded-2xl", bubble)} />
+					</div>
+				),
+			)}
+		</>
 	)
 }
 
@@ -164,13 +194,23 @@ export default function ChatIdPage() {
 				</Button>
 				<button
 					onClick={() => navigateFrom(`/preview/${chat?.id}`)}
+					disabled={isPending}
 					className="ml-3 flex grow items-center gap-x-1.5"
 				>
-					<img
-						src={chat?.avatar}
-						className="size-9 rounded-full object-cover"
-					/>
-					<p className="text-lg font-bold">{chat?.title}</p>
+					{isPending ? (
+						<>
+							<Skeleton className="size-9 rounded-full" />
+							<Skeleton className="h-5 w-32" />
+						</>
+					) : (
+						<>
+							<img
+								src={chat.avatar}
+								className="size-9 rounded-full object-cover"
+							/>
+							<p className="text-lg font-bold">{chat.title}</p>
+						</>
+					)}
 				</button>
 				<div className="flex items-center gap-x-3">
 					<PhoneIcon className="size-7" />
@@ -181,7 +221,7 @@ export default function ChatIdPage() {
 			<ScrollArea className="w-full px-3">
 				<div className="relative space-y-2.5 py-2.5 pb-16">
 					{isPending ? (
-						<p>load</p>
+						<MessagesSkeleton />
 					) : (
 						messages.map((message, index) => {
 							const previousDate =

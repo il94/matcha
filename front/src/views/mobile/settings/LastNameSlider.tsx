@@ -4,6 +4,7 @@ import { z } from "zod"
 import { Form, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { Loader2Icon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import InputTextField from "@/components/FormFields/InputTextField"
 import updateUser from "@/services/updateUser"
@@ -40,7 +41,7 @@ export default function LastNameSlider({
 		mode: "onTouched",
 	})
 
-	const { mutate: updateUserMutation } = useMutation({
+	const { mutate: updateUserMutation, isPending } = useMutation({
 		mutationFn: updateUser,
 		onSuccess: () => {
 			toast.success("Last name successfully updated !")
@@ -90,10 +91,12 @@ export default function LastNameSlider({
 						variant="dark"
 						type="submit"
 						disabled={
+							isPending ||
 							!form.formState.isValid ||
 							form.getValues().lastName === initialValue
 						}
 					>
+						{isPending && <Loader2Icon className="animate-spin" />}
 						Save
 					</Button>
 				</form>

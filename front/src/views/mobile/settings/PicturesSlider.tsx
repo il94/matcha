@@ -4,6 +4,7 @@ import { z } from "zod"
 import { Form, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { Loader2Icon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import InputImageFileField from "@/components/FormFields/InputImageFileField"
 import { useState } from "react"
@@ -64,7 +65,7 @@ export default function PicturesSlider({
 		mode: "onTouched",
 	})
 
-	const { mutate: updateUserMutation } = useMutation({
+	const { mutate: updateUserMutation, isPending } = useMutation({
 		mutationFn: updateUserPictures,
 		onSuccess: () => {
 			toast.success("Pictures successfully updated !")
@@ -215,6 +216,7 @@ export default function PicturesSlider({
 						variant="dark"
 						type="submit"
 						disabled={
+							isPending ||
 							!form.formState.isValid ||
 							picturesState === 0 ||
 							(initialValue.principalPicture ===
@@ -229,6 +231,7 @@ export default function PicturesSlider({
 									form.getValues().secondaryPicture4)
 						}
 					>
+						{isPending && <Loader2Icon className="animate-spin" />}
 						Save
 					</Button>
 				</form>

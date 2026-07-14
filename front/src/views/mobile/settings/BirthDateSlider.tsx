@@ -4,6 +4,7 @@ import { z } from "zod"
 import { Form, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { Loader2Icon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import DatePickerField from "@/components/FormFields/DatePickerField"
 import dayjs from "@/lib/dayjs"
@@ -42,7 +43,7 @@ export default function BirthDateSlider({
 		mode: "onTouched",
 	})
 
-	const { mutate: updateUserMutation } = useMutation({
+	const { mutate: updateUserMutation, isPending } = useMutation({
 		mutationFn: updateUser,
 		onSuccess: () => {
 			toast.success("Birth date successfully updated !")
@@ -94,10 +95,12 @@ export default function BirthDateSlider({
 						variant="dark"
 						type="submit"
 						disabled={
+							isPending ||
 							!form.formState.isValid ||
 							form.getValues().birthDate.toString() === initialValue?.toString()
 						}
 					>
+						{isPending && <Loader2Icon className="animate-spin" />}
 						Save
 					</Button>
 				</form>

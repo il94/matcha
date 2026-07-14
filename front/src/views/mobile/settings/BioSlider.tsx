@@ -4,6 +4,7 @@ import { z } from "zod"
 import { Form } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { Loader2Icon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import TextAreaField from "@/components/FormFields/TextAreaField"
 import toast from "@/lib/toast"
@@ -34,7 +35,7 @@ export default function BioSlider({
 		mode: "onTouched",
 	})
 
-	const { mutate: updateUserMutation } = useMutation({
+	const { mutate: updateUserMutation, isPending } = useMutation({
 		mutationFn: updateUser,
 		onSuccess: () => {
 			toast.success("Bio successfully updated !")
@@ -83,9 +84,12 @@ export default function BioSlider({
 						variant="dark"
 						type="submit"
 						disabled={
-							!form.formState.isValid || form.getValues().bio === initialValue
+							isPending ||
+							!form.formState.isValid ||
+							form.getValues().bio === initialValue
 						}
 					>
+						{isPending && <Loader2Icon className="animate-spin" />}
 						Save
 					</Button>
 				</form>

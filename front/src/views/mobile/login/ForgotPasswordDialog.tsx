@@ -12,6 +12,7 @@ import { Form, FormMessage } from "@/components/ui/form"
 import forgot from "@/services/forgot"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
+import { Loader2Icon } from "lucide-react"
 import { useCallback, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -42,7 +43,7 @@ export default function ForgotPasswordDialog({
 		mode: "onTouched",
 	})
 
-	const { mutate: forgotMutation } = useMutation({
+	const { mutate: forgotMutation, isPending } = useMutation({
 		mutationFn: forgot,
 		onSuccess: (_, params) => {
 			setIsSent(params.email)
@@ -99,8 +100,9 @@ export default function ForgotPasswordDialog({
 									variant="dark"
 									size="lg"
 									className="font-semibold"
-									disabled={!form.formState.isValid}
+									disabled={!form.formState.isValid || isPending}
 								>
+									{isPending && <Loader2Icon className="animate-spin" />}
 									Send
 								</Button>
 							</DialogFooter>

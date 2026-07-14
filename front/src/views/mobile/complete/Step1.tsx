@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query"
 import dayjs from "@/lib/dayjs"
 import { useFormContext } from "react-hook-form"
 import { useEffect } from "react"
+import { Loader2Icon } from "lucide-react"
 
 export default function Step1() {
 	const form = useFormContext()
@@ -32,7 +33,12 @@ export default function Step1() {
 		queryFn: getTags,
 	})
 
-	if (isPending) return <p>Loading...</p>
+	if (isPending)
+		return (
+			<div className="flex h-full items-center justify-center">
+				<Loader2Icon className="size-8 animate-spin" />
+			</div>
+		)
 	if (isError) throw error
 
 	return (

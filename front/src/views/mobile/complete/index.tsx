@@ -16,6 +16,8 @@ import dayjs from "@/lib/dayjs"
 import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 import useNavigateFrom from "@/hooks/useNavigateFrom"
 import Step4 from "./Step4"
+import { Loader2Icon } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export const formSchema = z.object({
 	birthDate: z
@@ -70,7 +72,7 @@ export default function CompletePage() {
 
 	const navigateFrom = useNavigateFrom()
 
-	const { mutate: completeMutation } = useMutation({
+	const { mutate: completeMutation, isPending } = useMutation({
 		mutationFn: complete,
 		onSuccess: () => {
 			navigateFrom("/home")
@@ -119,10 +121,11 @@ export default function CompletePage() {
 							}
 							variant="dark"
 							size="lg"
-							className="font-semibold"
+							className={cn("font-semibold", isPending && "pl-4 pr-5")}
 							type={currentStep < MAX_STEP ? "button" : "submit"}
 							disabled={
-								currentStep === 1
+								isPending ||
+								(currentStep === 1
 									? !watched.birthDate ||
 										!watched.gender ||
 										!watched.sexualOrientation
@@ -133,9 +136,10 @@ export default function CompletePage() {
 											: currentStep === 4
 												? !watched.locationLabel ||
 													watched.locationLabel === "typing"
-												: true
+												: true)
 							}
 						>
+							{isPending && <Loader2Icon className="animate-spin" />}
 							{currentStep < MAX_STEP ? "Next" : "Submit"}
 						</Button>
 						<Button

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 import useNavigateFrom from "@/hooks/useNavigateFrom"
 import { cn } from "@/lib/utils"
 import getUser from "@/services/getUser"
@@ -52,7 +53,30 @@ export default function ProfilePage() {
 	})
 
 	if (isError) throw error // TODO
-	if (isPending) return <p>Load</p> // TODO
+
+	if (isPending)
+		return (
+			<main className="flex h-full flex-col items-center justify-between overflow-y-hidden px-3 py-8">
+				<Skeleton className="h-10 w-40" />
+
+				<div className="flex h-full w-full flex-col items-center justify-evenly">
+					<Skeleton className="size-32 rounded-full" />
+					<div className="flex w-full justify-evenly">
+						<Skeleton className="h-16 w-20" />
+						<Skeleton className="h-16 w-20" />
+					</div>
+					<div className="flex w-full justify-evenly">
+						<Skeleton className="h-16 w-20" />
+						<Skeleton className="h-16 w-20" />
+					</div>
+				</div>
+
+				<div className="w-full space-y-3">
+					<Skeleton className="h-10 w-full rounded-xl" />
+					<Skeleton className="h-10 w-full rounded-xl" />
+				</div>
+			</main>
+		)
 
 	return (
 		<main className="flex h-full flex-col items-center justify-between overflow-y-hidden px-3 py-8">
