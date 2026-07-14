@@ -93,9 +93,11 @@ export const getUsersQuery = `
 			users.location_source,
 			(
 				6371 * acos(
-					cos(radians(ref_user.latitude)) * cos(radians(users.latitude)) *
-					cos(radians(users.longitude) - radians(ref_user.longitude)) +
-					sin(radians(ref_user.latitude)) * sin(radians(users.latitude))
+					LEAST(1, GREATEST(-1,
+						cos(radians(ref_user.latitude)) * cos(radians(users.latitude)) *
+						cos(radians(users.longitude) - radians(ref_user.longitude)) +
+						sin(radians(ref_user.latitude)) * sin(radians(users.latitude))
+					))
 				)
 			) AS distance,
 			EXTRACT(YEAR FROM AGE(users.birth_date::date)) AS age,
