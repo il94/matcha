@@ -214,7 +214,7 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 				sexualOrientation: userData.sexualOrientation,
 				bio: userData.bio,
 			},
-			userData.tags as unknown as number[],
+			userData.tags ? (JSON.parse(userData.tags) as number[]) : undefined,
 		)
 	})
 

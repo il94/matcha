@@ -70,7 +70,7 @@ export default function TagsSlider({
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit((values) =>
-						updateUserMutation({ tags: values.tags }),
+						updateUserMutation({ tags: JSON.stringify(values.tags) }),
 					)}
 					className="flex h-full flex-col justify-between"
 				>

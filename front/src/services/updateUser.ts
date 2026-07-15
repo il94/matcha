@@ -6,7 +6,7 @@ type UpdateUserParams = Partial<
 			newPassword: string
 	  })
 	| {
-			tags: number[]
+			tags: string
 	  }
 >
 
