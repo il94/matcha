@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormMessage } from "@/components/ui/form"
 import { useCallback, useState } from "react"
 import register from "@/services/register"
+import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 import { useMutation } from "@tanstack/react-query"
 import { AxiosError } from "axios"
 import { Loader2Icon } from "lucide-react"
@@ -80,12 +81,12 @@ export default function RegisterPage() {
 	})
 
 	const { mutate: registerMutation, isPending } = useMutation({
-		mutationFn: register,
+		mutationFn: DEBUG_ERRORS.register ? forcedError : register,
 		onSuccess: () => {
 			setIsRegistered(form.getValues().email)
 		},
 		onError: (error: AxiosError<{ message: string }>) => {
-			if (error.response?.status === 403)
+			if (error.response?.status === 403) {
 				if (error.response.data.message === "EMAIL_ALREADY_TAKEN")
 					form.setError("email", {
 						message:
@@ -106,6 +107,12 @@ export default function RegisterPage() {
 						message:
 							"Looks like something went wrong. Don't worry, we're on it try again shortly.",
 					})
+			} else {
+				form.setError("root", {
+					message:
+						"Looks like something went wrong. Don't worry, we're on it try again shortly.",
+				})
+			}
 		},
 	})
 

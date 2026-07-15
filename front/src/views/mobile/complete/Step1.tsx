@@ -8,6 +8,8 @@ import dayjs from "@/lib/dayjs"
 import { useFormContext } from "react-hook-form"
 import { useEffect } from "react"
 import { Loader2Icon } from "lucide-react"
+import { ErrorState } from "@/components/ui/error-state"
+import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 
 export default function Step1() {
 	const form = useFormContext()
@@ -27,10 +29,9 @@ export default function Step1() {
 		data: tags,
 		isPending,
 		isError,
-		error,
 	} = useQuery({
 		queryKey: ["tags"],
-		queryFn: getTags,
+		queryFn: DEBUG_ERRORS.completeTags ? forcedError : getTags,
 	})
 
 	if (isPending)
@@ -39,7 +40,12 @@ export default function Step1() {
 				<Loader2Icon className="size-8 animate-spin" />
 			</div>
 		)
-	if (isError) throw error
+	if (isError)
+		return (
+			<div className="flex h-full items-center justify-center">
+				<ErrorState message="An error occurred. Please try again later." />
+			</div>
+		)
 
 	return (
 		<div className="flex flex-col gap-16">

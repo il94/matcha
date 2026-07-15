@@ -4,6 +4,8 @@ import dayjs from "@/lib/dayjs"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
+import { ErrorState } from "@/components/ui/error-state"
+import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 import {
 	FormEvent,
 	Fragment,
@@ -105,10 +107,11 @@ export default function ChatIdPage() {
 		data: chat,
 		isPending,
 		isError,
-		error,
 	} = useQuery({
 		queryKey: ["chat", { chatId }],
-		queryFn: () => getUserChatConversation({ chatId }),
+		queryFn: DEBUG_ERRORS.chatConversation
+			? forcedError
+			: () => getUserChatConversation({ chatId }),
 	})
 
 	useEffect(() => {
@@ -160,8 +163,6 @@ export default function ChatIdPage() {
 	const navigate = useNavigate()
 	const navigateFrom = useNavigateFrom()
 
-	if (isError) throw error
-
 	function handleSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault()
 
@@ -197,7 +198,7 @@ export default function ChatIdPage() {
 					disabled={isPending}
 					className="ml-3 flex grow items-center gap-x-1.5"
 				>
-					{isPending ? (
+					{isPending || isError ? (
 						<>
 							<Skeleton className="size-9 rounded-full" />
 							<Skeleton className="h-5 w-32" />
@@ -222,6 +223,8 @@ export default function ChatIdPage() {
 				<div className="relative space-y-2.5 py-2.5 pb-16">
 					{isPending ? (
 						<MessagesSkeleton />
+					) : isError ? (
+						<ErrorState message="We couldn't load this conversation. Please try again later." />
 					) : (
 						messages.map((message, index) => {
 							const previousDate =

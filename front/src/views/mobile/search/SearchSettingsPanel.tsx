@@ -13,6 +13,8 @@ import { Label } from "@/components/ui/label"
 import SelectField from "@/components/FormFields/SelectField"
 import getTags from "@/services/getTags"
 import { Skeleton } from "@/components/ui/skeleton"
+import { ErrorState } from "@/components/ui/error-state"
+import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 
 // Slider bounds shared by the form and the "is this filter active?" logic.
 // A slider left at its full range is treated as inactive (param not sent).
@@ -84,13 +86,10 @@ function FilterForm({ initialFilters, onApply, onReset }: FilterFormProps) {
 		data: tags,
 		isPending,
 		isError,
-		error,
 	} = useQuery({
 		queryKey: ["tags"],
-		queryFn: getTags,
+		queryFn: DEBUG_ERRORS.searchTags ? forcedError : getTags,
 	})
-
-	if (isError) throw error
 
 	const age = form.watch("age")
 	const elo = form.watch("elo")
@@ -184,6 +183,11 @@ function FilterForm({ initialFilters, onApply, onReset }: FilterFormProps) {
 						<Label>Tags</Label>
 						{isPending ? (
 							<Skeleton className="h-10 w-full" />
+						) : isError ? (
+							<ErrorState
+								className="py-2 text-left"
+								message="We couldn't load the tags. Please try again in a moment."
+							/>
 						) : (
 							<SelectField
 								control={form.control}

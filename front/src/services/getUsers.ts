@@ -25,7 +25,6 @@ function buildUsersQuery({ limit, filters = {} }: GetUsersParams) {
 }
 
 export default async function getUsers({ limit, filters }: GetUsersParams) {
-	// TODO Gestion d'erreur
 	const response = await axios.get<User[]>(
 		`/users?${buildUsersQuery({ limit, filters })}`,
 	)

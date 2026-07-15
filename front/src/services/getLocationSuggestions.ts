@@ -7,7 +7,6 @@ type GetLocationSuggestions = {
 export default async function getLocationSuggestions({
 	label,
 }: GetLocationSuggestions) {
-	// TODO Gestion d'erreur
 	const response = await axios.get(`/location/search`, {
 		params: {
 			label,

@@ -14,7 +14,10 @@ import { Button } from "@/components/ui/button"
 import createVote from "@/services/createVote"
 import deleteVote from "@/services/deleteVote"
 import MatchScreen from "../home/MatchScreen"
-import { Loader2Icon } from "lucide-react"
+import CardSkeleton from "../home/CardSkeleton"
+import { ErrorState } from "@/components/ui/error-state"
+import toast from "@/lib/toast"
+import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 
 export default function PreviewPage() {
 	const { userId } = useParams<{ userId?: string }>()
@@ -30,17 +33,16 @@ export default function PreviewPage() {
 		data: userTarget,
 		isPending,
 		isError,
-		error,
 	} = useQuery({
 		queryKey: ["user", userId],
-		queryFn: () => getUser({ userId }),
+		queryFn: DEBUG_ERRORS.previewUser ? forcedError : () => getUser({ userId }),
 		enabled: !!userId,
 	})
 
 	const queryClient = useQueryClient()
 
 	const { mutate: createVoteMutation } = useMutation({
-		mutationFn: createVote,
+		mutationFn: DEBUG_ERRORS.previewCreateVote ? forcedError : createVote,
 		onSuccess: (data, variables) => {
 			queryClient.invalidateQueries({ queryKey: ["user", userId] })
 			if (variables.vote) {
@@ -51,22 +53,20 @@ export default function PreviewPage() {
 				}
 			}
 		},
-		onError: (error) => {
-			console.error("Error creating vote MUTATION:", error) // TODO
+		onError: () => {
+			toast.error("Couldn't register your like. Please try again.")
 		},
 	})
 
 	const { mutate: deleteVoteMutation } = useMutation({
-		mutationFn: deleteVote,
+		mutationFn: DEBUG_ERRORS.previewDeleteVote ? forcedError : deleteVote,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["user", userId] })
 		},
-		onError: (error) => {
-			console.error("Error deleting vote MUTATION:", error) // TODO
+		onError: () => {
+			toast.error("Couldn't remove your like. Please try again.")
 		},
 	})
-
-	if (isError) throw error // TODO Gestion d'erreur (surtout ici)
 
 	const userToDisplay = userId && userTarget ? userTarget : user
 
@@ -80,10 +80,13 @@ export default function PreviewPage() {
 
 	return (
 		<main className="relative flex h-full flex-col justify-between overflow-y-hidden bg-background p-3">
-			{userId && isPending ? (
-				<div className="flex h-full items-center justify-center">
-					<Loader2Icon className="size-8 animate-spin" />
-				</div>
+			{userId && isError ? (
+				<ErrorState
+					className="m-auto"
+					message="We couldn't load this profile. Please try again later."
+				/>
+			) : userId && isPending ? (
+				<CardSkeleton />
 			) : (
 				<>
 					<div className="no-scrollbar relative h-full space-y-3 overflow-y-scroll">

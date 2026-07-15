@@ -7,6 +7,7 @@ import dayjs from "@/lib/dayjs"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Skeleton } from "@/components/ui/skeleton"
+import { ErrorState } from "@/components/ui/error-state"
 import useNavigateFrom from "@/hooks/useNavigateFrom"
 import markNotificationsRead from "@/services/markNotificationsRead"
 
@@ -49,6 +50,7 @@ type NotificationsSheetProps = {
 	isOpen: boolean
 	notifications: AppNotification[]
 	isPending: boolean
+	isError?: boolean
 	onClose: () => void
 }
 
@@ -56,6 +58,7 @@ export default function NotificationsSheet({
 	isOpen,
 	notifications,
 	isPending,
+	isError,
 	onClose,
 }: NotificationsSheetProps) {
 	const navigateFrom = useNavigateFrom()
@@ -68,7 +71,6 @@ export default function NotificationsSheet({
 		},
 	})
 
-	// Ouvrir l'écran des notifs les marque toutes comme lues (pastille retirée).
 	useEffect(() => {
 		if (isOpen && notifications.some((notification) => !notification.read)) {
 			markRead()
@@ -90,6 +92,11 @@ export default function NotificationsSheet({
 			<ScrollArea className="grow">
 				{isPending ? (
 					<NotificationsSkeleton />
+				) : isError ? (
+					<ErrorState
+						className="px-4"
+						message="We couldn't load your notifications. Please try again later."
+					/>
 				) : notifications.length === 0 ? (
 					<p className="p-4 text-center text-sm text-muted-foreground">
 						No notifications yet.

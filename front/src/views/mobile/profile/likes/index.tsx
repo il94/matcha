@@ -2,6 +2,8 @@ import getUserLikes from "@/services/getUserLikes"
 import { useQuery } from "@tanstack/react-query"
 import UserList, { UserListSkeleton } from "../UserList"
 import { Button } from "@/components/ui/button"
+import { ErrorState } from "@/components/ui/error-state"
+import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 import { useNavigate } from "react-router"
 
 export default function ProfileLikesPage() {
@@ -11,18 +13,24 @@ export default function ProfileLikesPage() {
 		data: users,
 		isPending,
 		isError,
-		error,
 	} = useQuery({
 		queryKey: ["likes"],
-		queryFn: getUserLikes,
+		queryFn: DEBUG_ERRORS.profileLikes ? forcedError : getUserLikes,
 	})
-
-	if (isError) throw error // TODO
 
 	return (
 		<main className="flex h-full flex-col justify-between overflow-y-hidden px-1.5 pb-6 pt-6">
 			<h2 className="pl-1.5 text-2xl">Likes</h2>
-			{isPending ? <UserListSkeleton /> : <UserList users={users} />}
+			{isPending ? (
+				<UserListSkeleton />
+			) : isError ? (
+				<ErrorState
+					className="m-auto"
+					message="We couldn't load your likes. Please try again later."
+				/>
+			) : (
+				<UserList users={users} />
+			)}
 			<Button
 				onClick={() => navigate(-1)}
 				variant="dark"

@@ -11,6 +11,7 @@ import toast from "@/lib/toast"
 import createBlock from "@/services/createBlock"
 import createReport from "@/services/createReport"
 import { useMutation } from "@tanstack/react-query"
+import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 import { Loader2Icon } from "lucide-react"
 import { FormEvent, useCallback, useState } from "react"
 import { useNavigate } from "react-router"
@@ -26,14 +27,14 @@ function BlockDialog({ userId, firstName, onBlock }: WarningDialogProps) {
 	const [isOpen, setIsOpen] = useState(false)
 
 	const { mutate: createBlockMutation, isPending } = useMutation({
-		mutationFn: createBlock,
+		mutationFn: DEBUG_ERRORS.block ? forcedError : createBlock,
 		onSuccess: () => {
 			toast.success("User blocked")
 			onBlock?.()
 			navigate(0)
 		},
-		onError: (error) => {
-			console.error(error) // TODO
+		onError: () => {
+			toast.error("Couldn't block this user. Please try again.")
 		},
 	})
 
@@ -72,14 +73,14 @@ function ReportDialog({ userId, firstName }: WarningDialogProps) {
 	const [reason, setReason] = useState("")
 
 	const { mutate: createReportMutation, isPending } = useMutation({
-		mutationFn: createReport,
+		mutationFn: DEBUG_ERRORS.report ? forcedError : createReport,
 		onSuccess: () => {
 			toast.success("Report sent")
 			setIsOpen(false)
 			setReason("")
 		},
-		onError: (error) => {
-			console.error(error) // TODO
+		onError: () => {
+			toast.error("Couldn't send your report. Please try again.")
 		},
 	})
 

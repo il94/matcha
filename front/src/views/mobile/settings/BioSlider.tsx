@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Form } from "@/components/ui/form"
+import { Form, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Loader2Icon } from "lucide-react"
@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils"
 import TextAreaField from "@/components/FormFields/TextAreaField"
 import toast from "@/lib/toast"
 import updateUser from "@/services/updateUser"
+import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 
 const formSchema = z.object({
 	bio: z.string().max(256, "Keep it concise !"),
@@ -36,7 +37,7 @@ export default function BioSlider({
 	})
 
 	const { mutate: updateUserMutation, isPending } = useMutation({
-		mutationFn: updateUser,
+		mutationFn: DEBUG_ERRORS.updateBio ? forcedError : updateUser,
 		onSuccess: () => {
 			toast.success("Bio successfully updated !")
 			queryClient.invalidateQueries({ queryKey: ["verify"] })
@@ -49,6 +50,8 @@ export default function BioSlider({
 			})
 		},
 	})
+
+	const message = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
 
 	return (
 		<div className={cn(className)}>
@@ -77,6 +80,7 @@ export default function BioSlider({
 								maxLength={256}
 								className="h-24 max-h-64 min-h-24"
 							/>
+							<FormMessage className="h-5 px-1">{message}</FormMessage>
 						</div>
 					</div>
 

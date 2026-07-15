@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
+import { ErrorState } from "@/components/ui/error-state"
+import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 import useNavigateFrom from "@/hooks/useNavigateFrom"
 import { cn } from "@/lib/utils"
 import getUser from "@/services/getUser"
@@ -46,13 +48,17 @@ export default function ProfilePage() {
 		data: user,
 		isPending,
 		isError,
-		error,
 	} = useQuery({
 		queryKey: ["user"],
-		queryFn: () => getUser({}),
+		queryFn: DEBUG_ERRORS.profile ? forcedError : () => getUser({}),
 	})
 
-	if (isError) throw error // TODO
+	if (isError)
+		return (
+			<main className="flex h-full items-center justify-center px-3 py-8">
+				<ErrorState message="We couldn't load your profile. Please try again later." />
+			</main>
+		)
 
 	if (isPending)
 		return (

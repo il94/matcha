@@ -9,7 +9,6 @@ type VerifyReturn = {
 }
 
 export default async function verify() {
-	// TODO Gestion d'erreur
 	const response = await axios.get<VerifyReturn>(`/verify`)
 
 	return response.data

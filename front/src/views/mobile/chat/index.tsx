@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
+import { ErrorState } from "@/components/ui/error-state"
+import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "@/lib/dayjs"
 import { Calendar, MapPinned } from "lucide-react"
@@ -55,7 +57,7 @@ export default function ChatPage() {
 		isError,
 	} = useQuery({
 		queryKey: ["chats"],
-		queryFn: getUserChats,
+		queryFn: DEBUG_ERRORS.chatList ? forcedError : getUserChats,
 	})
 
 	return (
@@ -70,21 +72,23 @@ export default function ChatPage() {
 					Dates
 				</Button>
 			</div>
-			<ScrollArea className="my-4 px-3">
-				{isPending ? (
-					Array.from({ length: 5 }).map((_, i) => <ChatSkeleton key={i} />)
-				) : isError ? (
-					<p className="py-8 text-center text-sm opacity-50">TODO ERROR</p>
-				) : (
-					chats.map((chat) => {
-						return (
-							<Link to={`/chat/${chat.id}`} key={chat.id}>
-								<Chat chat={chat} />
-							</Link>
-						)
-					})
-				)}
-			</ScrollArea>
+			{isError ? (
+				<div className="flex grow items-center justify-center px-3">
+					<ErrorState message="We couldn't load your chats. Please try again later." />
+				</div>
+			) : (
+				<ScrollArea className="my-4 px-3">
+					{isPending
+						? Array.from({ length: 5 }).map((_, i) => <ChatSkeleton key={i} />)
+						: chats.map((chat) => {
+								return (
+									<Link to={`/chat/${chat.id}`} key={chat.id}>
+										<Chat chat={chat} />
+									</Link>
+								)
+							})}
+				</ScrollArea>
+			)}
 		</main>
 	)
 }

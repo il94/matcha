@@ -14,6 +14,7 @@ import InputSelect from "@/components/InputSelect"
 import useDebouncedCallback from "@/hooks/useDebouncedCallback"
 import getLocationByCoordinates from "@/services/getLocationByCoordinates"
 import getLocationSuggestions from "@/services/getLocationSuggestions"
+import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 
 export const formSchema = z.object({
 	longitude: z.number().optional(),
@@ -78,16 +79,19 @@ export default function LocationSlider({
 			async (position) => {
 				const { latitude, longitude } = position.coords
 
-				const locationLabel = await getLocationByCoordinates({
-					latitude,
-					longitude,
-				})
+				try {
+					const locationLabel = await (DEBUG_ERRORS.locationByCoordinates
+						? forcedError()
+						: getLocationByCoordinates({ latitude, longitude }))
 
-				setInput(locationLabel)
-				setSuggestions(undefined)
-				form.setValue("locationLabel", locationLabel)
-				form.setValue("latitude", latitude)
-				form.setValue("longitude", longitude)
+					setInput(locationLabel)
+					setSuggestions(undefined)
+					form.setValue("locationLabel", locationLabel)
+					form.setValue("latitude", latitude)
+					form.setValue("longitude", longitude)
+				} catch {
+					toast.error("We couldn't fetch your location. Please try again.")
+				}
 			},
 			() => {
 				setEnableLocationButton(false)
@@ -107,11 +111,16 @@ export default function LocationSlider({
 			return
 		}
 
-		const suggestions = await getLocationSuggestions({
-			label: input,
-		})
+		try {
+			const suggestions = await (DEBUG_ERRORS.locationSuggestions
+				? forcedError()
+				: getLocationSuggestions({ label: input }))
 
-		setSuggestions(suggestions)
+			setSuggestions(suggestions)
+		} catch {
+			setSuggestions(undefined)
+			toast.error("We couldn't load location suggestions. Please try again.")
+		}
 	}, 500)
 
 	const handleInputChange = useCallback(

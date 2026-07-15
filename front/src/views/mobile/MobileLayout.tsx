@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query"
 import SearchSettingsPanel from "./search/SearchSettingsPanel"
 import NotificationsSheet from "./notifications/NotificationsSheet"
 import getNotifications from "@/services/getNotifications"
+import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 
 const FILTERS_STORAGE_KEY = "matcha-get-users-filters"
 
@@ -26,13 +27,18 @@ export default function MobileLayout() {
 	const [isSearchOpen, setIsSearchOpen] = useState(false)
 	const [isNotificationsOpen, setIsNotificationsOpen] = useState(false)
 
-	const { data: notifications, isPending: isNotificationsPending } = useQuery({
+	const {
+		data: notifications,
+		isPending: isNotificationsPending,
+		isError: isNotificationsError,
+	} = useQuery({
 		queryKey: ["notifications"],
-		queryFn: getNotifications,
+		queryFn: DEBUG_ERRORS.notifications ? forcedError : getNotifications,
 	})
 
-	const unreadCount =
-		notifications?.filter((notification) => !notification.read).length ?? 0
+	const unreadCount = isNotificationsError
+		? 0
+		: (notifications?.filter((notification) => !notification.read).length ?? 0)
 
 	useEffect(() => {
 		localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(filters))
@@ -85,6 +91,7 @@ export default function MobileLayout() {
 				isOpen={isNotificationsOpen}
 				notifications={notifications ?? []}
 				isPending={isNotificationsPending}
+				isError={isNotificationsError}
 				onClose={() => setIsNotificationsOpen(false)}
 			/>
 		</main>

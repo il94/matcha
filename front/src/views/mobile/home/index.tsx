@@ -16,6 +16,10 @@ import ActionButtons from "./ActionButtons"
 import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 import createVote from "@/services/createVote"
 import MatchScreen from "./MatchScreen"
+import { ErrorState } from "@/components/ui/error-state"
+import CardSkeleton from "./CardSkeleton"
+import toast from "@/lib/toast"
+import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 
 const BATCH_LIMIT = 15
 const REFETCH_THRESHOLD = 5
@@ -27,16 +31,17 @@ export default function HomePage() {
 		data: batch,
 		isPending,
 		isError,
-		error,
 		isFetching,
 		refetch,
 	} = useQuery({
 		queryKey: ["users", filters],
-		queryFn: () =>
-			getUsers({
-				limit: BATCH_LIMIT,
-				filters,
-			}),
+		queryFn: DEBUG_ERRORS.homeUsers
+			? forcedError
+			: () =>
+					getUsers({
+						limit: BATCH_LIMIT,
+						filters,
+					}),
 		placeholderData: keepPreviousData,
 	})
 
@@ -46,7 +51,7 @@ export default function HomePage() {
 	const [newChatId, setNewChatId] = useState("")
 
 	const { mutate: createVoteMutation } = useMutation({
-		mutationFn: createVote,
+		mutationFn: DEBUG_ERRORS.vote ? forcedError : createVote,
 		onMutate: async (variables) => {
 			await scrollToTop()
 			if (variables.vote) photoSectionRef.current?.like()
@@ -61,12 +66,10 @@ export default function HomePage() {
 				}
 			} else photoSectionRef.current?.dislike()
 		},
-		onError: (error) => {
-			console.error("Error creating vote MUTATION:", error) // TODO
+		onError: () => {
+			toast.error("Couldn't register your choice. Please try again.")
 		},
 	})
-
-	if (isError) throw error // TODO Gestion d'erreur
 
 	const [users, setUsers] = useState<User[]>([])
 	const [currentCardIndex, setCurrentCardIndex] = useState(0)
@@ -118,8 +121,13 @@ export default function HomePage() {
 
 	return (
 		<main className="relative flex h-full flex-col justify-between overflow-y-hidden bg-background p-3">
-			{isPending || currentCardIndex >= users.length ? (
-				<h1>Load</h1> // TODO Loader
+			{isError ? (
+				<ErrorState
+					className="m-auto"
+					message="We couldn't load suggestions. Please try again later."
+				/>
+			) : isPending || currentCardIndex >= users.length ? (
+				<CardSkeleton />
 			) : (
 				<>
 					<div

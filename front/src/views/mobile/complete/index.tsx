@@ -18,6 +18,7 @@ import useNavigateFrom from "@/hooks/useNavigateFrom"
 import Step4 from "./Step4"
 import { Loader2Icon } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 
 export const formSchema = z.object({
 	birthDate: z
@@ -73,9 +74,15 @@ export default function CompletePage() {
 	const navigateFrom = useNavigateFrom()
 
 	const { mutate: completeMutation, isPending } = useMutation({
-		mutationFn: complete,
+		mutationFn: DEBUG_ERRORS.completeSubmit ? forcedError : complete,
 		onSuccess: () => {
 			navigateFrom("/home")
+		},
+		onError: () => {
+			form.setError("root", {
+				message:
+					"Something went wrong while creating your profile. Please try again.",
+			})
 		},
 	})
 

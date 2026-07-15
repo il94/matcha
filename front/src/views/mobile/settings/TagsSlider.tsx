@@ -1,11 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Form } from "@/components/ui/form"
+import { Form, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { cn } from "@/lib/utils"
 import SelectField from "@/components/FormFields/SelectField"
+import { ErrorState } from "@/components/ui/error-state"
+import { Skeleton } from "@/components/ui/skeleton"
+import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 import getTags from "@/services/getTags"
 import updateUser from "@/services/updateUser"
 import { toast } from "sonner"
@@ -40,14 +43,13 @@ export default function TagsSlider({
 		data: tags,
 		isPending,
 		isError,
-		error,
 	} = useQuery({
 		queryKey: ["tags"],
-		queryFn: getTags,
+		queryFn: DEBUG_ERRORS.settingsTags ? forcedError : getTags,
 	})
 
 	const { mutate: updateUserMutation, isPending: isUpdating } = useMutation({
-		mutationFn: updateUser,
+		mutationFn: DEBUG_ERRORS.updateTags ? forcedError : updateUser,
 		onSuccess: () => {
 			toast.success("Tags successfully updated !")
 			queryClient.invalidateQueries({ queryKey: ["verify"] })
@@ -61,14 +63,7 @@ export default function TagsSlider({
 		},
 	})
 
-	if (isPending)
-		return (
-			<div className="flex h-full items-center justify-center">
-				<Loader2Icon className="size-8 animate-spin" />
-			</div>
-		)
-
-	if (isError) throw error
+	const message = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
 
 	return (
 		<div className={cn(className)}>
@@ -88,20 +83,30 @@ export default function TagsSlider({
 						</div>
 
 						<div className="flex flex-col gap-6">
-							<SelectField
-								control={form.control}
-								defaultValues={
-									initialValue.map((item) => item.id) as unknown as string[]
-								}
-								name="tags"
-								placeholder="Select tags"
-								items={tags.map((item) => ({
-									label: item.name,
-									value: item.id as unknown as string,
-								}))}
-								isMulti
-								className="h-12"
-							/>
+							{isPending ? (
+								<Skeleton className="h-12 w-full" />
+							) : isError ? (
+								<ErrorState
+									className="py-2 text-left"
+									message="We couldn't load the tags. Please try again later."
+								/>
+							) : (
+								<SelectField
+									control={form.control}
+									defaultValues={
+										initialValue.map((item) => item.id) as unknown as string[]
+									}
+									name="tags"
+									placeholder="Select tags"
+									items={tags.map((item) => ({
+										label: item.name,
+										value: item.id as unknown as string,
+									}))}
+									isMulti
+									className="h-12"
+								/>
+							)}
+							<FormMessage className="h-5 px-1">{message}</FormMessage>
 						</div>
 					</div>
 

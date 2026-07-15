@@ -6,7 +6,6 @@ type loginParams = {
 }
 
 export default async function login({ username, password }: loginParams) {
-	// TODO Gestion d'erreur
 	const response = await axios.post(`/login`, {
 		username,
 		password,

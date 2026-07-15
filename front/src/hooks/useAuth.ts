@@ -4,30 +4,37 @@ import verify from "@/services/verify"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useNavigate } from "react-router"
 import useSocket from "./useSocket"
+import toast from "@/lib/toast"
+import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 
-// TODO On error
 export default function useAuth() {
 	const navigate = useNavigate()
 
-	const { data, isPending, isError } = useQuery({
+	const { data, isPending, isError, error } = useQuery({
 		queryKey: ["verify"],
-		queryFn: verify,
+		queryFn: DEBUG_ERRORS.verify ? forcedError : verify,
 		retry: false,
 	})
 
 	const { socket, isReady } = useSocket(!!data?.isAuthenticated)
 
 	const { mutate: logoutMutation } = useMutation({
-		mutationFn: logout,
+		mutationFn: DEBUG_ERRORS.logout ? forcedError : logout,
 		onSuccess: () => {
 			navigate(0)
+		},
+		onError: () => {
+			toast.error("Couldn't log you out. Please try again.")
 		},
 	})
 
 	const { mutate: publicLogoutMutation } = useMutation({
-		mutationFn: publicLogout,
+		mutationFn: DEBUG_ERRORS.logout ? forcedError : publicLogout,
 		onSuccess: () => {
 			navigate(0)
+		},
+		onError: () => {
+			toast.error("Couldn't log you out. Please try again.")
 		},
 	})
 
@@ -42,6 +49,7 @@ export default function useAuth() {
 
 		isPending,
 		isError,
+		error,
 		logout: logoutMutation,
 		publicLogout: publicLogoutMutation,
 	}

@@ -5,7 +5,6 @@ type GetUserParams = {
 }
 
 export default async function getUser({ userId }: GetUserParams) {
-	// TODO Gestion d'erreur
 	const response = await axios.get<User>(userId ? `/user/${userId}` : "/user")
 
 	return response.data
