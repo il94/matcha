@@ -3,7 +3,7 @@ import { FastifyPluginAsync } from "fastify"
 import { WebSocket } from "ws"
 
 const wsPlugin: FastifyPluginAsync = async (app, options) => {
-	app.register(fastifyWebsocket)
+	app.register(fastifyWebsocket, { options: { maxPayload: 1048576 } })
 
 	const clients = new Map<UserData["id"], WebSocket>()
 

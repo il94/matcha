@@ -8,6 +8,8 @@ import { FastifyPluginAsync } from "fastify"
 const RED = "\x1b[31m"
 const END = "\x1b[0m"
 
+const MAX_MESSAGE_CONTENT_LENGTH = 2000
+
 const print = (color: string, message: string) => {
 	return `${color}${message}${END}`
 }
@@ -42,7 +44,13 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 		})
 
 		const onReceiveMessage = async (message: SocketMessage) => {
-			if (!message.content || !message.chatId)
+			if (
+				typeof message.content !== "string" ||
+				!message.content ||
+				message.content.length > MAX_MESSAGE_CONTENT_LENGTH ||
+				typeof message.chatId !== "string" ||
+				!message.chatId
+			)
 				throw new BadRequestException(ERROR_CODES.INVALID_SOCKET_MESSAGE)
 
 			const response = await service.createMessage(

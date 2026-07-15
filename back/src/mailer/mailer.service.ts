@@ -1,4 +1,5 @@
 import capitalize from "@/lib/capitalize"
+import escapeHtml from "@/lib/escapeHtml"
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
 
 class mailerService {
@@ -49,7 +50,7 @@ class mailerService {
 	) {
 		const body = `
 			<div class="container">
-				<h1 class="title">Hi, ${firstName}</h1>
+				<h1 class="title">Hi, ${escapeHtml(firstName)}</h1>
 				<p>
 					Welcome to Matcha, where exciting connections happen ! We're thrilled to have you on board.
 				</p>
