@@ -83,7 +83,7 @@ declare global {
 
 	type NotificationType = "like" | "match" | "view" | "unlike" | "message"
 
-	type Notification = {
+	type AppNotification = {
 		id: string
 		type: NotificationType
 		read: boolean

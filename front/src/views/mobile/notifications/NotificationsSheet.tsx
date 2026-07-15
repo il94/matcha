@@ -26,7 +26,7 @@ function NotificationsSkeleton() {
 	)
 }
 
-function notificationLabel(notification: Notification) {
+function notificationLabel(notification: AppNotification) {
 	const name = (
 		<span className="font-semibold">{notification.sender.username}</span>
 	)
@@ -47,7 +47,7 @@ function notificationLabel(notification: Notification) {
 
 type NotificationsSheetProps = {
 	isOpen: boolean
-	notifications: Notification[]
+	notifications: AppNotification[]
 	isPending: boolean
 	onClose: () => void
 }
