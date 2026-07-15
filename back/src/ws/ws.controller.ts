@@ -18,8 +18,13 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 		const { userId } = request
 
 		app.clients.set(userId, socket)
-
-		service.updateUser(userId, { isOnline: true })
+		;(async () => {
+			try {
+				await service.updateUser(userId, { isOnline: true })
+			} catch (error) {
+				app.log.error(error, "WS: failed to set user online")
+			}
+		})()
 
 		socket.on("message", async (raw) => {
 			try {
@@ -65,6 +70,12 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 			userId: UserData["id"],
 			location: SocketMessage,
 		) => {
+			if (
+				typeof location.latitude !== "number" ||
+				typeof location.longitude !== "number"
+			)
+				throw new BadRequestException("INVALID_SOCKET_MESSAGE")
+
 			const user = await service.getUser(userId)
 
 			if (user.locationSource !== "manual") {
@@ -77,13 +88,17 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 			socketSend(socket, "location")
 		}
 
-		socket.onclose = () => {
+		socket.onclose = async () => {
 			app.clients.delete(userId)
 
-			service.updateUser(userId, {
-				isOnline: false,
-				lastConnexion: dayjs().utc().toISOString(),
-			})
+			try {
+				await service.updateUser(userId, {
+					isOnline: false,
+					lastConnexion: dayjs().utc().toISOString(),
+				})
+			} catch (error) {
+				app.log.error(error, "WS: failed to set user offline")
+			}
 		}
 
 		const onError = (error?: unknown) => {

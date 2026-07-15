@@ -42,3 +42,9 @@ export class InternalServerError extends HttpException {
 		super(500, message ?? "INTERNAL_SERVER_ERROR")
 	}
 }
+
+export class BadGatewayException extends HttpException {
+	constructor(message?: string) {
+		super(502, message ?? "BAD_GATEWAY")
+	}
+}

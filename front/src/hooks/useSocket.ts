@@ -60,7 +60,12 @@ export default function useSocket(enabled: boolean) {
 		setSocket(newSocket)
 
 		newSocket.onmessage = (event) => {
-			const message = JSON.parse(event.data)
+			let message
+			try {
+				message = JSON.parse(event.data)
+			} catch {
+				return
+			}
 
 			if (message.type === "message") {
 				queryClient.invalidateQueries({ queryKey: ["chats"] })

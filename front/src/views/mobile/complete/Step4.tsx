@@ -9,11 +9,13 @@ import getLocationByCoordinates from "@/services/getLocationByCoordinates"
 import getLocationSuggestions from "@/services/getLocationSuggestions"
 import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 import toast from "@/lib/toast"
+import { Loader2Icon } from "lucide-react"
 
 export default function Step4() {
 	const form = useFormContext()
 
 	const [enableLocationButton, setEnableLocationButton] = useState(false)
+
 	useEffect(() => {
 		navigator.permissions.query({ name: "geolocation" }).then((result) => {
 			if (result.state === "granted" || result.state === "prompt")
@@ -23,8 +25,11 @@ export default function Step4() {
 	}, [])
 
 	const [input, setInput] = useState("")
+	const [isLocating, setIsLocating] = useState(false)
+	const [isSearching, setIsSearching] = useState(false)
 
 	const getLocation = useCallback(() => {
+		setIsLocating(true)
 		navigator.geolocation.getCurrentPosition(
 			async (position) => {
 				const { latitude, longitude } = position.coords
@@ -41,10 +46,13 @@ export default function Step4() {
 					form.setValue("longitude", longitude)
 				} catch {
 					toast.error("We couldn't fetch your location. Please try again.")
+				} finally {
+					setIsLocating(false)
 				}
 			},
 			() => {
 				setEnableLocationButton(false)
+				setIsLocating(false)
 			},
 			{
 				enableHighAccuracy: true,
@@ -58,9 +66,11 @@ export default function Step4() {
 	const getSuggestions = useDebouncedCallback(async (input: string) => {
 		if (input.trim().length === 0) {
 			setSuggestions(undefined)
+			setIsSearching(false)
 			return
 		}
 
+		setIsSearching(true)
 		try {
 			const suggestions = await (DEBUG_ERRORS.locationSuggestions
 				? forcedError()
@@ -70,6 +80,8 @@ export default function Step4() {
 		} catch {
 			setSuggestions(undefined)
 			toast.error("We couldn't load location suggestions. Please try again.")
+		} finally {
+			setIsSearching(false)
 		}
 	}, 500)
 
@@ -113,9 +125,10 @@ export default function Step4() {
 				<Button
 					onClick={getLocation}
 					type="button"
-					disabled={!enableLocationButton}
+					disabled={!enableLocationButton || isLocating}
 					className="disabled:bg-accent"
 				>
+					{isLocating && <Loader2Icon className="animate-spin" />}
 					{enableLocationButton
 						? "Use my current location"
 						: "Location access denied"}
@@ -126,6 +139,7 @@ export default function Step4() {
 					onSelect={handleSelectSuggestion}
 					input={input}
 					items={suggestions}
+					isLoading={isSearching}
 					placeholder="Enter your city or neighbourhood"
 					className={cn(
 						"min-h-20",

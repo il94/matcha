@@ -6,13 +6,19 @@ import { AsyncTask, CronJob } from "toad-scheduler"
 const schedulerPlugin: FastifyPluginAsync = async (app, options) => {
 	app.register(fastifySchedule)
 
-	const deleteInactiveUsers = new AsyncTask("deleteInactiveUsers", async () => {
-		const result = await app.pg.query(deleteInactiveUsersMutation)
+	const deleteInactiveUsers = new AsyncTask(
+		"deleteInactiveUsers",
+		async () => {
+			const result = await app.pg.query(deleteInactiveUsersMutation)
 
-		const deletedUsers = result.rows
+			const deletedUsers = result.rows
 
-		console.warn("Deleted inactive users", deletedUsers)
-	})
+			app.log.info(`Deleted ${deletedUsers.length} inactive users`)
+		},
+		(error) => {
+			app.log.error(error, "deleteInactiveUsers cron job failed")
+		},
+	)
 
 	const cronJob = new CronJob(
 		{ cronExpression: process.env.SCHEDULER_JOB_CRON! },

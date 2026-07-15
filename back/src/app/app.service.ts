@@ -3,6 +3,7 @@ import appRepository from "./app.repository"
 
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
 import {
+	BadGatewayException,
 	BadRequestException,
 	ForbiddenException,
 	NotFoundException,
@@ -235,40 +236,43 @@ class appService {
 
 	/* ============= PRIVATE CONTROLLER ============= */
 
-	async getLocationByCoordinates(latitude: number, longitude: number) {
-		const response = await axios.get<NominatimLocation>(
-			`https://nominatim.openstreetmap.org/reverse`,
-			{
-				params: {
-					lat: latitude,
-					lon: longitude,
-					format: "json",
+	private async fetchNominatim<T>(
+		path: "reverse" | "search",
+		params: Record<string, string | number>,
+	): Promise<T> {
+		try {
+			const response = await axios.get<T>(
+				`https://nominatim.openstreetmap.org/${path}`,
+				{
+					params: { format: "json", ...params },
+					headers: this.NOMINATIM_HEADERS,
 				},
-				headers: this.NOMINATIM_HEADERS,
-			},
-		)
+			)
 
-		if (response.data.error) throw new NotFoundException("LOCATION_NOT_FOUND")
+			return response.data
+		} catch {
+			throw new BadGatewayException("LOCATION_SERVICE_UNAVAILABLE")
+		}
+	}
 
-		const locationLabel = this.getLocationLabel(response.data)
+	async getLocationByCoordinates(latitude: number, longitude: number) {
+		const data = await this.fetchNominatim<NominatimLocation>("reverse", {
+			lat: latitude,
+			lon: longitude,
+		})
 
-		return locationLabel
+		if (data.error) throw new NotFoundException("LOCATION_NOT_FOUND")
+
+		return this.getLocationLabel(data)
 	}
 
 	async getLocationByLabel(label: string) {
-		const response = await axios.get<NominatimLocation[]>(
-			"https://nominatim.openstreetmap.org/search",
-			{
-				params: {
-					q: label,
-					format: "json",
-					addressdetails: 1,
-					limit: 1,
-				},
-				headers: this.NOMINATIM_HEADERS,
-			},
-		)
-		const [location] = response.data
+		const data = await this.fetchNominatim<NominatimLocation[]>("search", {
+			q: label,
+			addressdetails: 1,
+			limit: 1,
+		})
+		const [location] = data
 
 		if (!location) throw new NotFoundException("LOCATION_NOT_FOUND")
 
@@ -279,23 +283,14 @@ class appService {
 	}
 
 	async getLocationSuggestions(label: string) {
-		const response = await axios.get<NominatimLocation[]>(
-			"https://nominatim.openstreetmap.org/search",
-			{
-				params: {
-					q: label,
-					format: "json",
-					addressdetails: 1,
-					limit: 2,
-				},
-				headers: this.NOMINATIM_HEADERS,
-			},
-		)
+		const data = await this.fetchNominatim<NominatimLocation[]>("search", {
+			q: label,
+			addressdetails: 1,
+			limit: 2,
+		})
 
 		const suggestions = Array.from(
-			new Set(
-				response.data.map((suggestion) => this.getLocationLabel(suggestion)),
-			),
+			new Set(data.map((suggestion) => this.getLocationLabel(suggestion))),
 		) as string[]
 
 		return suggestions
@@ -438,15 +433,17 @@ class appService {
 		if (targetId && (await this.repository.isUserBlocked(userId, targetId)))
 			throw new BadRequestException()
 
-		if (targetId && targetId !== userId) {
-			await this.repository.createView(userId, targetId)
-			await this.notify(targetId, userId, "view")
-		}
-
 		const user = await this.repository.getUser(
 			targetId ?? userId,
 			targetId ? userId : undefined,
 		)
+
+		if (!user) throw new NotFoundException()
+
+		if (targetId && targetId !== userId) {
+			await this.repository.createView(userId, targetId)
+			await this.notify(targetId, userId, "view")
+		}
 
 		user.principalPicture.name = await this.resolvePictureUrl(
 			user.principalPicture.name,
@@ -502,6 +499,9 @@ class appService {
 			userId,
 			chatId,
 		)
+
+		if (!conversation) throw new NotFoundException()
+
 		conversation.avatar = await this.resolvePictureUrl(conversation.avatar)
 
 		return conversation

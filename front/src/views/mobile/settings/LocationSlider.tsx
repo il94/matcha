@@ -73,10 +73,14 @@ export default function LocationSlider({
 	}, [])
 
 	const [input, setInput] = useState(initialValue.locationLabel)
+	const [isLocating, setIsLocating] = useState(false)
+	const [isSearching, setIsSearching] = useState(false)
 
 	const getLocation = useCallback(() => {
+		setIsLocating(true)
 		navigator.geolocation.getCurrentPosition(
 			async (position) => {
+				await new Promise((resolve) => setTimeout(resolve, 2000))
 				const { latitude, longitude } = position.coords
 
 				try {
@@ -91,10 +95,13 @@ export default function LocationSlider({
 					form.setValue("longitude", longitude)
 				} catch {
 					toast.error("We couldn't fetch your location. Please try again.")
+				} finally {
+					setIsLocating(false)
 				}
 			},
 			() => {
 				setEnableLocationButton(false)
+				setIsLocating(false)
 			},
 			{
 				enableHighAccuracy: true,
@@ -108,9 +115,11 @@ export default function LocationSlider({
 	const getSuggestions = useDebouncedCallback(async (input: string) => {
 		if (input.trim().length === 0) {
 			setSuggestions(undefined)
+			setIsSearching(false)
 			return
 		}
 
+		setIsSearching(true)
 		try {
 			const suggestions = await (DEBUG_ERRORS.locationSuggestions
 				? forcedError()
@@ -120,6 +129,8 @@ export default function LocationSlider({
 		} catch {
 			setSuggestions(undefined)
 			toast.error("We couldn't load location suggestions. Please try again.")
+		} finally {
+			setIsSearching(false)
 		}
 	}, 500)
 
@@ -177,9 +188,10 @@ export default function LocationSlider({
 						<Button
 							onClick={getLocation}
 							type="button"
-							disabled={!enableLocationButton}
+							disabled={!enableLocationButton || isLocating}
 							className="disabled:bg-accent"
 						>
+							{isLocating && <Loader2Icon className="animate-spin" />}
 							{enableLocationButton
 								? "Use my current location"
 								: "Location access denied"}
@@ -189,6 +201,7 @@ export default function LocationSlider({
 							onSelect={handleSelectSuggestion}
 							input={input}
 							items={suggestions}
+							isLoading={isSearching}
 							placeholder="Enter your city or neighbourhood"
 							className={cn(
 								"min-h-20",

@@ -45,7 +45,7 @@ export const DEBUG_ERRORS = {
 
 	// --- WebSocket ---
 	socketConnect: false, // boot : échec de connexion → écran d'erreur (bloquant)
-	socketDrop: true, // chute unique après ouverture → toast (non bloquant, sans reconnexion)
+	socketDrop: false, // chute unique après ouverture → toast (non bloquant, sans reconnexion)
 	socketSendMessage: false, // chat : envoi impossible (socket fermée) → toast
 } as const
 

@@ -188,7 +188,7 @@ class appRepository {
 		])
 
 		const [user] = result.rows
-		return user.completed
+		return user?.completed ?? false
 	}
 
 	async updateUser(

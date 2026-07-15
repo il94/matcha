@@ -10,7 +10,12 @@ const dbPlugin: FastifyPluginAsync = async (app, options) => {
 	app.addHook("onReady", async () => {
 		const repository = new dbRepository(app, options)
 
-		repository.initDb()
+		try {
+			await repository.initDb()
+		} catch (error) {
+			app.log.error(error, "Database initialization failed")
+			process.exit(1)
+		}
 	})
 }
 

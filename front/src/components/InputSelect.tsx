@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
+import { Loader2Icon } from "lucide-react"
 import { ChangeEvent, useState } from "react"
 
 type InputSelectProps = {
@@ -8,6 +9,7 @@ type InputSelectProps = {
 	onSelect: (value: string) => void
 	input: string
 	items?: string[]
+	isLoading?: boolean
 	placeholder?: string
 
 	className?: string
@@ -18,6 +20,7 @@ export default function InputSelect({
 	onSelect,
 	input,
 	items,
+	isLoading,
 	placeholder,
 	className,
 }: InputSelectProps) {
@@ -39,31 +42,46 @@ export default function InputSelect({
 				autoSize
 				className={cn("text-sm", className)}
 			/>
-			{items?.map((suggestion, index) => (
-				<Button
-					key={index}
-					onClick={() => onSelect(suggestion)}
-					type="button"
-					variant="outline"
-					className={cn(
-						"justify-start rounded-none px-3 py-1 last:rounded-b-lg",
-					)}
-				>
-					<p className="truncate">{suggestion}</p>
-				</Button>
-			))}
-
-			{items?.length === 0 && (
+			{isLoading ? (
 				<Button
 					type="button"
 					variant="outline"
 					disabled
 					className={cn(
-						"justify-start rounded-none px-3 py-1 last:rounded-b-lg",
+						"justify-center rounded-none px-3 py-1 last:rounded-b-lg",
 					)}
 				>
-					<p className="truncate">No results found</p>
+					<Loader2Icon className="animate-spin" />
 				</Button>
+			) : (
+				<>
+					{items?.map((suggestion, index) => (
+						<Button
+							key={index}
+							onClick={() => onSelect(suggestion)}
+							type="button"
+							variant="outline"
+							className={cn(
+								"justify-start rounded-none px-3 py-1 last:rounded-b-lg",
+							)}
+						>
+							<p className="truncate">{suggestion}</p>
+						</Button>
+					))}
+
+					{items?.length === 0 && (
+						<Button
+							type="button"
+							variant="outline"
+							disabled
+							className={cn(
+								"justify-start rounded-none px-3 py-1 last:rounded-b-lg",
+							)}
+						>
+							<p className="truncate">No results found</p>
+						</Button>
+					)}
+				</>
 			)}
 		</div>
 	)

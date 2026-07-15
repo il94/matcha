@@ -24,7 +24,6 @@ import NotFoundPage from "./views/mobile/notFound"
 	TODO
 
 	- Style des messages d'erreur de form
-	- Recheck gestion d'erreur
 	- Check injections SQL / XSS
 	- Filtrer les champs (mail, tailles, password ect)
 	
