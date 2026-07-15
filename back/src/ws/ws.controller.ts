@@ -102,12 +102,12 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 				app.log.error(
 					print(
 						RED,
-						`(${request.socket.remoteAddress}) WS ${500}\n\t${"UNKOWN_ERROR"}`,
+						`(${request.socket.remoteAddress}) WS ${500}\n\t${"UNKNOWN_ERROR"}`,
 					),
 				)
 
 				socketSend(socket, "error", {
-					message: "UNKOWN_ERROR",
+					message: "UNKNOWN_ERROR",
 				})
 			}
 		}

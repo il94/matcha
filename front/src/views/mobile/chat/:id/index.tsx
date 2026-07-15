@@ -21,6 +21,7 @@ import useAuthOutletContext from "@/hooks/useAuthOutletContext"
 import useNavigateFrom from "@/hooks/useNavigateFrom"
 import { useNavigate } from "react-router"
 import socketSend from "@/lib/socketSend"
+import toast from "@/lib/toast"
 import { cn } from "@/lib/utils"
 
 type ChatDateProps = {
@@ -165,6 +166,15 @@ export default function ChatIdPage() {
 
 	function handleSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault()
+
+		if (
+			DEBUG_ERRORS.socketSendMessage ||
+			!socket ||
+			socket.readyState !== WebSocket.OPEN
+		) {
+			toast.error("Message not sent. Connection lost, please try again.")
+			return
+		}
 
 		socketSend(socket, "message", {
 			content: input,

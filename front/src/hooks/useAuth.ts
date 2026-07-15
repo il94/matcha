@@ -16,7 +16,7 @@ export default function useAuth() {
 		retry: false,
 	})
 
-	const { socket, isReady } = useSocket(!!data?.isAuthenticated)
+	const { socket, socketStatus } = useSocket(!!data?.isAuthenticated)
 
 	const { mutate: logoutMutation } = useMutation({
 		mutationFn: DEBUG_ERRORS.logout ? forcedError : logout,
@@ -45,7 +45,7 @@ export default function useAuth() {
 		isReseting: data?.isReseting,
 
 		socket,
-		isReady,
+		socketStatus,
 
 		isPending,
 		isError,

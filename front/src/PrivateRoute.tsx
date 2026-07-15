@@ -8,7 +8,7 @@ export default function PrivateRoute() {
 	const {
 		user,
 		socket,
-		isReady,
+		socketStatus,
 		isAuthenticated,
 		isPending,
 		isError,
@@ -32,5 +32,5 @@ export default function PrivateRoute() {
 
 	if (!isAuthenticated) return <Navigate to="/" />
 
-	return <Outlet context={{ user, logout, socket, isReady }} />
+	return <Outlet context={{ user, logout, socket, socketStatus }} />
 }

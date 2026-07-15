@@ -8,6 +8,8 @@ import SearchSettingsPanel from "./search/SearchSettingsPanel"
 import NotificationsSheet from "./notifications/NotificationsSheet"
 import getNotifications from "@/services/getNotifications"
 import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
+import { Loader2Icon } from "lucide-react"
+import { ErrorState } from "@/components/ui/error-state"
 
 const FILTERS_STORAGE_KEY = "matcha-get-users-filters"
 
@@ -63,8 +65,14 @@ export default function MobileLayout() {
 					setIsSearchOpen((prev) => !prev)
 				}}
 			/>
-			{!authOutletContext.isReady ? (
-				<p>Connecting ...</p> // TODO
+			{authOutletContext.socketStatus === "connecting" ? (
+				<div className="flex grow items-center justify-center">
+					<Loader2Icon className="size-8 animate-spin" />
+				</div>
+			) : authOutletContext.socketStatus === "failed" ? (
+				<div className="flex grow items-center justify-center p-6">
+					<ErrorState message="We couldn't establish a live connection. Please check your connection and try again." />
+				</div>
 			) : (
 				<Outlet context={{ ...authOutletContext, filters }} />
 			)}

@@ -1,9 +1,13 @@
 import socketSend from "@/lib/socketSend"
 import MessageToast from "@/components/MessageToast"
+import notify from "@/lib/toast"
 import { useQueryClient } from "@tanstack/react-query"
 import { createElement, useEffect, useRef, useState } from "react"
 import { useLocation, useNavigate } from "react-router"
 import { toast } from "sonner"
+import { DEBUG_ERRORS } from "@/lib/debugError"
+
+export type SocketStatus = "connecting" | "connected" | "failed"
 
 async function refreshLocationIfConsented(socket: WebSocket) {
 	if (!navigator.permissions || !navigator.geolocation) return
@@ -28,20 +32,29 @@ async function refreshLocationIfConsented(socket: WebSocket) {
 
 export default function useSocket(enabled: boolean) {
 	const [socket, setSocket] = useState<WebSocket>()
-	const [isReady, setIsReady] = useState(false)
+	const [socketStatus, setSocketStatus] = useState<SocketStatus>("connecting")
 	const queryClient = useQueryClient()
 	const navigate = useNavigate()
 
-	// La socket est créée une seule fois : on lit le pathname courant via une ref
-	// pour ne pas afficher la bannière d'un message si on est déjà sur ce chat.
 	const location = useLocation()
 	const pathnameRef = useRef(location.pathname)
 	useEffect(() => {
 		pathnameRef.current = location.pathname
 	}, [location.pathname])
 
+	const hasConnectedRef = useRef(false)
+	const closedByUsRef = useRef(false)
+	const debugDroppedRef = useRef(false)
+
 	useEffect(() => {
 		if (!enabled) return
+
+		closedByUsRef.current = false
+
+		if (DEBUG_ERRORS.socketConnect) {
+			setSocketStatus("failed")
+			return
+		}
 
 		const newSocket = new WebSocket(import.meta.env.VITE_API_BACK_WS)
 		setSocket(newSocket)
@@ -71,22 +84,42 @@ export default function useSocket(enabled: boolean) {
 				queryClient.invalidateQueries({ queryKey: ["notifications"] })
 			} else if (message.type === "location") {
 				queryClient.invalidateQueries({ queryKey: ["verify"] })
-				setIsReady(true)
+			} else if (message.type === "error") {
+				notify.error(
+					"Something went wrong on the live connection. Please try again.",
+				)
 			}
 		}
 
 		newSocket.onopen = () => {
-			setIsReady(true)
+			hasConnectedRef.current = true
+			setSocketStatus("connected")
 			refreshLocationIfConsented(newSocket)
+
+			if (DEBUG_ERRORS.socketDrop && !debugDroppedRef.current) {
+				debugDroppedRef.current = true
+				setTimeout(() => newSocket.close(), 3000)
+			}
+		}
+
+		newSocket.onerror = () => newSocket.close()
+
+		newSocket.onclose = () => {
+			if (closedByUsRef.current) return
+
+			if (hasConnectedRef.current)
+				notify.error("Connection lost. Please reload to reconnect.")
+			else setSocketStatus("failed")
 		}
 
 		return () => {
+			closedByUsRef.current = true
 			newSocket.close()
 		}
 	}, [enabled, queryClient, navigate])
 
 	return {
 		socket,
-		isReady,
+		socketStatus,
 	}
 }

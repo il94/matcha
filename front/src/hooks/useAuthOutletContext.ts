@@ -1,9 +1,10 @@
 import { useOutletContext } from "react-router"
+import type { SocketStatus } from "./useSocket"
 
 type OutletAuthContext = {
 	user: User
-	socket: WebSocket
-	isReady: boolean
+	socket?: WebSocket
+	socketStatus: SocketStatus
 
 	isAuthenticated: boolean
 	isCompleting: boolean

@@ -42,6 +42,11 @@ export const DEBUG_ERRORS = {
 	// --- Services location (toast, hors query/mutation) ---
 	locationByCoordinates: false, // bouton "Use my current location"
 	locationSuggestions: false, // autocomplétion ville (à la saisie)
+
+	// --- WebSocket ---
+	socketConnect: false, // boot : échec de connexion → écran d'erreur (bloquant)
+	socketDrop: true, // chute unique après ouverture → toast (non bloquant, sans reconnexion)
+	socketSendMessage: false, // chat : envoi impossible (socket fermée) → toast
 } as const
 
 /**
