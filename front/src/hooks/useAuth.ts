@@ -24,7 +24,7 @@ export default function useAuth() {
 			navigate(0)
 		},
 		onError: () => {
-			toast.error("Couldn't log you out. Please try again.")
+			toast.error("Couldn't log you out. Give it another try!")
 		},
 	})
 
@@ -34,7 +34,7 @@ export default function useAuth() {
 			navigate(0)
 		},
 		onError: () => {
-			toast.error("Couldn't log you out. Please try again.")
+			toast.error("Couldn't log you out. Give it another try!")
 		},
 	})
 

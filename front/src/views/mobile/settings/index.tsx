@@ -17,7 +17,9 @@ export default function SettingsPage() {
 			toast.success("Email successfully updated !")
 			setSearchParams({})
 		} else if (error === "EMAIL_ALREADY_TAKEN") {
-			toast.error("This email is already taken. Please try another one.")
+			toast.error(
+				"This email is already spoken for, try a different one to stay unique!",
+			)
 			setSearchParams({})
 		}
 	}, [success, error, setSearchParams])

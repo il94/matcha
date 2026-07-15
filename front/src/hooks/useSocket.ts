@@ -91,7 +91,7 @@ export default function useSocket(enabled: boolean) {
 				queryClient.invalidateQueries({ queryKey: ["verify"] })
 			} else if (message.type === "error") {
 				notify.error(
-					"Something went wrong on the live connection. Please try again.",
+					"Something glitched on our live connection. Try that again!",
 				)
 			}
 		}
@@ -113,7 +113,7 @@ export default function useSocket(enabled: boolean) {
 			if (closedByUsRef.current) return
 
 			if (hasConnectedRef.current)
-				notify.error("Connection lost. Please reload to reconnect.")
+				notify.error("We lost touch! Reload to get back online.")
 			else setSocketStatus("failed")
 		}
 

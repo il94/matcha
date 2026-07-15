@@ -26,7 +26,7 @@ export default function ProfileLikesPage() {
 			) : isError ? (
 				<ErrorState
 					className="m-auto"
-					message="We couldn't load your likes. Please try again later."
+					message="We couldn't load who's into you. Try again in a bit!"
 				/>
 			) : (
 				<UserList users={users} />

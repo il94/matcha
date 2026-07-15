@@ -71,7 +71,7 @@ export default function MobileLayout() {
 				</div>
 			) : authOutletContext.socketStatus === "failed" ? (
 				<div className="flex grow items-center justify-center p-6">
-					<ErrorState message="We couldn't establish a live connection. Please check your connection and try again." />
+					<ErrorState message="We can't get you online right now. Check your connection and give it another shot!" />
 				</div>
 			) : (
 				<Outlet context={{ ...authOutletContext, filters }} />

@@ -49,12 +49,12 @@ export default function LoginPage() {
 			if (error.response?.status === 403)
 				form.setError("password", {
 					message:
-						"Oops ! The password you entered didn't work. Let's try that again !",
+						"Oops! The password you entered didn't work. Let's try that again!",
 				})
 			else
 				form.setError("root", {
 					message:
-						"Looks like something went wrong. Don't worry, we're on it try again shortly.",
+						"Looks like something went wrong. Don't worry, we're on it, try again shortly.",
 				})
 		},
 	})

@@ -10,6 +10,7 @@ import InputImageFileField from "@/components/FormFields/InputImageFileField"
 import { useState } from "react"
 import toast from "@/lib/toast"
 import updateUserPictures from "@/services/updateUserPictures"
+import { AxiosError } from "axios"
 
 const formSchema = z.object({
 	principalPicture: z.union([
@@ -72,11 +73,21 @@ export default function PicturesSlider({
 			queryClient.invalidateQueries({ queryKey: ["verify"] })
 			onClose()
 		},
-		onError: () => {
-			form.setError("root", {
-				message:
-					"Looks like something went wrong. Don't worry, we're on it try again shortly.",
-			})
+		onError: (error: AxiosError<{ message: string }>) => {
+			if (
+				error.response?.status === 400 &&
+				(error.response.data.message === "INVALID_PICTURE_URL" ||
+					error.response.data.message === "INVALID_PICTURE_URL_2")
+			) {
+				form.setError("root", {
+					message: "That picture didn't quite make it. Try uploading it again!",
+				})
+			} else {
+				form.setError("root", {
+					message:
+						"Looks like something went wrong. Don't worry, we're on it, try again shortly.",
+				})
+			}
 		},
 	})
 

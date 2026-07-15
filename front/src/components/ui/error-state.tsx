@@ -6,7 +6,7 @@ type ErrorStateProps = {
 }
 
 function ErrorState({
-	message = "Something went wrong. Please try again later.",
+	message = "Looks like something went wrong. Don't worry, we're on it, try again shortly.",
 	className,
 }: ErrorStateProps) {
 	return (

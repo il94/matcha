@@ -26,7 +26,7 @@ export default function ProfileViewsPage() {
 			) : isError ? (
 				<ErrorState
 					className="m-auto"
-					message="We couldn't load your profile views. Please try again later."
+					message="We couldn't load who's been checking you out. Try again in a bit!"
 				/>
 			) : (
 				<UserList users={users} />

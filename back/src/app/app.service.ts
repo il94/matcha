@@ -9,6 +9,7 @@ import {
 	NotFoundException,
 	UnauthorizedException,
 } from "@/lib/HttpException"
+import { ERROR_CODES } from "@/lib/errorCodes"
 import bcrypt from "bcrypt"
 import redisService from "@/redis/redis.service"
 import mailerService from "@/mailer/mailer.service"
@@ -251,7 +252,7 @@ class appService {
 
 			return response.data
 		} catch {
-			throw new BadGatewayException("LOCATION_SERVICE_UNAVAILABLE")
+			throw new BadGatewayException(ERROR_CODES.LOCATION_SERVICE_UNAVAILABLE)
 		}
 	}
 
@@ -261,7 +262,7 @@ class appService {
 			lon: longitude,
 		})
 
-		if (data.error) throw new NotFoundException("LOCATION_NOT_FOUND")
+		if (data.error) throw new NotFoundException(ERROR_CODES.LOCATION_NOT_FOUND)
 
 		return this.getLocationLabel(data)
 	}
@@ -274,7 +275,7 @@ class appService {
 		})
 		const [location] = data
 
-		if (!location) throw new NotFoundException("LOCATION_NOT_FOUND")
+		if (!location) throw new NotFoundException(ERROR_CODES.LOCATION_NOT_FOUND)
 
 		return {
 			latitude: parseFloat(location.lat),
@@ -308,7 +309,9 @@ class appService {
 			userData.gender === Gender.UNDEFINED &&
 			userData.sexualOrientation !== SexualOrientation.BI
 		)
-			throw new BadRequestException("ORIENTATION_LOCKED_FOR_UNDEFINED_GENDER")
+			throw new BadRequestException(
+				ERROR_CODES.ORIENTATION_LOCKED_FOR_UNDEFINED_GENDER,
+			)
 
 		const sessionId = randomUUID()
 		let locationSource: "gps" | "manual"
@@ -329,7 +332,7 @@ class appService {
 				userData.latitude = latitude
 				locationSource = "manual"
 			} else {
-				throw new BadRequestException("LOCATION_REQUIRED")
+				throw new BadRequestException(ERROR_CODES.LOCATION_REQUIRED)
 			}
 
 			pictureNames = await this.s3Service.uploadFiles(picturesBuffer)
@@ -385,7 +388,7 @@ class appService {
 		vote: boolean,
 	) {
 		if (vote && !(await this.repository.hasPrincipalPicture(userId)))
-			throw new ForbiddenException("PROFILE_PICTURE_REQUIRED")
+			throw new ForbiddenException(ERROR_CODES.PROFILE_PICTURE_REQUIRED)
 
 		const result = await this.repository.createVote(userId, targetId, vote)
 
@@ -525,14 +528,16 @@ class appService {
 				userData.sexualOrientation &&
 				userData.sexualOrientation !== SexualOrientation.BI
 			)
-				throw new BadRequestException("ORIENTATION_LOCKED_FOR_UNDEFINED_GENDER")
+				throw new BadRequestException(
+					ERROR_CODES.ORIENTATION_LOCKED_FOR_UNDEFINED_GENDER,
+				)
 			if (userData.gender === Gender.UNDEFINED)
 				userData.sexualOrientation = SexualOrientation.BI
 		}
 
 		if (userData.email) {
 			if (await this.repository.getUserByEmail(userData.email))
-				throw new ForbiddenException("EMAIL_ALREADY_TAKEN")
+				throw new ForbiddenException(ERROR_CODES.EMAIL_ALREADY_TAKEN)
 
 			const token = this.getRandomToken()
 			try {
@@ -556,10 +561,10 @@ class appService {
 				!currentHash ||
 				!(await bcrypt.compare(userData.currentPassword, currentHash))
 			)
-				throw new ForbiddenException("INVALID_PASSWORD")
+				throw new ForbiddenException(ERROR_CODES.INVALID_PASSWORD)
 
 			if (this.repository.isWordInPassword(userData.newPassword))
-				throw new ForbiddenException("WORD_IN_PASSWORD")
+				throw new ForbiddenException(ERROR_CODES.WORD_IN_PASSWORD)
 		}
 
 		if (userData.longitude && userData.latitude) {
@@ -611,11 +616,12 @@ class appService {
 		// Vérifier que les url d'images envoyées existent dans la base de données
 		for (const pictureString of picturesString) {
 			const pictureName = pictureString.match(/\/([^/?]+)(?:\?|$)/)
-			if (!pictureName) throw new BadRequestException("INVALID_PICTURE_URL")
+			if (!pictureName)
+				throw new BadRequestException(ERROR_CODES.INVALID_PICTURE_URL)
 			if (
 				!userPictures.find((userPicture) => userPicture.name === pictureName[1])
 			)
-				throw new BadRequestException("INVALID_PICTURE_URL_2")
+				throw new BadRequestException(ERROR_CODES.INVALID_PICTURE_URL_2)
 		}
 
 		const pictureNames = await this.s3Service.uploadFiles(picturesBuffer)

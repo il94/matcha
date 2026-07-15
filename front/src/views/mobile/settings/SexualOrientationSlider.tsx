@@ -11,6 +11,7 @@ import Gender from "@/data/Gender"
 import SexualOrientation from "@/data/SexualOrientation"
 import updateUser from "@/services/updateUser"
 import { toast } from "sonner"
+import { AxiosError } from "axios"
 
 const formSchema = z.object({
 	sexualOrientation: z.string().min(1, "Please select your sexual orientation"),
@@ -48,11 +49,21 @@ export default function SexualOrientationSlider({
 			queryClient.invalidateQueries({ queryKey: ["verify"] })
 			onClose()
 		},
-		onError: () => {
-			form.setError("root", {
-				message:
-					"Looks like something went wrong. Don't worry, we're on it try again shortly.",
-			})
+		onError: (error: AxiosError<{ message: string }>) => {
+			if (
+				error.response?.status === 400 &&
+				error.response.data.message ===
+					"ORIENTATION_LOCKED_FOR_UNDEFINED_GENDER"
+			) {
+				form.setError("root", {
+					message: "Pick a gender first, then we can talk orientation!",
+				})
+			} else {
+				form.setError("root", {
+					message:
+						"Looks like something went wrong. Don't worry, we're on it, try again shortly.",
+				})
+			}
 		},
 	})
 

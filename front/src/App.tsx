@@ -20,15 +20,6 @@ import ProfileLikesPage from "./views/mobile/profile/likes"
 import PreviewPage from "./views/mobile/preview"
 import NotFoundPage from "./views/mobile/notFound"
 
-/*
-	TODO
-
-	- Style des messages d'erreur de form
-	- Check injections SQL / XSS
-	- Filtrer les champs (mail, tailles, password ect)
-	
-*/
-
 function App() {
 	return (
 		<ThemeProvider defaultTheme="dark">

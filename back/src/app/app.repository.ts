@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
 import { ForbiddenException } from "@/lib/HttpException"
+import { ERROR_CODES } from "@/lib/errorCodes"
 import convertObjectKeysToCamelCase from "@/lib/convertObjectKeysToCamelCase"
 import * as appQueries from "@/db/queries/app"
 import { PoolClient } from "pg"
@@ -44,7 +45,7 @@ class appRepository {
 		const executor = transact || this.db
 
 		if (this.isWordInPassword(userData.password))
-			throw new ForbiddenException("WORD_IN_PASSWORD")
+			throw new ForbiddenException(ERROR_CODES.WORD_IN_PASSWORD)
 
 		const result = await executor.query(appQueries.createUserMutation, [
 			await bcrypt.hash(userData.password, 10),
@@ -288,7 +289,7 @@ class appRepository {
 		password: UserData["password"],
 	) {
 		if (this.isWordInPassword(password))
-			throw new ForbiddenException("WORD_IN_PASSWORD")
+			throw new ForbiddenException(ERROR_CODES.WORD_IN_PASSWORD)
 
 		await this.db.query(appQueries.updateUserPasswordMutation, [
 			userId,

@@ -45,7 +45,7 @@ export default function Step4() {
 					form.setValue("latitude", latitude)
 					form.setValue("longitude", longitude)
 				} catch {
-					toast.error("We couldn't fetch your location. Please try again.")
+					toast.error("We couldn't pin down your location. Try again!")
 				} finally {
 					setIsLocating(false)
 				}
@@ -79,7 +79,9 @@ export default function Step4() {
 			setSuggestions(suggestions)
 		} catch {
 			setSuggestions(undefined)
-			toast.error("We couldn't load location suggestions. Please try again.")
+			toast.error(
+				"We couldn't find any matching places. Try typing something else!",
+			)
 		} finally {
 			setIsSearching(false)
 		}

@@ -34,7 +34,7 @@ function BlockDialog({ userId, firstName, onBlock }: WarningDialogProps) {
 			navigate(0)
 		},
 		onError: () => {
-			toast.error("Couldn't block this user. Please try again.")
+			toast.error("Couldn't block this user. Try again!")
 		},
 	})
 
@@ -80,7 +80,7 @@ function ReportDialog({ userId, firstName }: WarningDialogProps) {
 			setReason("")
 		},
 		onError: () => {
-			toast.error("Couldn't send your report. Please try again.")
+			toast.error("Couldn't send your report. Try again!")
 		},
 	})
 

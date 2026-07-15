@@ -186,7 +186,7 @@ function FilterForm({ initialFilters, onApply, onReset }: FilterFormProps) {
 						) : isError ? (
 							<ErrorState
 								className="py-2 text-left"
-								message="We couldn't load the tags. Please try again in a moment."
+								message="We couldn't load the tags. Try again in a moment!"
 							/>
 						) : (
 							<SelectField

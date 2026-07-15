@@ -43,7 +43,7 @@ export default function Step1() {
 	if (isError)
 		return (
 			<div className="flex h-full items-center justify-center">
-				<ErrorState message="An error occurred. Please try again later." />
+				<ErrorState />
 			</div>
 		)
 

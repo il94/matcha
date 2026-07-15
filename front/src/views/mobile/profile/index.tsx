@@ -56,7 +56,7 @@ export default function ProfilePage() {
 	if (isError)
 		return (
 			<main className="flex h-full items-center justify-center px-3 py-8">
-				<ErrorState message="We couldn't load your profile. Please try again later." />
+				<ErrorState message="We couldn't load your profile. Give it another shot!" />
 			</main>
 		)
 

@@ -51,7 +51,7 @@ export default function LastNameSlider({
 		onError: () => {
 			form.setError("root", {
 				message:
-					"Looks like something went wrong. Don't worry, we're on it try again shortly.",
+					"Looks like something went wrong. Don't worry, we're on it, try again shortly.",
 			})
 		},
 	})

@@ -51,12 +51,12 @@ export default function EmailSlider({
 			) {
 				form.setError("email", {
 					message:
-						"This email is already spoken for, try a different one to stay unique !",
+						"This email is already spoken for, try a different one to stay unique!",
 				})
 			} else {
 				form.setError("root", {
 					message:
-						"Looks like something went wrong. Don't worry, we're on it try again shortly.",
+						"Looks like something went wrong. Don't worry, we're on it, try again shortly.",
 				})
 			}
 		},

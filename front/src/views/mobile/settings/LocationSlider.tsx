@@ -15,6 +15,7 @@ import useDebouncedCallback from "@/hooks/useDebouncedCallback"
 import getLocationByCoordinates from "@/services/getLocationByCoordinates"
 import getLocationSuggestions from "@/services/getLocationSuggestions"
 import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
+import { AxiosError } from "axios"
 
 export const formSchema = z.object({
 	longitude: z.number().optional(),
@@ -53,11 +54,21 @@ export default function LocationSlider({
 			queryClient.invalidateQueries({ queryKey: ["verify"] })
 			onClose()
 		},
-		onError: () => {
-			form.setError("root", {
-				message:
-					"Looks like something went wrong. Don't worry, we're on it try again shortly.",
-			})
+		onError: (error: AxiosError<{ message: string }>) => {
+			if (
+				error.response?.status === 400 &&
+				error.response.data.message === "LOCATION_REQUIRED"
+			) {
+				form.setError("root", {
+					message:
+						"Looks like you haven't set a location yet. Add one to keep going!",
+				})
+			} else {
+				form.setError("root", {
+					message:
+						"Looks like something went wrong. Don't worry, we're on it, try again shortly.",
+				})
+			}
 		},
 	})
 
@@ -94,7 +105,7 @@ export default function LocationSlider({
 					form.setValue("latitude", latitude)
 					form.setValue("longitude", longitude)
 				} catch {
-					toast.error("We couldn't fetch your location. Please try again.")
+					toast.error("We couldn't pin down your location. Try again!")
 				} finally {
 					setIsLocating(false)
 				}
@@ -128,7 +139,9 @@ export default function LocationSlider({
 			setSuggestions(suggestions)
 		} catch {
 			setSuggestions(undefined)
-			toast.error("We couldn't load location suggestions. Please try again.")
+			toast.error(
+				"We couldn't find any matching places. Try typing something else!",
+			)
 		} finally {
 			setIsSearching(false)
 		}

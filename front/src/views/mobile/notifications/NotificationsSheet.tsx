@@ -98,7 +98,7 @@ export default function NotificationsSheet({
 				) : isError ? (
 					<ErrorState
 						className="px-4"
-						message="We couldn't load your notifications. Please try again later."
+						message="We couldn't load your notifications. Try again in a bit!"
 					/>
 				) : notifications.length === 0 ? (
 					<p className="p-4 text-center text-sm text-muted-foreground">

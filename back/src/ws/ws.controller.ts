@@ -1,5 +1,6 @@
 import appService from "@/app/app.service"
 import { BadRequestException, HttpException } from "@/lib/HttpException"
+import { ERROR_CODES } from "@/lib/errorCodes"
 import dayjs from "@/lib/dayjs"
 import socketSend from "@/lib/socketSend"
 import { FastifyPluginAsync } from "fastify"
@@ -33,7 +34,10 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 				if (message.type === "message") await onReceiveMessage(message)
 				else if (message.type === "location")
 					await onReceiveLocation(userId, message)
-				else throw new BadRequestException("INVALID_SOCKET_MESSAGE_TYPE")
+				else
+					throw new BadRequestException(
+						ERROR_CODES.INVALID_SOCKET_MESSAGE_TYPE,
+					)
 			} catch (error) {
 				onError(error)
 			}
@@ -41,7 +45,7 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 
 		const onReceiveMessage = async (message: SocketMessage) => {
 			if (!message.content || !message.chatId)
-				throw new BadRequestException("INVALID_SOCKET_MESSAGE")
+				throw new BadRequestException(ERROR_CODES.INVALID_SOCKET_MESSAGE)
 
 			const response = await service.createMessage(
 				userId,
@@ -74,7 +78,7 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 				typeof location.latitude !== "number" ||
 				typeof location.longitude !== "number"
 			)
-				throw new BadRequestException("INVALID_SOCKET_MESSAGE")
+				throw new BadRequestException(ERROR_CODES.INVALID_SOCKET_MESSAGE)
 
 			const user = await service.getUser(userId)
 
@@ -117,12 +121,12 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 				app.log.error(
 					print(
 						RED,
-						`(${request.socket.remoteAddress}) WS ${500}\n\t${"UNKNOWN_ERROR"}`,
+						`(${request.socket.remoteAddress}) WS ${500}\n\t${ERROR_CODES.UNKNOWN_ERROR}`,
 					),
 				)
 
 				socketSend(socket, "error", {
-					message: "UNKNOWN_ERROR",
+					message: ERROR_CODES.UNKNOWN_ERROR,
 				})
 			}
 		}

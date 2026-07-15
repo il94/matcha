@@ -11,6 +11,7 @@ import { useCallback } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router"
 import { z } from "zod"
+import { AxiosError } from "axios"
 
 export const formSchema = z.object({
 	password: z
@@ -55,11 +56,21 @@ export default function ResetPage() {
 		onSuccess: () => {
 			navigate(0)
 		},
-		onError: () => {
-			form.setError("root", {
-				message:
-					"Looks like something went wrong. Don't worry, we're on it try again shortly.",
-			})
+		onError: (error: AxiosError<{ message: string }>) => {
+			if (
+				error.response?.status === 403 &&
+				error.response.data.message === "WORD_IN_PASSWORD"
+			) {
+				form.setError("password", {
+					message:
+						"Your password contains a common word, let's make it more unique!",
+				})
+			} else {
+				form.setError("root", {
+					message:
+						"Looks like something went wrong. Don't worry, we're on it, try again shortly.",
+				})
+			}
 		},
 	})
 

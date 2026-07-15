@@ -14,7 +14,6 @@ import { Loader2Icon } from "lucide-react"
 import ActivationDialog from "./ActivationDialog"
 import { cn } from "@/lib/utils"
 
-// TODO voir si besoin d'interdire des chars
 const formSchema = z.object({
 	email: z
 		.string()
@@ -90,27 +89,27 @@ export default function RegisterPage() {
 				if (error.response.data.message === "EMAIL_ALREADY_TAKEN")
 					form.setError("email", {
 						message:
-							"This email is already spoken for, try a different one to stay unique !",
+							"This email is already spoken for, try a different one to stay unique!",
 					})
 				else if (error.response.data.message === "USERNAME_ALREADY_TAKEN")
 					form.setError("username", {
 						message:
-							"Someone else snagged this username, it's popular ! Try a new one.",
+							"Someone else snagged this username, it's popular! Try a new one.",
 					})
 				else if (error.response.data.message === "WORD_IN_PASSWORD")
 					form.setError("password", {
 						message:
-							"Your password contains a common word, let's make it more unique !",
+							"Your password contains a common word, let's make it more unique!",
 					})
 				else
 					form.setError("root", {
 						message:
-							"Looks like something went wrong. Don't worry, we're on it try again shortly.",
+							"Looks like something went wrong. Don't worry, we're on it, try again shortly.",
 					})
 			} else {
 				form.setError("root", {
 					message:
-						"Looks like something went wrong. Don't worry, we're on it try again shortly.",
+						"Looks like something went wrong. Don't worry, we're on it, try again shortly.",
 				})
 			}
 		},
