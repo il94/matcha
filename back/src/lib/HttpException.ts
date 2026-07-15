@@ -50,3 +50,11 @@ export class BadGatewayException extends HttpException {
 		super(502, message ?? ERROR_CODES.BAD_GATEWAY)
 	}
 }
+
+export class TooManyRequestsException extends HttpException {
+	retryAfter: number
+	constructor(retryAfter: number, message?: string) {
+		super(429, message ?? ERROR_CODES.TOO_MANY_REQUESTS)
+		this.retryAfter = retryAfter
+	}
+}

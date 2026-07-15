@@ -12,7 +12,7 @@ import { useMutation } from "@tanstack/react-query"
 import { AxiosError } from "axios"
 import { Loader2Icon } from "lucide-react"
 import ActivationDialog from "./ActivationDialog"
-import { cn } from "@/lib/utils"
+import { cn, formatRetryAfter } from "@/lib/utils"
 
 const formSchema = z.object({
 	email: z
@@ -84,7 +84,7 @@ export default function RegisterPage() {
 		onSuccess: () => {
 			setIsRegistered(form.getValues().email)
 		},
-		onError: (error: AxiosError<{ message: string }>) => {
+		onError: (error: AxiosError<{ message: string; retryAfter?: number }>) => {
 			if (error.response?.status === 403) {
 				if (error.response.data.message === "EMAIL_ALREADY_TAKEN")
 					form.setError("email", {
@@ -106,6 +106,10 @@ export default function RegisterPage() {
 						message:
 							"Looks like something went wrong. Don't worry, we're on it, try again shortly.",
 					})
+			} else if (error.response?.status === 429) {
+				form.setError("root", {
+					message: `Whoa, slow down there! Too many attempts, try again in ${formatRetryAfter(error.response.data.retryAfter ?? 600)}.`,
+				})
 			} else {
 				form.setError("root", {
 					message:

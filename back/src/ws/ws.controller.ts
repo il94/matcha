@@ -35,9 +35,7 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 				else if (message.type === "location")
 					await onReceiveLocation(userId, message)
 				else
-					throw new BadRequestException(
-						ERROR_CODES.INVALID_SOCKET_MESSAGE_TYPE,
-					)
+					throw new BadRequestException(ERROR_CODES.INVALID_SOCKET_MESSAGE_TYPE)
 			} catch (error) {
 				onError(error)
 			}

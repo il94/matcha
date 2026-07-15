@@ -2,7 +2,7 @@ import InputTextField from "@/components/FormFields/InputTextField"
 import { Button } from "@/components/ui/button"
 import { Form, FormMessage } from "@/components/ui/form"
 import useAuthOutletContext from "@/hooks/useAuthOutletContext"
-import { cn } from "@/lib/utils"
+import { cn, formatRetryAfter } from "@/lib/utils"
 import resetPassword from "@/services/resetPassword"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -56,7 +56,7 @@ export default function ResetPage() {
 		onSuccess: () => {
 			navigate(0)
 		},
-		onError: (error: AxiosError<{ message: string }>) => {
+		onError: (error: AxiosError<{ message: string; retryAfter?: number }>) => {
 			if (
 				error.response?.status === 403 &&
 				error.response.data.message === "WORD_IN_PASSWORD"
@@ -64,6 +64,10 @@ export default function ResetPage() {
 				form.setError("password", {
 					message:
 						"Your password contains a common word, let's make it more unique!",
+				})
+			} else if (error.response?.status === 429) {
+				form.setError("root", {
+					message: `Whoa, slow down there! Too many attempts, try again in ${formatRetryAfter(error.response.data.retryAfter ?? 600)}.`,
 				})
 			} else {
 				form.setError("root", {

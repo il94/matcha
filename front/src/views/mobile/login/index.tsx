@@ -13,7 +13,7 @@ import { useCallback, useState } from "react"
 
 import ForgotPasswordDialog from "./ForgotPasswordDialog"
 import useNavigateFrom from "@/hooks/useNavigateFrom"
-import { cn } from "@/lib/utils"
+import { cn, formatRetryAfter } from "@/lib/utils"
 
 const formSchema = z.object({
 	username: z
@@ -45,11 +45,15 @@ export default function LoginPage() {
 		onSuccess: () => {
 			navigateFrom("/home")
 		},
-		onError: (error: AxiosError) => {
+		onError: (error: AxiosError<{ message: string; retryAfter?: number }>) => {
 			if (error.response?.status === 403)
 				form.setError("password", {
 					message:
 						"Oops! The password you entered didn't work. Let's try that again!",
+				})
+			else if (error.response?.status === 429)
+				form.setError("root", {
+					message: `Whoa, slow down there! Too many attempts, try again in ${formatRetryAfter(error.response.data.retryAfter ?? 60)}.`,
 				})
 			else
 				form.setError("root", {

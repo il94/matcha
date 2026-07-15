@@ -1,5 +1,9 @@
 import { FastifyErrorHandler } from "./fastify.types"
-import { HttpException, UnauthorizedException } from "@/lib/HttpException"
+import {
+	HttpException,
+	TooManyRequestsException,
+	UnauthorizedException,
+} from "@/lib/HttpException"
 import { isPGError, PGException } from "./lib/PGException"
 import { ERROR_CODES } from "@/lib/errorCodes"
 
@@ -14,6 +18,13 @@ const appErrorHandler: FastifyErrorHandler = (error, request, reply) => {
 				.clearCookie("completingSessionId")
 				.clearCookie("resetingSessionId")
 				.send({ message: httpError.message })
+		}
+
+		if (httpError instanceof TooManyRequestsException) {
+			return reply.status(httpError.code).send({
+				message: httpError.message,
+				retryAfter: httpError.retryAfter,
+			})
 		}
 
 		return reply.status(httpError.code).send({ message: httpError.message })

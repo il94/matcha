@@ -12,6 +12,7 @@ import mailerPlugin from "./mailer/mailer.plugin"
 import schedulerPlugin from "./scheduler/scheduler.plugin"
 import appLogger from "./app.logger"
 import wsPlugin from "./ws/ws.plugin"
+import rateLimitPlugin from "./rateLimit/rateLimit.plugin"
 
 const appPlugin: FastifyPluginAsync = async (app, options) => {
 	app.register(fastifyPlugin(appConfig))
@@ -19,6 +20,7 @@ const appPlugin: FastifyPluginAsync = async (app, options) => {
 	app.register(fastifyPlugin(dbPlugin))
 	app.register(fastifyPlugin(s3Plugin))
 	app.register(fastifyPlugin(redisPlugin))
+	app.register(fastifyPlugin(rateLimitPlugin))
 	app.register(fastifyPlugin(mailerPlugin))
 	app.register(fastifyPlugin(schedulerPlugin))
 	app.register(fastifyPlugin(wsPlugin))

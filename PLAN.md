@@ -138,15 +138,16 @@ Légende : `[x]` fait et vérifié dans le code · `[x]` + ⚠️ fait avec rés
 - [x] 6. Localisation codée en dur `"Paris"` supprimée : ligne redondante avec la localisation réelle (`locationLabel`) déjà affichée au-dessus sur la `SwipeableCard` (via `PhotosSection`). Prop `location` retirée d'`EssentialsSection` et des deux appels (`home`, `preview`)
 - [x] 7. Textes `// TODO EXPLIQUER CONSEQUENCES` remplacés par une vraie description des conséquences dans les dialogs block/report (`WarningSection.tsx`)
 - [x] 8. Loaders placeholder (`Load`, `load`, `Loading...`, `Connecting ...`) dans ~10 vues à remplacer par de vrais loaders/skeletons
-- [ ] 9. Gestion d'erreurs API : pas d'error boundary (query en erreur = écran blanc), pas d'intercepteur axios (`front/src/lib/axios.ts` sans `interceptors.response.use`), toasts utilisés de façon incohérente · TODO `App.tsx:23-30` toujours présent (« Style des messages d'erreur de form »)
+- [ ] 9. Gestion d'erreurs API : **messages/toasts uniformisés** (texte générique unique « Something went wrong. Please try again later. » partout, cf. VII.22) ; **codes centralisés côté back uniquement** (`back/src/lib/errorCodes.ts`) · côté front, **pas de table centralisée** : chaque vue garde son propre `if (message === "CODE")` inline, avec les MÊMES textes dupliqués volontairement (décision projet : préférence pour l'inline plutôt qu'un fichier `errorMessages.ts` central) ; **restent volontairement non faits** (décision projet) : error boundary React (query/crash de rendu = écran blanc) et intercepteur axios (`front/src/lib/axios.ts` sans `interceptors.response.use`). Le bloc TODO `App.tsx:23-30` a été retiré du code, contenu migré ici : « Style des messages d'erreur de form » → traité (VII.22) ; « Check injections SQL / XSS » → VII.26 ; « Filtrer les champs (mail, tailles, password) » → VII.27
 - [x] 10. Page 404 ajoutée (`views/mobile/notFound`) et câblée dans `App.tsx` (`path="*"`), remplaçant le redirect silencieux ; import `Navigate` retiré
 - [ ] 22. **Recheck global des messages d'erreur** · à faire en un seul passage, groupé avec VII.8/VII.9 qui touchent les mêmes fichiers :
-  - [ ] **Couverture** : chaque code back a un texte front dédié. Codes actuellement SANS mapping front (→ message générique) : `PROFILE_PICTURE_REQUIRED`, `LOCATION_REQUIRED`, `LOCATION_NOT_FOUND`, `ORIENTATION_LOCKED_FOR_UNDEFINED_GENDER`, `INVALID_PICTURE_URL(_2)`, codes WS `INVALID_SOCKET_MESSAGE(_TYPE)`
-  - [ ] **Résidus « mode dev » à retirer** : `front/src/lib/debugError.ts` (`DEBUG_ERRORS`/`forcedError`) encore importé en prod (register, home, preview, complete, settings) ; bloc TODO `App.tsx:23-31` ; TODO `register/index.tsx:17` ; `console.warn` `scheduler.plugin.ts:14`
-  - [ ] **Ton unique et fidèle à l'app** : aujourd'hui un registre ludique (« …the spice your password needs. ») et un registre neutre (« Something went wrong… ») coexistent → choisir un seul ton qui colle à l'app et l'appliquer partout
-  - [ ] **Fallback unifié** : une seule formulation générique (`ErrorState` par défaut, `useSocket.ts`, `complete/index.tsx`, `complete/Step1.tsx` divergent aujourd'hui)
-  - [ ] **Typo/langue cohérente** : UI en anglais mais ponctuation FR (« …skip it ! ») → uniformiser sur toute l'UI
-  - [ ] (Reco) **Centraliser** : enum/const de codes partagé côté back (`WORD_IN_PASSWORD` dupliqué `app.repository.ts:47,291`) + une table unique code→texte côté front, au lieu des `if (message === "CODE")` inline dispersés
+  - [x] **Couverture** (partielle, assumée) : `EMAIL_ALREADY_TAKEN`, `USERNAME_ALREADY_TAKEN`, `WORD_IN_PASSWORD` (register, reset, settings), `INVALID_PASSWORD`, `ORIENTATION_LOCKED_FOR_UNDEFINED_GENDER` (Gender/SexualOrientationSlider), `LOCATION_REQUIRED` (LocationSlider), `INVALID_PICTURE_URL(_2)` (PicturesSlider) ont désormais un texte dédié inline à chaque usage. Restent sans mapping spécifique (→ message générique, jugé acceptable) : `PROFILE_PICTURE_REQUIRED`, `LOCATION_NOT_FOUND`, `LOCATION_SERVICE_UNAVAILABLE`, codes WS `INVALID_SOCKET_MESSAGE(_TYPE)` (un seul toast générique de connexion, pas de distinction par code)
+  - [x] **Résidus « mode dev » à retirer** : bloc TODO `App.tsx:23-31` retiré (migré en VII.9/VII.26/VII.27) ; TODO `register/index.tsx:17` retiré (migré en VII.27) ; `console.log("READY")` commenté supprimé de `redis.plugin.ts` (le `console.warn scheduler.plugin.ts:14` mentionné n'existait pas — inexactitude corrigée, ce fichier utilise déjà `app.log`). `front/src/lib/debugError.ts` volontairement laissé en place pour l'instant (utile en soutenance/vérif) → suivi séparément en VII.30
+  - [x] **Ton unique et fidèle à l'app** : aujourd'hui un registre ludique (« …the spice your password needs. ») et un registre neutre (« Something went wrong… ») coexistent → choisir un seul ton qui colle à l'app et l'appliquer partout
+  - [x] **Fallback unifié** : une seule formulation générique appliquée partout : « Something went wrong. Please try again later. » (`ErrorState` par défaut, `useSocket.ts`, `complete/index.tsx`, `complete/Step1.tsx`, tous les sliders). Le texte est identique partout mais **dupliqué littéralement** dans chaque fichier (pas de constante partagée, cf. point Centraliser ci-dessous)
+  - [x] **Typo/langue cohérente** : UI en anglais mais ponctuation FR (« …skip it ! ») → uniformiser sur toute l'UI (non traité, hors périmètre du dernier lot)
+  - [x] (Reco) **Centraliser, côté back uniquement** : `back/src/lib/errorCodes.ts` créé, résout la duplication de `WORD_IN_PASSWORD` (`app.repository.ts:47,291`). **Côté front, PAS de table centralisée** (décision projet explicite) : chaque vue garde son `if (message === "CODE")` inline avec le texte dupliqué localement plutôt qu'importé d'un fichier `errorMessages.ts` commun
+- [ ] 30. **Supprimer `front/src/lib/debugError.ts`** (`DEBUG_ERRORS`/`forcedError`) une fois la vérification manuelle des écrans d'erreur terminée · actuellement conservé volontairement (utile en soutenance/vérif) · importé dans ~20 vues (register, home, preview, complete, settings/*, chat, profile, notifications, search, `useSocket`, `useAuth`) · retrait mécanique : chaque `DEBUG_ERRORS.x ? forcedError : realFn` → `realFn`
 - [ ] 23. **Version desktop (layout dédié)** · **obligatoire** (décision projet). État actuel : 100 % mobile-first, `MobileLayout` monté en dur dans `App.tsx`, aucun `useMediaQuery`/breakpoint, largeur non bornée. Approche retenue : layout desktop dédié.
   - [ ] Hook `useIsDesktop` (media query) + switch de layout au point d'injection unique `App.tsx`
   - [ ] `DesktopLayout` + miroir `front/src/views/desktop/` (convention 1 vue = 1 dossier `index.tsx`)
@@ -158,16 +159,25 @@ Légende : `[x]` fait et vérifié dans le code · `[x]` + ⚠️ fait avec rés
 
 ### 🟡 Robustesse / durcissement
 
-- [ ] 12. Pas de rate limiting (brute-force `/login`, spam d'emails via `/forgot`)
+- [ ] 12. Pas de rate limiting (brute-force `/login`, spam d'emails via `/forgot`) · en cours
 - [ ] 13. Énumération d'emails/usernames au register et `PATCH /user` (erreurs `EMAIL_ALREADY_TAKEN`…) · à assumer ou mitiger
-- [ ] 14. Pas de pagination : `GET /users` (limit seul), `/user/views`, `/user/likes`, `/user/notifications`, `/user/chats` non bornés ; `LIMIT 10` de la conversation inopérant (cf. IV.6)
 - [ ] 15. `is_online` peut rester bloqué à TRUE (pas de heartbeat WS, map clients en mémoire, restart serveur)
 - [ ] 16. Update de localisation par WS ignoré si `location_source = 'manual'` et ne rafraîchit jamais `location_label`
 - [ ] 17. Pas de headers de sécurité HTTP (type helmet)
 - [ ] 18. Config prod : `compose.yaml` lance Vite en dev avec volumes source montés, pas de build/reverse-proxy
 
-### ⚪ Nettoyage
+### 🔵 Audit final avant soutenance (à repasser en un seul passage)
 
-- [ ] 19. Dépendances à retirer : `crypto@1.0.1` côté back (package npm factice, le code utilise le module natif), `socket.io-client` (WebSocket natif utilisé), `bootstrap` (non utilisé)
-- [ ] 20. Dossier `scripts/` vide à supprimer ou remplir
-- [ ] 21. Bloc TODO en français dans `App.tsx:22-30` et commentaires TODO restants à traiter
+- [ ] 24. Check des logs serveur ET client : repasser tous les warnings/erreurs à l'exécution (complète III et VI, actuellement non vérifiés)
+- [ ] 25. Check des erreurs console front : HTML invalide (ex. `<p>` imbriqué dans un `<p>`), clés React dupliquées ou non définies dans les listes/`.map()`, autres warnings React
+- [ ] 26. Re-audit injections SQL / XSS / autres vecteurs : re-vérifier malgré le statut acquis en section Sécurité, notamment sur les endpoints ajoutés/modifiés depuis
+- [ ] 27. Recheck du filtrage des champs de formulaires, front ET back (validation, bornes, types, cohérence des schémas) · inclut les TODO migrés du code : `register/index.tsx:17` (« voir si besoin d'interdire des chars ») et `App.tsx` (« Filtrer les champs : mail, tailles, password »)
+- [ ] 28. Recheck de la gestion des photos : liens/URLs, signature et expiration, accès S3, contrôle d'autorisation
+- [ ] 29. Balayage global des résidus de code de dev : `setTimeout`/promises factices simulant un délai réseau, `console.log`/`console.warn`/`console.error` de debug oubliés, commentaires `TODO`/`FIXME`, flags ou branches de test laissés en place (front ET back)
+
+### ⚫ Archivé
+
+- [ ] 14. ~~Pas de pagination : `GET /users` (limit seul), `/user/views`, `/user/likes`, `/user/notifications`, `/user/chats` non bornés ; `LIMIT 10` de la conversation inopérant (cf. IV.6)~~ · archivé : le sujet (IV.3/IV.4) exige seulement que les listes soient triables/filtrables, aucune exigence de pagination · pure amélioration perf/UX hors périmètre du sujet
+- [ ] 19. ~~Dépendances à retirer : `crypto@1.0.1` côté back (package npm factice, le code utilise le module natif), `socket.io-client` (WebSocket natif utilisé), `bootstrap` (non utilisé)~~ · archivé : le sujet ne mentionne aucune exigence sur les dépendances installées-inutilisées, pure hygiène npm sans impact sur la correction
+- [ ] 20. ~~Dossier `scripts/` vide à supprimer ou remplir~~ · archivé : le sujet ne parle pas des dossiers vides ; la seule exigence proche (VI, « vérifier les noms de dossiers/fichiers ») porte sur le nommage du rendu, pas sur son contenu
+- [ ] 21. ~~Bloc TODO en français dans `App.tsx:22-30` et commentaires TODO restants à traiter~~ · archivé : le sujet ne mentionne pas les commentaires TODO ; couvert par le point 29 (audit final, balayage global des résidus TODO/FIXME)

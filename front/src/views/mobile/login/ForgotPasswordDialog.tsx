@@ -12,10 +12,12 @@ import { Form, FormMessage } from "@/components/ui/form"
 import forgot from "@/services/forgot"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
+import { AxiosError } from "axios"
 import { Loader2Icon } from "lucide-react"
 import { useCallback, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { formatRetryAfter } from "@/lib/utils"
 
 const formSchema = z.object({
 	email: z
@@ -48,11 +50,16 @@ export default function ForgotPasswordDialog({
 		onSuccess: (_, params) => {
 			setIsSent(params.email)
 		},
-		onError: () => {
-			form.setError("root", {
-				message:
-					"Looks like something went wrong. Don't worry, we're on it, try again shortly.",
-			})
+		onError: (error: AxiosError<{ message: string; retryAfter?: number }>) => {
+			if (error.response?.status === 429)
+				form.setError("root", {
+					message: `Whoa, slow down there! Too many reset emails requested, try again in ${formatRetryAfter(error.response.data.retryAfter ?? 300)}.`,
+				})
+			else
+				form.setError("root", {
+					message:
+						"Looks like something went wrong. Don't worry, we're on it, try again shortly.",
+				})
 		},
 		onMutate: () => {
 			setIsSent("")
