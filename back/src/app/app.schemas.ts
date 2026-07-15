@@ -1,6 +1,5 @@
 import { FastifyRouteSchema } from "@/fastify.types"
 import schemasModels from "./app.schemas-models"
-// TODO check les params de validation
 
 /* ============= PUBLIC CONTROLLER ============= */
 

@@ -8,14 +8,6 @@ import bcrypt from "bcrypt"
 import capitalize from "@/lib/capitalize"
 import * as fs from "fs"
 
-/*
-	TODO
-
-	- Envoyer url signee pour les photos
-	- Rechecker les types
-	- Rechecker les modeles
-*/
-
 class appRepository {
 	private db
 	private words: Set<string>

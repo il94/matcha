@@ -182,7 +182,7 @@ export default forwardRef(function SwipeableCard(
 		>
 			{picturesList.map((picture, index) => (
 				<img
-					key={`test_${index}`}
+					key={`photo_${index}`}
 					src={picture.name}
 					className={cn(
 						"absolute hidden size-full bg-background object-cover",

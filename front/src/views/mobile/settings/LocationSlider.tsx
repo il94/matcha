@@ -91,7 +91,6 @@ export default function LocationSlider({
 		setIsLocating(true)
 		navigator.geolocation.getCurrentPosition(
 			async (position) => {
-				await new Promise((resolve) => setTimeout(resolve, 2000))
 				const { latitude, longitude } = position.coords
 
 				try {

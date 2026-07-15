@@ -69,9 +69,6 @@ export default function NotificationsSheet({
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["notifications"] })
 		},
-		onError: (error) => {
-			console.warn("Failed to mark notifications as read", error)
-		},
 	})
 
 	useEffect(() => {
