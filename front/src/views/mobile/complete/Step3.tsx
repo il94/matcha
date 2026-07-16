@@ -13,7 +13,7 @@ export default function Step3() {
 			<div className="flex w-full flex-col gap-6">
 				<p>
 					Your photos are the first thing others see. Make a great impression by
-					choosing pictures that truly represent you
+					choosing pictures that truly represent you.
 				</p>
 				<div className="flex flex-col items-center justify-center gap-4">
 					<div className="relative">

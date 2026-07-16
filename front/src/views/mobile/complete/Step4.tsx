@@ -45,7 +45,7 @@ export default function Step4() {
 					form.setValue("latitude", latitude)
 					form.setValue("longitude", longitude)
 				} catch {
-					toast.error("We couldn't pin down your location. Try again!")
+					toast.error("We couldn't pin down your location. Try again !")
 				} finally {
 					setIsLocating(false)
 				}
@@ -80,7 +80,7 @@ export default function Step4() {
 		} catch {
 			setSuggestions(undefined)
 			toast.error(
-				"We couldn't find any matching places. Try typing something else!",
+				"We couldn't find any matching places. Try typing something else !",
 			)
 		} finally {
 			setIsSearching(false)
@@ -116,7 +116,7 @@ export default function Step4() {
 
 	return (
 		<div className="flex max-w-full flex-col gap-10">
-			<h1 className="text-4xl">Where are you ?</h1>
+			<h1 className="text-4xl">Where Are You ?</h1>
 			<div className="flex w-full flex-col gap-6">
 				<p>
 					Sharing your location allows us to suggest more relevant matches based

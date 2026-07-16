@@ -55,7 +55,7 @@ export default function GenderSlider({
 					"ORIENTATION_LOCKED_FOR_UNDEFINED_GENDER"
 			) {
 				form.setError("root", {
-					message: "Pick a gender first, then we can talk orientation!",
+					message: "Pick a gender first, then we can talk orientation !",
 				})
 			} else {
 				form.setError("root", {
@@ -87,7 +87,7 @@ export default function GenderSlider({
 						<div>
 							<h2 className="text-lg font-medium">Gender</h2>
 							<p className="text-sm text-muted-foreground">
-								Select your gender to help us match you with compatible partners
+								Update your gender to help us find your best matches.
 							</p>
 						</div>
 

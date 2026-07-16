@@ -79,7 +79,7 @@ export default function InputSelect({
 								"justify-start rounded-none px-3 py-1 last:rounded-b-lg",
 							)}
 						>
-							<p className="truncate">No results found</p>
+							<p className="truncate">No results found.</p>
 						</Button>
 					)}
 				</>

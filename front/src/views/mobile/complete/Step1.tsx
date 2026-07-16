@@ -49,7 +49,7 @@ export default function Step1() {
 
 	return (
 		<div className="flex flex-col gap-16">
-			<h1 className="text-4xl">Who are you ?</h1>
+			<h1 className="text-4xl">Who Are You ?</h1>
 			<div className="flex w-full flex-col gap-6">
 				<p>Complete your profile to help us find the best matches for you !</p>
 				<DatePickerField

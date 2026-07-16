@@ -26,7 +26,7 @@ export default function useAuth() {
 			navigate(0)
 		},
 		onError: () => {
-			toast.error("Couldn't log you out. Give it another try!")
+			toast.error("Couldn't log you out. Give it another try !")
 		},
 	})
 
@@ -38,9 +38,9 @@ export default function useAuth() {
 		onError: (error: AxiosError<{ message: string; retryAfter?: number }>) => {
 			if (error.response?.status === 429)
 				toast.error(
-					`Whoa, slow down there! Too many attempts, try again in ${formatRetryAfter(error.response.data.retryAfter ?? 60)}.`,
+					`Whoa, slow down there ! Too many attempts, try again in ${formatRetryAfter(error.response.data.retryAfter ?? 60)}.`,
 				)
-			else toast.error("Couldn't log you out. Give it another try!")
+			else toast.error("Couldn't log you out. Give it another try !")
 		},
 	})
 

@@ -41,7 +41,7 @@ export default function EmailSlider({
 	const { mutate: updateUserMutation, isPending } = useMutation({
 		mutationFn: updateUser,
 		onSuccess: () => {
-			toast.success("An email has been sent to verify your new email address.")
+			toast.success("Almost there ! Check your inbox to verify your new email address.")
 			onClose()
 		},
 		onError: (error: AxiosError<{ message: string }>) => {
@@ -51,7 +51,7 @@ export default function EmailSlider({
 			) {
 				form.setError("email", {
 					message:
-						"This email is already spoken for, try a different one to stay unique!",
+						"This email is already spoken for, try a different one to stay unique !",
 				})
 			} else {
 				form.setError("root", {
@@ -77,7 +77,7 @@ export default function EmailSlider({
 						<div>
 							<h2 className="text-lg font-medium">Email Address</h2>
 							<p className="text-sm text-muted-foreground">
-								Change your email address. You'll need to verify your new email.
+								Update your email address, you'll just need to verify the new one.
 							</p>
 						</div>
 

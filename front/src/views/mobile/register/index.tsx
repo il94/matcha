@@ -23,13 +23,13 @@ const formSchema = z.object({
 	firstName: z
 		.string()
 		.min(1, "Your first name is the spark of your charm, let it shine !")
-		.max(64, "Keep your first name under 64 characters; simple is stylish."),
+		.max(64, "Keep your first name under 64 characters ; simple is stylish."),
 	lastName: z
 		.string()
 		.min(1, "Your last name completes your story, share it with us !")
 		.max(
 			64,
-			"Please limit your last name to 64 characters; elegance in simplicity !",
+			"Please limit your last name to 64 characters ; elegance in simplicity !",
 		),
 	username: z
 		.string()
@@ -90,17 +90,17 @@ export default function RegisterPage() {
 				if (error.response.data.message === "EMAIL_ALREADY_TAKEN")
 					form.setError("email", {
 						message:
-							"This email is already spoken for, try a different one to stay unique!",
+							"This email is already spoken for, try a different one to stay unique !",
 					})
 				else if (error.response.data.message === "USERNAME_ALREADY_TAKEN")
 					form.setError("username", {
 						message:
-							"Someone else snagged this username, it's popular! Try a new one.",
+							"Someone else snagged this username, it's popular ! Try a new one.",
 					})
 				else if (error.response.data.message === "WORD_IN_PASSWORD")
 					form.setError("password", {
 						message:
-							"Your password contains a common word, let's make it more unique!",
+							"Your password contains a common word, let's make it more unique !",
 					})
 				else
 					form.setError("root", {
@@ -109,7 +109,7 @@ export default function RegisterPage() {
 					})
 			} else if (error.response?.status === 429) {
 				form.setError("root", {
-					message: `Whoa, slow down there! Too many attempts, try again in ${formatRetryAfter(error.response.data.retryAfter ?? 600)}.`,
+					message: `Whoa, slow down there ! Too many attempts, try again in ${formatRetryAfter(error.response.data.retryAfter ?? 600)}.`,
 				})
 			} else {
 				form.setError("root", {

@@ -67,7 +67,7 @@ export default function HomePage() {
 			} else photoSectionRef.current?.dislike()
 		},
 		onError: () => {
-			toast.error("Couldn't register your choice. Give it another swipe!")
+			toast.error("Couldn't register your choice. Give it another swipe !")
 		},
 	})
 
@@ -124,7 +124,7 @@ export default function HomePage() {
 			{isError ? (
 				<ErrorState
 					className="m-auto"
-					message="We couldn't find your matches. Give it another try!"
+					message="We couldn't find your matches. Give it another try !"
 				/>
 			) : isPending || currentCardIndex >= users.length ? (
 				<CardSkeleton />

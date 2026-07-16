@@ -54,7 +54,7 @@ export default function PreviewPage() {
 			}
 		},
 		onError: () => {
-			toast.error("Couldn't register your like. Try again!")
+			toast.error("Couldn't register your like. Try again !")
 		},
 	})
 
@@ -64,7 +64,7 @@ export default function PreviewPage() {
 			queryClient.invalidateQueries({ queryKey: ["user", userId] })
 		},
 		onError: () => {
-			toast.error("Couldn't remove your like. Try again!")
+			toast.error("Couldn't remove your like. Try again !")
 		},
 	})
 
@@ -83,7 +83,7 @@ export default function PreviewPage() {
 			{userId && isError ? (
 				<ErrorState
 					className="m-auto"
-					message="We couldn't load this profile. Try again in a bit!"
+					message="We couldn't load this profile. Try again in a bit !"
 				/>
 			) : userId && isPending ? (
 				<CardSkeleton />

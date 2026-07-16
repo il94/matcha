@@ -78,7 +78,7 @@ export default function TagsSlider({
 						<div>
 							<h2 className="text-lg font-medium">Tags</h2>
 							<p className="text-sm text-muted-foreground">
-								Select tags that best describe your interests
+								Pick the tags that capture what you're into.
 							</p>
 						</div>
 
@@ -88,7 +88,7 @@ export default function TagsSlider({
 							) : isError ? (
 								<ErrorState
 									className="py-2 text-left"
-									message="We couldn't load the tags. Try again in a bit!"
+									message="We couldn't load the tags. Try again in a bit !"
 								/>
 							) : (
 								<SelectField

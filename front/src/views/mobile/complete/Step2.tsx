@@ -10,7 +10,7 @@ export default function Step2() {
 			<div className="flex w-full flex-col gap-6">
 				<p>
 					While optional, a bio helps others get to know you better and can make
-					you much more appealing to potential matches
+					you much more appealing to potential matches.
 				</p>
 				<TextAreaField
 					control={form.control}

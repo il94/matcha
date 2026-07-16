@@ -36,7 +36,7 @@ function notificationLabel(notification: AppNotification) {
 		case "like":
 			return <>{name} liked you.</>
 		case "match":
-			return <>New match with {name}!</>
+			return <>New match with {name} !</>
 		case "view":
 			return <>{name} viewed your profile.</>
 		case "unlike":
@@ -95,7 +95,7 @@ export default function NotificationsSheet({
 				) : isError ? (
 					<ErrorState
 						className="px-4"
-						message="We couldn't load your notifications. Try again in a bit!"
+						message="We couldn't load your notifications. Try again in a bit !"
 					/>
 				) : notifications.length === 0 ? (
 					<p className="p-4 text-center text-sm text-muted-foreground">

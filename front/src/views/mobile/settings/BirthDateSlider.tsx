@@ -73,8 +73,8 @@ export default function BirthDateSlider({
 						<div>
 							<h2 className="text-lg font-medium">Birth Date</h2>
 							<p className="text-sm text-muted-foreground">
-								Update your birth date to help us match you with people in your
-								age group
+								Update your birth date so we can match you with people in your
+								age group.
 							</p>
 						</div>
 

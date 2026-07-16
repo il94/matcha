@@ -64,7 +64,7 @@ export default function LocationSlider({
 			) {
 				form.setError("root", {
 					message:
-						"Looks like you haven't set a location yet. Add one to keep going!",
+						"Looks like you haven't set a location yet. Add one to keep going !",
 				})
 			} else {
 				form.setError("root", {
@@ -107,7 +107,7 @@ export default function LocationSlider({
 					form.setValue("latitude", latitude)
 					form.setValue("longitude", longitude)
 				} catch {
-					toast.error("We couldn't pin down your location. Try again!")
+					toast.error("We couldn't pin down your location. Try again !")
 				} finally {
 					setIsLocating(false)
 				}
@@ -142,7 +142,7 @@ export default function LocationSlider({
 		} catch {
 			setSuggestions(undefined)
 			toast.error(
-				"We couldn't find any matching places. Try typing something else!",
+				"We couldn't find any matching places. Try typing something else !",
 			)
 		} finally {
 			setIsSearching(false)

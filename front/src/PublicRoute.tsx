@@ -24,7 +24,7 @@ export default function PublicRoute() {
 	if (isError && (error as AxiosError)?.response?.status !== 401)
 		return (
 			<div className="flex h-full items-center justify-center p-6">
-				<ErrorState message="We're having trouble reaching Matcha. Check your connection and try again!" />
+				<ErrorState message="We're having trouble reaching Matcha. Check your connection and try again !" />
 			</div>
 		)
 

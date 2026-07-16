@@ -74,7 +74,7 @@ export default function ChatPage() {
 			</div>
 			{isError ? (
 				<div className="flex grow items-center justify-center px-3">
-					<ErrorState message="We couldn't pull up your chats. Give it another try!" />
+					<ErrorState message="We couldn't pull up your chats. Give it another try !" />
 				</div>
 			) : (
 				<ScrollArea className="my-4 px-3">

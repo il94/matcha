@@ -18,7 +18,7 @@ export default function SettingsPage() {
 			setSearchParams({})
 		} else if (error === "EMAIL_ALREADY_TAKEN") {
 			toast.error(
-				"This email is already spoken for, try a different one to stay unique!",
+				"This email is already spoken for, try a different one to stay unique !",
 			)
 			setSearchParams({})
 		}

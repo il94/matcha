@@ -35,10 +35,10 @@ export default function ActionButtonsDialog() {
 					No match made here.
 				</ActionItem>
 				<ActionItem component={<AnimateDislike isLiked />}>
-					Changed your mind? Tap to undo the like.
+					Changed your mind ? Tap to undo the like.
 				</ActionItem>
 				<ActionItem component={<AnimateHeart />}>
-					Feeling a spark? Tap to like.
+					Feeling a spark ? Tap to like.
 				</ActionItem>
 				<ActionItem component={<AnimateHeart isLiked />}>
 					You've shown them some love.

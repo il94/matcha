@@ -56,7 +56,7 @@ export default function ProfilePage() {
 	if (isError)
 		return (
 			<main className="flex h-full items-center justify-center px-3 py-8">
-				<ErrorState message="We couldn't load your profile. Give it another shot!" />
+				<ErrorState message="We couldn't load your profile. Give it another shot !" />
 			</main>
 		)
 
@@ -98,7 +98,7 @@ export default function ProfilePage() {
 					<Stat value={user.likes} label="Likes" isButton />
 				</div>
 				<div className="flex w-full justify-evenly">
-					<Stat value={user.matchs} label="Matchs" />
+					<Stat value={user.matchs} label="Matches" />
 					<Stat value={user.elo} label="Rating" />
 				</div>
 			</div>

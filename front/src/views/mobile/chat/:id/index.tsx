@@ -177,7 +177,7 @@ export default function ChatIdPage() {
 			!socket ||
 			socket.readyState !== WebSocket.OPEN
 		) {
-			toast.error("Message not sent, we lost connection. Try again!")
+			toast.error("Message not sent, we lost connection. Try again !")
 			return
 		}
 
@@ -239,7 +239,7 @@ export default function ChatIdPage() {
 					{isPending ? (
 						<MessagesSkeleton />
 					) : isError ? (
-						<ErrorState message="We couldn't load this conversation. Try refreshing to pick up where you left off!" />
+						<ErrorState message="We couldn't load this conversation. Try refreshing to pick up where you left off !" />
 					) : (
 						messages.map((message, index) => {
 							const previousDate =

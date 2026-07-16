@@ -29,12 +29,12 @@ function BlockDialog({ userId, firstName, onBlock }: WarningDialogProps) {
 	const { mutate: createBlockMutation, isPending } = useMutation({
 		mutationFn: DEBUG_ERRORS.block ? forcedError : createBlock,
 		onSuccess: () => {
-			toast.success("User blocked")
+			toast.success("They're blocked, you won't hear from them again.")
 			onBlock?.()
 			navigate(0)
 		},
 		onError: () => {
-			toast.error("Couldn't block this user. Try again!")
+			toast.error("Couldn't block this user. Try again !")
 		},
 	})
 
@@ -49,7 +49,7 @@ function BlockDialog({ userId, firstName, onBlock }: WarningDialogProps) {
 				<div className="flex flex-col gap-3">
 					<DialogTitle>Block {firstName}</DialogTitle>
 					<DialogDescription>
-						Are you sure you want to block {firstName}? They will no longer
+						Are you sure you want to block {firstName} ? They will no longer
 						appear in your suggestions, you will stop receiving their
 						notifications, and your chat will be closed.
 					</DialogDescription>
@@ -75,12 +75,12 @@ function ReportDialog({ userId, firstName }: WarningDialogProps) {
 	const { mutate: createReportMutation, isPending } = useMutation({
 		mutationFn: DEBUG_ERRORS.report ? forcedError : createReport,
 		onSuccess: () => {
-			toast.success("Report sent")
+			toast.success("Report sent, thanks for keeping Matcha safe !")
 			setIsOpen(false)
 			setReason("")
 		},
 		onError: () => {
-			toast.error("Couldn't send your report. Try again!")
+			toast.error("Couldn't send your report. Try again !")
 		},
 	})
 
@@ -108,7 +108,7 @@ function ReportDialog({ userId, firstName }: WarningDialogProps) {
 				<form onSubmit={handleSubmit} className="flex flex-col gap-3">
 					<DialogTitle>Report {firstName}</DialogTitle>
 					<DialogDescription>
-						What is the reason for reporting {firstName}? Your report will be
+						What is the reason for reporting {firstName} ? Your report will be
 						reviewed by our team.
 					</DialogDescription>
 					<Textarea

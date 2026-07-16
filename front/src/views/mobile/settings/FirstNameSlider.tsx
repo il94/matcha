@@ -13,8 +13,8 @@ import toast from "@/lib/toast"
 const formSchema = z.object({
 	firstName: z
 		.string()
-		.min(1, "Your first name is the spark of your charm, let it shine!")
-		.max(64, "Keep your first name under 64 characters; simple is stylish."),
+		.min(1, "Your first name is the spark of your charm, let it shine !")
+		.max(64, "Keep your first name under 64 characters ; simple is stylish."),
 })
 
 type FirstNameSliderProps = {
@@ -68,7 +68,7 @@ export default function FirstNameSlider({
 						<div>
 							<h2 className="text-lg font-medium">First Name</h2>
 							<p className="text-sm text-muted-foreground">
-								Update your first name
+								Update your first name, it's how your matches will know you.
 							</p>
 						</div>
 

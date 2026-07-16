@@ -37,7 +37,7 @@ export const formSchema = z
 		retypePassword: z.string(),
 	})
 	.refine((data) => data.password === data.retypePassword, {
-		message: "Passwords don't match. Try again.",
+		message: "Looks like your passwords don't match. Let's try that again !",
 		path: ["retypePassword"],
 	})
 
@@ -69,11 +69,11 @@ export default function ResetPage() {
 			) {
 				form.setError("password", {
 					message:
-						"Your password contains a common word, let's make it more unique!",
+						"Your password contains a common word, let's make it more unique !",
 				})
 			} else if (error.response?.status === 429) {
 				form.setError("root", {
-					message: `Whoa, slow down there! Too many attempts, try again in ${formatRetryAfter(error.response.data.retryAfter ?? 600)}.`,
+					message: `Whoa, slow down there ! Too many attempts, try again in ${formatRetryAfter(error.response.data.retryAfter ?? 600)}.`,
 				})
 			} else {
 				form.setError("root", {
@@ -101,7 +101,7 @@ export default function ResetPage() {
 					className="flex h-full w-full flex-col items-center justify-between px-9 pb-4 pt-10"
 				>
 					<div className="flex flex-col gap-16">
-						<h1 className="text-4xl">Choose a new password</h1>
+						<h1 className="text-4xl">Choose a New Password</h1>
 						<div className="flex w-full flex-col gap-6">
 							<InputTextField
 								control={form.control}
@@ -114,7 +114,7 @@ export default function ResetPage() {
 								control={form.control}
 								type="password"
 								name="retypePassword"
-								placeholder="Re-type Password"
+								placeholder="Retype password"
 								className="h-12"
 							/>
 						</div>

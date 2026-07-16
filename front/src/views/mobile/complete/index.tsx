@@ -84,7 +84,7 @@ export default function CompletePage() {
 		onError: () => {
 			form.setError("root", {
 				message:
-					"Something went wrong while creating your profile. Let's give it another shot!",
+					"Something went wrong while creating your profile. Let's give it another shot !",
 			})
 		},
 	})

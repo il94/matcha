@@ -49,11 +49,11 @@ export default function LoginPage() {
 			if (error.response?.status === 403)
 				form.setError("password", {
 					message:
-						"Oops! The password you entered didn't work. Let's try that again!",
+						"Oops ! The password you entered didn't work. Let's try that again !",
 				})
 			else if (error.response?.status === 429)
 				form.setError("root", {
-					message: `Whoa, slow down there! Too many attempts, try again in ${formatRetryAfter(error.response.data.retryAfter ?? 60)}.`,
+					message: `Whoa, slow down there ! Too many attempts, try again in ${formatRetryAfter(error.response.data.retryAfter ?? 60)}.`,
 				})
 			else
 				form.setError("root", {

@@ -14,10 +14,10 @@ import toast from "@/lib/toast"
 const formSchema = z.object({
 	username: z
 		.string()
-		.min(1, "Your username is your stage name, make it memorable!")
+		.min(1, "Your username is your stage name, make it memorable !")
 		.max(
 			32,
-			"A short username is easier to remember, stick to 32 characters or less!",
+			"A short username is easier to remember, stick to 32 characters or less !",
 		),
 })
 
@@ -56,7 +56,7 @@ export default function UsernameSlider({
 			) {
 				form.setError("username", {
 					message:
-						"Someone else snagged this username, it's popular! Try a new one.",
+						"Someone else snagged this username, it's popular ! Try a new one.",
 				})
 			} else {
 				form.setError("root", {
@@ -82,7 +82,7 @@ export default function UsernameSlider({
 						<div>
 							<h2 className="text-lg font-medium">Username</h2>
 							<p className="text-sm text-muted-foreground">
-								Choose a unique username that represents you
+								Pick a unique username that's all you.
 							</p>
 						</div>
 

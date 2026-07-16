@@ -30,14 +30,14 @@ export default function Step4LocationDialog() {
 								geographic proximity.
 							</p>
 							<p className="mb-4">
-								<strong>Location Methods:</strong>
+								<strong>Location Methods :</strong>
 							</p>
 							<ul className="mb-4 list-disc pl-5">
 								<li>
-									<strong>GPS:</strong> Precise location if you consent.
+									<strong>GPS :</strong> Precise location if you consent.
 								</li>
 								<li>
-									<strong>Manual Input:</strong> If you decline GPS, enter your
+									<strong>Manual Input :</strong> If you decline GPS, enter your
 									city or neighbourhood manually.
 								</li>
 							</ul>
@@ -45,7 +45,7 @@ export default function Step4LocationDialog() {
 								Adjust or disable location settings anytime in your profile.
 							</p>
 							<p>
-								Your privacy is important to us; location data is securely
+								Your privacy is important to us ; location data is securely
 								handled.
 							</p>
 						</div>

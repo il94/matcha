@@ -13,7 +13,9 @@ import toast from "@/lib/toast"
 
 const formSchema = z
 	.object({
-		currentPassword: z.string().min(1, "Please enter your current password"),
+		currentPassword: z
+			.string()
+			.min(1, "Pop in your current password to confirm it's you."),
 		newPassword: z
 			.string()
 			.min(
@@ -23,7 +25,7 @@ const formSchema = z
 			.max(128, "Easy there ! Keep your password under 128 characters.")
 			.refine((password) => /[a-z]/.test(password), {
 				message:
-					"Without a lowercase letter, your password feels a bit incomplete, doesn't it?",
+					"Without a lowercase letter, your password feels a bit incomplete, doesn't it ?",
 			})
 			.refine((password) => /[A-Z]/.test(password), {
 				message:
@@ -39,10 +41,12 @@ const formSchema = z
 				message:
 					"A strong bond requires time, and a strong password requires 8 characters.",
 			}),
-		retypePassword: z.string().min(1, "Please retype your new password"),
+		retypePassword: z
+			.string()
+			.min(1, "Type your new password once more to be sure."),
 	})
 	.refine((data) => data.newPassword === data.retypePassword, {
-		message: "Looks like your passwords don't match. Let's try that again!",
+		message: "Looks like your passwords don't match. Let's try that again !",
 		path: ["retypePassword"],
 	})
 
@@ -110,7 +114,7 @@ export default function PasswordSlider({
 						<div>
 							<h2 className="text-lg font-medium">Change Password</h2>
 							<p className="text-sm text-muted-foreground">
-								Update your password to keep your account secure
+								Refresh your password to keep your account safe and sound.
 							</p>
 						</div>
 

@@ -24,7 +24,7 @@ const formSchema = z.object({
 		.string()
 		.min(1, "Don't forget your email !")
 		.max(256, "Your email must be under 256 characters, brevity is charming !")
-		.email("Looks like that's not an email."),
+		.email("Hmm, that doesn't look like a valid email address. Try again ?"),
 })
 
 type ForgotPasswordDialogProps = {
@@ -54,7 +54,7 @@ export default function ForgotPasswordDialog({
 		onError: (error: AxiosError<{ message: string; retryAfter?: number }>) => {
 			if (error.response?.status === 429)
 				form.setError("root", {
-					message: `Whoa, slow down there! Too many reset emails requested, try again in ${formatRetryAfter(error.response.data.retryAfter ?? 300)}.`,
+					message: `Whoa, slow down there ! Too many reset emails requested, try again in ${formatRetryAfter(error.response.data.retryAfter ?? 300)}.`,
 				})
 			else
 				form.setError("root", {
@@ -101,7 +101,7 @@ export default function ForgotPasswordDialog({
 								className="h-10 text-sm"
 							/>
 							<FormMessage isSuccess={!!isSent} className="h-5 px-1">
-								{isSent ? `Succefully sent to ${isSent} !` : error}
+								{isSent ? `Successfully sent to ${isSent} !` : error}
 							</FormMessage>
 							<DialogFooter>
 								<Button
