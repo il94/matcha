@@ -104,7 +104,7 @@ export const createReport = {
 		type: "object",
 		properties: {
 			targetId: schemasModels.id,
-			reason: { type: "string" },
+			reason: { type: "string", maxLength: 500 },
 		},
 		required: ["targetId", "reason"],
 		additionalProperties: false,
@@ -126,8 +126,8 @@ export const getLocationByCoordinates = {
 	querystring: {
 		type: "object",
 		properties: {
-			latitude: { type: "number" },
-			longitude: { type: "number" },
+			latitude: schemasModels.latitude,
+			longitude: schemasModels.longitude,
 		},
 		required: ["latitude", "longitude"],
 		additionalProperties: false,
@@ -138,7 +138,7 @@ export const getLocationSuggestions = {
 	querystring: {
 		type: "object",
 		properties: {
-			label: { type: "string" },
+			label: schemasModels.locationLabel,
 		},
 		required: ["label"],
 		additionalProperties: false,
@@ -182,7 +182,7 @@ export const updateUser = {
 			username: schemasModels.username,
 			firstName: schemasModels.firstName,
 			lastName: schemasModels.lastName,
-			currentPassword: schemasModels.password,
+			currentPassword: schemasModels.passwordLogin,
 			newPassword: schemasModels.password,
 			birthDate: schemasModels.birthDate,
 			longitude: schemasModels.longitude,

@@ -13,27 +13,33 @@ import { useNavigate } from "react-router"
 import { z } from "zod"
 import { AxiosError } from "axios"
 
-export const formSchema = z.object({
-	password: z
-		.string()
-		.min(1, "Wait... you wanted to change your password, right ?")
-		.refine((password) => /[a-z]/.test(password), {
-			message: "A little lowercase letter never hurt anyone. Try adding one.",
-		})
-		.refine((password) => /[A-Z]/.test(password), {
-			message: "An uppercase letter adds some strength, don't skip it !",
-		})
-		.refine((password) => /[0-9]/.test(password), {
-			message: "Numbers make everything more secure. Add one in there.",
-		})
-		.refine((password) => /[!@#$%^&*(),.?":{}|<>]/.test(password), {
-			message: "Spice things up with a special character !",
-		})
-		.refine((password) => password.length >= 8, {
-			message: "Passwords need at least 8 characters. You're almost there !",
-		}),
-	retypePassword: z.string(),
-})
+export const formSchema = z
+	.object({
+		password: z
+			.string()
+			.min(1, "Wait... you wanted to change your password, right ?")
+			.max(128, "Easy there ! Keep your password under 128 characters.")
+			.refine((password) => /[a-z]/.test(password), {
+				message: "A little lowercase letter never hurt anyone. Try adding one.",
+			})
+			.refine((password) => /[A-Z]/.test(password), {
+				message: "An uppercase letter adds some strength, don't skip it !",
+			})
+			.refine((password) => /[0-9]/.test(password), {
+				message: "Numbers make everything more secure. Add one in there.",
+			})
+			.refine((password) => /[!@#$%^&*(),.?":{}|<>]/.test(password), {
+				message: "Spice things up with a special character !",
+			})
+			.refine((password) => password.length >= 8, {
+				message: "Passwords need at least 8 characters. You're almost there !",
+			}),
+		retypePassword: z.string(),
+	})
+	.refine((data) => data.password === data.retypePassword, {
+		message: "Passwords don't match. Try again.",
+		path: ["retypePassword"],
+	})
 
 export default function ResetPage() {
 	const { publicLogout } = useAuthOutletContext()
@@ -80,16 +86,9 @@ export default function ResetPage() {
 
 	const onSubmit = useCallback(
 		(values: z.infer<typeof formSchema>) => {
-			if (values.password !== values.retypePassword) {
-				form.setError("retypePassword", {
-					message: "Passwords don't match. Try again.",
-				})
-				return
-			}
-
 			resetPasswordMutation(values)
 		},
-		[resetPasswordMutation, form],
+		[resetPasswordMutation],
 	)
 
 	const error = Object.values(form.formState.errors ?? [])[0]?.message ?? " "

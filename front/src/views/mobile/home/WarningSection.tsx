@@ -116,6 +116,7 @@ function ReportDialog({ userId, firstName }: WarningDialogProps) {
 						onChange={(e) => setReason(e.target.value)}
 						className="resize-none"
 						rows={4}
+						maxLength={500}
 					/>
 					<Button
 						variant="destructiveDark"

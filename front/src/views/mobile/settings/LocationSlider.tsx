@@ -20,7 +20,10 @@ import { AxiosError } from "axios"
 export const formSchema = z.object({
 	longitude: z.number().optional(),
 	latitude: z.number().optional(),
-	locationLabel: z.string().optional(),
+	locationLabel: z
+		.string()
+		.max(256, "That location name is a bit long, keep it under 256 characters.")
+		.optional(),
 })
 
 type LocationSliderProps = {

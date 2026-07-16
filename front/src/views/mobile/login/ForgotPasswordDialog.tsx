@@ -23,6 +23,7 @@ const formSchema = z.object({
 	email: z
 		.string()
 		.min(1, "Don't forget your email !")
+		.max(256, "Your email must be under 256 characters, brevity is charming !")
 		.email("Looks like that's not an email."),
 })
 

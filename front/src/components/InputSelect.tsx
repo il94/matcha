@@ -40,6 +40,7 @@ export default function InputSelect({
 				value={input}
 				placeholder={placeholder}
 				autoSize
+				maxLength={256}
 				className={cn("text-sm", className)}
 			/>
 			{isLoading ? (

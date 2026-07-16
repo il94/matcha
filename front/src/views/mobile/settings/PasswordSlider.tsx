@@ -20,6 +20,7 @@ const formSchema = z
 				1,
 				"A password can be crucial for maintaining some... privacy in your love life.",
 			)
+			.max(128, "Easy there ! Keep your password under 128 characters.")
 			.refine((password) => /[a-z]/.test(password), {
 				message:
 					"Without a lowercase letter, your password feels a bit incomplete, doesn't it?",

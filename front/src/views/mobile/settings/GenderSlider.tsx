@@ -14,7 +14,10 @@ import { toast } from "sonner"
 import { AxiosError } from "axios"
 
 const formSchema = z.object({
-	gender: z.string().min(1, "Please select your gender"),
+	gender: z.nativeEnum(Gender, {
+		message: "Gender is part of your identity, pick what feels right.",
+		required_error: "Everyone has a story, let's start with your gender.",
+	}),
 })
 
 type GenderSliderProps = {
@@ -33,7 +36,7 @@ export default function GenderSlider({
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			gender: initialValue,
+			gender: initialValue as Gender,
 		},
 		mode: "onTouched",
 	})

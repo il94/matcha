@@ -53,7 +53,10 @@ export const formSchema = z.object({
 	secondaryPicture4: z.instanceof(Blob).optional(),
 	longitude: z.number().optional(),
 	latitude: z.number().optional(),
-	locationLabel: z.string().optional(),
+	locationLabel: z
+		.string()
+		.max(256, "That location name is a bit long, keep it under 256 characters.")
+		.optional(),
 })
 
 export default function CompletePage() {

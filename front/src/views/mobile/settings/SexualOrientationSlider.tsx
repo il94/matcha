@@ -14,7 +14,10 @@ import { toast } from "sonner"
 import { AxiosError } from "axios"
 
 const formSchema = z.object({
-	sexualOrientation: z.string().min(1, "Please select your sexual orientation"),
+	sexualOrientation: z.nativeEnum(SexualOrientation, {
+		message: "Love is love, choose what best represents you.",
+		required_error: "Everyone has a type, don't leave this blank !",
+	}),
 })
 
 type SexualOrientationSliderProps = {
@@ -37,7 +40,7 @@ export default function SexualOrientationSlider({
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			sexualOrientation: initialValue,
+			sexualOrientation: initialValue as SexualOrientation,
 		},
 		mode: "onTouched",
 	})
