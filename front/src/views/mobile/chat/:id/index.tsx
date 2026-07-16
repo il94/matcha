@@ -249,7 +249,7 @@ export default function ChatIdPage() {
 							const Date = !previousDate || diff > 8 ? ChatDate : null
 
 							return (
-								<Fragment key={index}>
+								<Fragment key={`${message.createdAt}-${message.authorId}`}>
 									{Date && <Date date={message.createdAt} />}
 									{message.authorId === user.id ? (
 										<ChatUser>{message.content}</ChatUser>

@@ -58,7 +58,7 @@ export default function InputSelect({
 				<>
 					{items?.map((suggestion, index) => (
 						<Button
-							key={index}
+							key={`${suggestion}-${index}`}
 							onClick={() => onSelect(suggestion)}
 							type="button"
 							variant="outline"

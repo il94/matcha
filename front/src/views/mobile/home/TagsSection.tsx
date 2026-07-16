@@ -111,7 +111,7 @@ export default function TagsSection({ tags }: TagsSectionProps) {
 	return (
 		<section className="flex flex-wrap gap-2 rounded-xl bg-secondary p-2 text-black">
 			{tags.map((tag, index) => (
-				<Tag key={`tag_${index}`} content={tag.name as TagType} />
+				<Tag key={`${tag.name}-${index}`} content={tag.name as TagType} />
 			))}
 		</section>
 	)
