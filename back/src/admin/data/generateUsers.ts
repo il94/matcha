@@ -185,7 +185,7 @@ function buildDevUser(): SeedUser {
 			"Ilyes",
 			"Landolsi",
 			username,
-			`${username}@matcha.fr`,
+			`ilyes.landolsi@outlook.fr`,
 			faker.date
 				.birthdate({ min: 18, max: 40, mode: "age" })
 				.toISOString()
