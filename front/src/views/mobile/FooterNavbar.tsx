@@ -17,7 +17,7 @@ export default function FooterNavbar({ onNavigate }: FooterNavbarProps) {
 	const { pathname } = useLocation()
 
 	return (
-		<nav className="flex h-14 shrink-0 items-center justify-evenly bg-secondary">
+		<footer className="flex h-14 shrink-0 items-center justify-evenly bg-secondary">
 			{NAV_ITEMS.map(({ to, Icon }) => {
 				const isActive = pathname === to || pathname.startsWith(`${to}/`)
 
@@ -38,6 +38,6 @@ export default function FooterNavbar({ onNavigate }: FooterNavbarProps) {
 					</Button>
 				)
 			})}
-		</nav>
+		</footer>
 	)
 }

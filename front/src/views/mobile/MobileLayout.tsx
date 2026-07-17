@@ -22,7 +22,7 @@ export default function MobileLayout({
 	onCloseNotifications,
 }: LayoutProps) {
 	return (
-		<main className="flex h-dvh flex-col justify-between">
+		<div className="flex h-dvh flex-col justify-between">
 			<HeaderNavbar
 				unreadCount={unreadCount}
 				onOpenNotifications={onToggleNotifications}
@@ -44,6 +44,6 @@ export default function MobileLayout({
 				isError={isNotificationsError}
 				onClose={onCloseNotifications}
 			/>
-		</main>
+		</div>
 	)
 }

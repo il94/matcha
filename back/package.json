@@ -2,6 +2,7 @@
 	"scripts": {
 		"start": "NODE_ENV=production node dist/index.js",
 		"dev": "NODE_ENV=development nodemon -w src -e ts,json --exec \"tsx src/index.ts\"",
+		"seed": "tsx src/seed.ts",
 		"build": "tsc && tsc-alias",
 		"format": "prettier --write .",
 		"check": "eslint . && tsc -p ./tsconfig.json",

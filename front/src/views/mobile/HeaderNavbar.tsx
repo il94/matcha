@@ -16,7 +16,7 @@ export default function HeaderNavbar({
 	const { logout } = useAuthOutletContext()
 
 	return (
-		<nav className="flex h-12 shrink-0 items-center justify-between bg-primary px-3">
+		<header className="flex h-12 shrink-0 items-center justify-between bg-primary px-3">
 			<div className="flex items-center gap-1.5">
 				<img src="/favicon.ico" alt="Logo" className="h-6" />
 				<p className="text-lg text-text">matcha</p>
@@ -45,6 +45,6 @@ export default function HeaderNavbar({
 					<LogOutIcon className="text-black" />
 				</Button>
 			</div>
-		</nav>
+		</header>
 	)
 }

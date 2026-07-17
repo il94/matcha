@@ -6,14 +6,13 @@ import useIsDesktop from "@/hooks/useIsDesktop"
 export default function ChatPage() {
 	const isDesktop = useIsDesktop()
 
-	// Sur desktop la liste vit dans la sidebar : le centre sert d'état vide.
 	if (isDesktop)
 		return (
-			<div className="flex h-full items-center justify-center px-6">
+			<main className="flex h-full items-center justify-center px-6">
 				<p className="text-center text-sm opacity-50">
 					Pick a conversation and keep the spark going !
 				</p>
-			</div>
+			</main>
 		)
 
 	return (

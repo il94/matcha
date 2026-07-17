@@ -34,7 +34,7 @@ export default function DesktopLayout({
 				onToggleNotifications={onToggleNotifications}
 				onNavigate={onNavigate}
 			/>
-			<main className="flex grow overflow-hidden bg-secondary/10">
+			<div className="flex grow overflow-hidden bg-secondary/10">
 				{isFullWidth ? (
 					<div className="flex h-full w-full flex-col">{content}</div>
 				) : (
@@ -44,7 +44,7 @@ export default function DesktopLayout({
 						</div>
 					</div>
 				)}
-			</main>
+			</div>
 			<SearchSettingsPanel
 				isOpen={isSearchOpen}
 				initialFilters={filters}

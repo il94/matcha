@@ -203,7 +203,7 @@ export default function ChatIdPage() {
 	}
 
 	return (
-		<div className="relative flex h-full flex-col items-center overflow-y-hidden">
+		<main className="relative flex h-full flex-col items-center overflow-y-hidden">
 			<div className="flex w-full items-center border-b border-b-button p-3">
 				<Button onClick={() => navigate(-1)} variant="ghost" size="icon">
 					<ArrowLeftIcon className="size-9" />
@@ -280,6 +280,6 @@ export default function ChatIdPage() {
 				</Button>
 			</form>
 			<div className="backdrop absolute bottom-0 h-12 w-full backdrop-blur-sm lg:hidden" />
-		</div>
+		</main>
 	)
 }
