@@ -9,17 +9,17 @@ Légende : `[x]` fait et vérifié dans le code · `[x]` + ⚠️ fait avec rés
 
 ## III · Instructions générales
 
-- [ ] Aucune erreur, warning ou notice, côté serveur ET côté client (console web incluse) · des `console.error // TODO` et des textes TODO rendus à l'écran subsistent (cf. VII.7, VII.9) + à vérifier en exécution
+- [x] Aucune erreur, warning ou notice, côté serveur ET côté client (console web incluse) · vérifié statiquement : **0 `console.*`** dans `back/src` et `front/src`, **aucun `TODO`** hors celui de `/admin` désormais neutralisé, aucun texte TODO rendu à l'écran ; `debugError.ts` conservé mais inerte (flags `false`). Les warnings runtime restent à confirmer à l'exécution (cf. VII.24)
 - [x] Micro-framework autorisé : routeur (+ templating éventuel), mais **sans ORM, sans validateurs, sans gestionnaire de comptes utilisateurs** · Fastify 5, SQL brut via `pg`, validation par JSON Schema natif de Fastify (Ajv intégré au framework, à justifier en soutenance), auth maison bcrypt + sessions Redis
 - [x] Bibliothèques UI libres · React 18 + Tailwind + shadcn/Radix
 - [x] Base de données **relationnelle ou orientée graphe, gratuite** · PostgreSQL 16.1 (`compose.yaml`)
 - [x] Requêtes écrites **manuellement** (pas d'ORM) · SQL brut paramétré dans `back/src/db/queries/**`
 - [x] **Minimum 500 profils distincts** en base · 501 profils seedés (`back/src/admin/data/generateUsers.ts`, faker seedé)
 - [x] Serveur web libre · serveur intégré Fastify + Vite ⚠️ config prod non durcie (cf. VII.18)
-- [ ] Compatible avec au moins les **dernières versions de Firefox et Chrome** · à tester en exécution
-- [ ] Mise en page structurée : au minimum **en-tête + section principale + pied de page** · `HeaderNavbar` + `Outlet` + `FooterNavbar` dans `MobileLayout.tsx`, mais le "footer" est une barre de navigation et les pages auth (login/register/reset/complete) n'ont ni header ni footer
+- [x] Compatible avec au moins les **dernières versions de Firefox et Chrome** · audit statique de compat OK : APIs (`navigator.permissions`, `matchMedia`, `ResizeObserver`, WebSocket) et CSS (`dvh`, `:has()`, `backdrop-blur`) toutes supportées par les dernières FF+Chrome, Tailwind v3, aucune API Chrome-only ni config `browserslist` restrictive. Test runtime Firefox recommandé avant soutenance
+- [x] Mise en page structurée : au minimum **en-tête + section principale + pied de page** · sémantique corrigée : `HeaderNavbar` en `<header>`, page en `<main>` unique, `FooterNavbar` en `<footer>` (mobile) ; `<aside>` (Sidebar) + `<main>` (desktop). Le `<main>` imbriqué invalide (layout + page) a été supprimé ; `chat/:id` a désormais sa propre balise `<main>`. Réserve assumée : les pages auth (login/register/reset/complete/404) restent des `<main>` autonomes hors shell applicatif
 - [x] Site **adapté aux mobiles** · design mobile-first ⚠️ aucun breakpoint desktop, rendu étiré sur grand écran (chantier desktop détaillé en VII.23)
-- [ ] **Tous les formulaires validés** correctement, site entièrement sécurisé · validation OK partout, MAIS endpoints `/admin` destructifs non protégés (bloquant, cf. VII.1)
+- [x] **Tous les formulaires validés** correctement, site entièrement sécurisé · validation OK partout, et endpoints `/admin` destructifs désormais neutralisés (registration commentée, cf. VII.1) : le blocage 🔴 est levé
 
 ## IV.1 · Inscription et connexion
 
@@ -126,7 +126,7 @@ Légende : `[x]` fait et vérifié dans le code · `[x]` + ⚠️ fait avec rés
 
 ### 🔴 Bloquants (risque note 0 ou perte de données)
 
-- [ ] 1. Endpoints `/admin` sans authentification (`app.plugin.ts:30`, TODO déjà présent) : `PUT /admin` drop + recrée la base + `redis.flushall()`, `DELETE /admin` drop la base. À supprimer ou protéger avant soutenance
+- [x] 1. Endpoints `/admin` sans authentification (`app.plugin.ts`) : `PUT /admin` drop + recrée la base + `redis.flushall()`, `DELETE /admin` drop la base. **Neutralisés** : l'import et la registration `app.register(adminController, ...)` sont commentés (code du dossier `admin/` conservé intact, non supprimé). Vérifié : `POST`/`DELETE /admin` renvoient 404, le reste de l'API répond (401). Le seul moyen de seed passant par `POST /admin`, un script de remplacement `npm run seed` (`back/src/seed.ts`) réutilise `adminRepository.fillDb()` hors HTTP (bootstrap Fastify + `dbPlugin`) ; vérifié end-to-end (schéma + tags + tentative des 501 profils, rollback transactionnel sur base déjà peuplée, seed complet sur base fraîche)
 - [x] 2. Cron de nettoyage : le `first_name = 'haha'` n'existe que dans `back/dist` (build compilé obsolète) ; la source `back/src/db/queries/app/deleteInactiveUsersMutation.ts` ne supprime que les comptes non activés depuis plus de 24 h. À régénérer le build avant rendu
 - [x] 3. Guard « pas de like sans photo de profil » ajouté sur `createVote` (cf. IV.5)
 - [x] 4. Notifications non purgées au block : les notifications déjà reçues d'un utilisateur bloqué restent listées (`getUserNotificationsQuery` sans filtre `user_blocks`). Nuance liée : un unlike pré-match laisse une notification `like` obsolète (cf. IV.5). Non exigé strictement par le sujet (« notifications ultérieures » = futures) → **accepté en l'état**
