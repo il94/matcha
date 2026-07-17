@@ -117,7 +117,8 @@ export default forwardRef(function SwipeableCard(
 	const handlePictureClick = useCallback(
 		(event: MouseEvent<HTMLDivElement>) => {
 			const { clientX, currentTarget } = event
-			const clickPosition = clientX / currentTarget.offsetWidth
+			const { left, width } = currentTarget.getBoundingClientRect()
+			const clickPosition = (clientX - left) / width
 
 			if (clickPosition < 0.5) displayPreviousPicture()
 			else displayNextPicture()
