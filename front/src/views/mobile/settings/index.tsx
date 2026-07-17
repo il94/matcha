@@ -4,8 +4,10 @@ import SettingSlider from "./SettingSlider"
 import toast from "@/lib/toast"
 import { useSearchParams } from "react-router"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import useIsDesktop from "@/hooks/useIsDesktop"
 
 export default function SettingsPage() {
+	const isDesktop = useIsDesktop()
 	const [settingSelected, setSettingSelected] = useState("")
 
 	const [searchParams, setSearchParams] = useSearchParams()
@@ -24,74 +26,106 @@ export default function SettingsPage() {
 		}
 	}, [success, error, setSearchParams])
 
+	const sections = (
+		<>
+			<div className="w-full space-y-2">
+				<h2 className="px-2 text-sm font-medium text-muted-foreground">
+					Account Security
+				</h2>
+				<SectionButton
+					onClick={() => setSettingSelected("email")}
+					label="Email"
+					selected={settingSelected === "email"}
+				/>
+				<SectionButton
+					onClick={() => setSettingSelected("password")}
+					label="Password"
+					selected={settingSelected === "password"}
+				/>
+			</div>
+
+			<div className="w-full space-y-2">
+				<h2 className="px-2 text-sm font-medium text-muted-foreground">
+					Personal Information
+				</h2>
+				<SectionButton
+					onClick={() => setSettingSelected("first_name")}
+					label="First name"
+					selected={settingSelected === "first_name"}
+				/>
+				<SectionButton
+					onClick={() => setSettingSelected("last_name")}
+					label="Last name"
+					selected={settingSelected === "last_name"}
+				/>
+				<SectionButton
+					onClick={() => setSettingSelected("username")}
+					label="Username"
+					selected={settingSelected === "username"}
+				/>
+				<SectionButton
+					onClick={() => setSettingSelected("birth_date")}
+					label="Birth date"
+					selected={settingSelected === "birth_date"}
+				/>
+				<SectionButton
+					onClick={() => setSettingSelected("location")}
+					label="Location"
+					selected={settingSelected === "location"}
+				/>
+			</div>
+
+			<div className="w-full space-y-2">
+				<h2 className="px-2 text-sm font-medium text-muted-foreground">
+					Profile Details
+				</h2>
+				<SectionButton
+					onClick={() => setSettingSelected("gender")}
+					label="Gender"
+					selected={settingSelected === "gender"}
+				/>
+				<SectionButton
+					onClick={() => setSettingSelected("sexual_orientation")}
+					label="Sexual orientation"
+					selected={settingSelected === "sexual_orientation"}
+				/>
+				<SectionButton
+					onClick={() => setSettingSelected("tags")}
+					label="Tags"
+					selected={settingSelected === "tags"}
+				/>
+				<SectionButton
+					onClick={() => setSettingSelected("bio")}
+					label="Bio"
+					selected={settingSelected === "bio"}
+				/>
+				<SectionButton
+					onClick={() => setSettingSelected("pictures")}
+					label="Pictures"
+					selected={settingSelected === "pictures"}
+				/>
+			</div>
+		</>
+	)
+
+	if (isDesktop) {
+		return (
+			<div className="flex h-full w-full">
+				<ScrollArea className="w-[360px] shrink-0 border-r border-button">
+					<div className="flex flex-col gap-4 px-3 pb-8 pt-4">{sections}</div>
+				</ScrollArea>
+				<SettingSlider
+					settingSelected={settingSelected}
+					setSettingSelected={setSettingSelected}
+				/>
+			</div>
+		)
+	}
+
 	return (
 		<ScrollArea>
 			<main className="relative flex h-full flex-col items-center justify-between gap-4 px-3 pb-8 pt-4">
-				<div className="w-full space-y-2">
-					<h2 className="px-2 text-sm font-medium text-muted-foreground">
-						Account Security
-					</h2>
-					<SectionButton
-						onClick={() => setSettingSelected("email")}
-						label="Email"
-					/>
-					<SectionButton
-						onClick={() => setSettingSelected("password")}
-						label="Password"
-					/>
-				</div>
-
-				<div className="w-full space-y-2">
-					<h2 className="px-2 text-sm font-medium text-muted-foreground">
-						Personal Information
-					</h2>
-					<SectionButton
-						onClick={() => setSettingSelected("first_name")}
-						label="First name"
-					/>
-					<SectionButton
-						onClick={() => setSettingSelected("last_name")}
-						label="Last name"
-					/>
-					<SectionButton
-						onClick={() => setSettingSelected("username")}
-						label="Username"
-					/>
-					<SectionButton
-						onClick={() => setSettingSelected("birth_date")}
-						label="Birth date"
-					/>
-					<SectionButton
-						onClick={() => setSettingSelected("location")}
-						label="Location"
-					/>
-				</div>
-
-				<div className="w-full space-y-2">
-					<h2 className="px-2 text-sm font-medium text-muted-foreground">
-						Profile Details
-					</h2>
-					<SectionButton
-						onClick={() => setSettingSelected("gender")}
-						label="Gender"
-					/>
-					<SectionButton
-						onClick={() => setSettingSelected("sexual_orientation")}
-						label="Sexual orientation"
-					/>
-					<SectionButton
-						onClick={() => setSettingSelected("tags")}
-						label="Tags"
-					/>
-					<SectionButton
-						onClick={() => setSettingSelected("bio")}
-						label="Bio"
-					/>
-					<SectionButton
-						onClick={() => setSettingSelected("pictures")}
-						label="Pictures"
-					/>
-				</div>
+				{sections}
 
 				<SettingSlider
 					settingSelected={settingSelected}

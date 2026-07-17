@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils"
-import { ChevronLeftIcon } from "lucide-react"
+import useIsDesktop from "@/hooks/useIsDesktop"
+import { ChevronLeftIcon, SlidersHorizontalIcon } from "lucide-react"
 import EmailSlider from "./EmailSlider"
 import PasswordSlider from "./PasswordSlider"
 import FirstNameSlider from "./FirstNameSlider"
@@ -24,6 +25,7 @@ export default function SettingSlider({
 	setSettingSelected,
 }: SettingSliderProps) {
 	const { user } = useAuthOutletContext()
+	const isDesktop = useIsDesktop()
 
 	type SliderProps = {
 		onClose: () => void
@@ -137,12 +139,29 @@ export default function SettingSlider({
 		}
 	}
 
+	if (isDesktop) {
+		return (
+			<div className="flex h-full w-full grow flex-col overflow-hidden">
+				{settingSelected ? (
+					<Slider
+						onClose={() => setSettingSelected("")}
+						className="mx-auto w-full max-w-[480px] grow p-6"
+					/>
+				) : (
+					<div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground">
+						<SlidersHorizontalIcon className="size-10" />
+						<p className="text-sm">Select a setting to edit</p>
+					</div>
+				)}
+			</div>
+		)
+	}
+
 	return (
 		<div
 			className={cn(
 				"fixed top-12 flex h-[calc(100%-56px-48px)] w-full flex-col overflow-hidden bg-background p-2 transition-transform",
-				"lg:left-[360px] lg:top-0 lg:z-20 lg:h-dvh lg:w-[360px] lg:border-r lg:border-button",
-				settingSelected ? "translate-x-0" : "translate-x-full lg:hidden",
+				settingSelected ? "translate-x-0" : "translate-x-full",
 			)}
 		>
 			<ChevronLeftIcon

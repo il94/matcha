@@ -23,6 +23,8 @@ export default function DesktopLayout({
 }: LayoutProps) {
 	const location = useLocation()
 	const isChatConversation = /^\/chat\/[^/]+$/.test(location.pathname)
+	const isSettings = location.pathname === "/settings"
+	const isFullWidth = isChatConversation || isSettings
 
 	return (
 		<div className="flex h-dvh overflow-hidden">
@@ -33,7 +35,7 @@ export default function DesktopLayout({
 				onNavigate={onNavigate}
 			/>
 			<main className="flex grow overflow-hidden bg-secondary/10">
-				{isChatConversation ? (
+				{isFullWidth ? (
 					<div className="flex h-full w-full flex-col">{content}</div>
 				) : (
 					<div className="flex h-full w-full justify-center p-6">
