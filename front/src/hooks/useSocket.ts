@@ -36,25 +36,31 @@ export default function useSocket(enabled: boolean) {
 	const queryClient = useQueryClient()
 	const navigate = useNavigate()
 
+	// useNavigate() et location changent d'identité à chaque navigation : on les
+	// lit via des refs pour ne pas recréer le socket à chaque changement de page.
 	const location = useLocation()
 	const pathnameRef = useRef(location.pathname)
 	useEffect(() => {
 		pathnameRef.current = location.pathname
 	}, [location.pathname])
 
-	const hasConnectedRef = useRef(false)
-	const closedByUsRef = useRef(false)
+	const navigateRef = useRef(navigate)
+	useEffect(() => {
+		navigateRef.current = navigate
+	}, [navigate])
+
 	const debugDroppedRef = useRef(false)
 
 	useEffect(() => {
 		if (!enabled) return
 
-		closedByUsRef.current = false
-
 		if (DEBUG_ERRORS.socketConnect) {
 			setSocketStatus("failed")
 			return
 		}
+
+		let closedByUs = false
+		let hasConnected = false
 
 		const newSocket = new WebSocket(import.meta.env.VITE_API_BACK_WS)
 		setSocket(newSocket)
@@ -80,7 +86,7 @@ export default function useSocket(enabled: boolean) {
 								authorFirstName: message.authorFirstName,
 								avatar: message.authorAvatar,
 								content: message.content,
-								onOpen: () => navigate(`/chat/${message.chatId}`),
+								onOpen: () => navigateRef.current(`/chat/${message.chatId}`),
 							}),
 						{ position: "top-center", duration: 5000 },
 					)
@@ -97,7 +103,7 @@ export default function useSocket(enabled: boolean) {
 		}
 
 		newSocket.onopen = () => {
-			hasConnectedRef.current = true
+			hasConnected = true
 			setSocketStatus("connected")
 			refreshLocationIfConsented(newSocket)
 
@@ -110,18 +116,18 @@ export default function useSocket(enabled: boolean) {
 		newSocket.onerror = () => newSocket.close()
 
 		newSocket.onclose = () => {
-			if (closedByUsRef.current) return
+			if (closedByUs) return
 
-			if (hasConnectedRef.current)
+			if (hasConnected)
 				notify.error("We lost touch ! Reload to get back online.")
 			else setSocketStatus("failed")
 		}
 
 		return () => {
-			closedByUsRef.current = true
+			closedByUs = true
 			newSocket.close()
 		}
-	}, [enabled, queryClient, navigate])
+	}, [enabled, queryClient])
 
 	return {
 		socket,

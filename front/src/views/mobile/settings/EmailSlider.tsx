@@ -41,7 +41,9 @@ export default function EmailSlider({
 	const { mutate: updateUserMutation, isPending } = useMutation({
 		mutationFn: updateUser,
 		onSuccess: () => {
-			toast.success("Almost there ! Check your inbox to verify your new email address.")
+			toast.success(
+				"Almost there ! Check your inbox to verify your new email address.",
+			)
 			onClose()
 		},
 		onError: (error: AxiosError<{ message: string }>) => {
@@ -77,7 +79,8 @@ export default function EmailSlider({
 						<div>
 							<h2 className="text-lg font-medium">Email Address</h2>
 							<p className="text-sm text-muted-foreground">
-								Update your email address, you'll just need to verify the new one.
+								Update your email address, you'll just need to verify the new
+								one.
 							</p>
 						</div>
 

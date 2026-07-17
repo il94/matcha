@@ -110,7 +110,7 @@ export default function CompletePage() {
 	const watched = form.watch()
 
 	return (
-		<main className="h-dvh">
+		<main className="h-dvh lg:mx-auto lg:max-w-md">
 			<FormProvider {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}

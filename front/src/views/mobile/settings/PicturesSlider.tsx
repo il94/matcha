@@ -80,7 +80,8 @@ export default function PicturesSlider({
 					error.response.data.message === "INVALID_PICTURE_URL_2")
 			) {
 				form.setError("root", {
-					message: "That picture didn't quite make it. Try uploading it again !",
+					message:
+						"That picture didn't quite make it. Try uploading it again !",
 				})
 			} else {
 				form.setError("root", {

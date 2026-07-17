@@ -234,8 +234,8 @@ export default function ChatIdPage() {
 				</div>
 			</div>
 
-			<ScrollArea className="w-full px-3">
-				<div className="relative space-y-2.5 py-2.5 pb-16">
+			<ScrollArea className="w-full px-3 lg:mx-auto lg:min-h-0 lg:w-full lg:max-w-3xl lg:grow">
+				<div className="relative space-y-2.5 py-2.5 pb-16 lg:pb-2.5">
 					{isPending ? (
 						<MessagesSkeleton />
 					) : isError ? (
@@ -267,7 +267,7 @@ export default function ChatIdPage() {
 			</ScrollArea>
 			<form
 				onSubmit={handleSubmit}
-				className="absolute bottom-3 z-10 flex h-10 w-full gap-2 px-3"
+				className="absolute bottom-3 z-10 flex h-10 w-full gap-2 px-3 lg:static lg:mx-auto lg:mb-3 lg:w-full lg:max-w-3xl lg:shrink-0"
 			>
 				<Input
 					onChange={(e) => setInput(e.target.value)}
@@ -279,7 +279,7 @@ export default function ChatIdPage() {
 					<SendIcon />
 				</Button>
 			</form>
-			<div className="backdrop absolute bottom-0 h-12 w-full backdrop-blur-sm" />
+			<div className="backdrop absolute bottom-0 h-12 w-full backdrop-blur-sm lg:hidden" />
 		</div>
 	)
 }

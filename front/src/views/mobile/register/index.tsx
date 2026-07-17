@@ -130,7 +130,7 @@ export default function RegisterPage() {
 	const error = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
 
 	return (
-		<main className="h-dvh">
+		<main className="h-dvh lg:mx-auto lg:max-w-md">
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}

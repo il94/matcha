@@ -141,7 +141,8 @@ export default function SettingSlider({
 		<div
 			className={cn(
 				"fixed top-12 flex h-[calc(100%-56px-48px)] w-full flex-col overflow-hidden bg-background p-2 transition-transform",
-				settingSelected ? "translate-x-0" : "translate-x-full",
+				"lg:left-[360px] lg:top-0 lg:z-20 lg:h-dvh lg:w-[360px] lg:border-r lg:border-button",
+				settingSelected ? "translate-x-0" : "translate-x-full lg:hidden",
 			)}
 		>
 			<ChevronLeftIcon

@@ -81,11 +81,15 @@ export default function NotificationsSheet({
 		<div
 			className={cn(
 				"fixed top-12 z-20 flex h-[calc(100%-56px-48px)] w-full flex-col overflow-hidden bg-background transition-transform",
-				isOpen ? "translate-x-0" : "translate-x-full",
+				"lg:left-[360px] lg:top-0 lg:h-dvh lg:w-[360px] lg:border-r lg:border-button",
+				isOpen ? "translate-x-0" : "translate-x-full lg:hidden",
 			)}
 		>
 			<div className="flex shrink-0 items-center gap-2 border-b border-b-button p-2">
-				<ChevronLeftIcon onClick={onClose} className="size-8 shrink-0" />
+				<ChevronLeftIcon
+					onClick={onClose}
+					className="size-8 shrink-0 cursor-pointer"
+				/>
 				<p className="text-lg font-bold">Notifications</p>
 			</div>
 

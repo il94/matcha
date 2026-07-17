@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router"
-import MobileLayout from "./views/mobile/MobileLayout"
+import ResponsiveLayout from "./views/ResponsiveLayout"
 import { ThemeProvider } from "./providers/ThemeProvider"
 import HomePage from "./views/mobile/home"
 import ProfilePage from "./views/mobile/profile"
@@ -36,7 +36,7 @@ function App() {
 							<Route path="complete" element={<CompletePage />} />
 						</Route>
 						<Route element={<PrivateRoute />}>
-							<Route element={<MobileLayout />}>
+							<Route element={<ResponsiveLayout />}>
 								<Route path="home" element={<HomePage />} />
 								<Route path="profile" element={<ProfilePage />} />
 								<Route path="profile/views" element={<ProfileViewsPage />} />
