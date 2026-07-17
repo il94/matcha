@@ -120,7 +120,7 @@ export default function HomePage() {
 	}, [photoSectionRef])
 
 	return (
-		<main className="relative flex h-full flex-col justify-between overflow-y-hidden bg-background p-3">
+		<main className="relative flex h-full flex-col justify-between overflow-y-hidden rounded-xl bg-background p-3">
 			{isError ? (
 				<ErrorState
 					className="m-auto"
