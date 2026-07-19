@@ -17,7 +17,7 @@ import { CHARACTER_PICTURES } from "./characterPictures"
 
 export const SEED_PASSWORD = "password"
 
-type SeedUser = {
+export type SeedUser = {
 	data: (string | number | boolean)[]
 	tags: string[]
 }
@@ -214,8 +214,8 @@ const DEV_USER_AVATAR =
 	"https://api.dicebear.com/9.x/identicon/svg?seed=matcha-dev-account"
 
 function generate(): { users: SeedUser[]; pictures: string[][] } {
-	const users: SeedUser[] = [buildDevUser()]
-	const pictures: string[][] = [[DEV_USER_AVATAR]]
+	const users: SeedUser[] = []
+	const pictures: string[][] = []
 
 	const characters = [...REAL_CHARACTERS, ...FICTIONAL_CHARACTERS]
 	characters.forEach((row, index) => {
@@ -226,6 +226,15 @@ function generate(): { users: SeedUser[]; pictures: string[][] } {
 	return { users, pictures }
 }
 
+// Le compte dev est construit AVANT les personnages, et volontairement hors de
+// `users` : il est seedé séparément par `npm run seed:dev` (cf. seed.dev.ts).
+// Le construire en premier préserve deux invariants :
+//  - il réserve le pseudo "ilandols" (aucun personnage ne peut le reprendre) ;
+//  - il consomme ses tirages faker avant les personnages, ce qui laisse le
+//    dataset des ~500 profils identique à l'ordre historique.
+const devUser = buildDevUser()
+const devUserPictures = [DEV_USER_AVATAR]
+
 const { users, pictures } = generate()
 
-export { users, pictures }
+export { users, pictures, devUser, devUserPictures }

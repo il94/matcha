@@ -9,9 +9,12 @@ import adminRepository from "./admin/admin.repository"
  *
  * Remplace l'ancien endpoint `POST /admin` désormais désactivé (cf. app.plugin.ts).
  * Réutilise `adminRepository.fillDb()` : crée le schéma (CREATE TABLE IF NOT EXISTS),
- * seed les tags puis les ~500 profils.
+ * seed les tags puis les ~500 profils (personnages).
  *
- * Usage : `npm run seed`
+ * NB : le compte dev `ilandols` n'est PLUS inclus ici ; il est seedé à part via
+ * `npm run seed:dev` (cf. seed.dev.ts).
+ *
+ * Usage : `docker compose exec back npm run seed`
  *
  * NB : `fillDb()` suppose une base fraîche. Pour repartir d'une base peuplée,
  * décommenter l'appel à `repository.dropDb()` ci-dessous (drop puis recrée tout).

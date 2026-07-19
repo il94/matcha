@@ -1,5 +1,13 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
-import { pictures, users, SEED_PASSWORD } from "./data/generateUsers"
+import { PoolClient, QueryResult } from "pg"
+import {
+	pictures,
+	users,
+	devUser,
+	devUserPictures,
+	SEED_PASSWORD,
+	SeedUser,
+} from "./data/generateUsers"
 import bcrypt from "bcrypt"
 
 import * as adminQueries from "@/db/queries/admin"
@@ -12,6 +20,41 @@ class adminRepository {
 	constructor(app: FastifyInstance, options: FastifyPluginOptions) {
 		this.db = app.pg
 		this.log = app.log
+	}
+
+	// Insère un profil seed complet (user + photos + tags) dans la transaction
+	// courante. Partagé par `fillDb` (les ~500 personnages) et `fillDevUser`
+	// (le seul compte dev). Suppose que les tags existent déjà (`tagsDb`).
+	private async insertSeedUser(
+		transact: PoolClient,
+		tagsDb: QueryResult,
+		hashedPassword: string,
+		user: SeedUser,
+		userPictures: string[],
+	): Promise<string> {
+		const createUserResult = await transact.query(
+			adminQueries.createUserMutation,
+			[hashedPassword, ...user.data.slice(1)],
+		)
+		const userCreated = createUserResult.rows[0]
+
+		for (let j = 0; j < userPictures.length; j++) {
+			await transact.query(appQueries.createPictureMutation, [
+				userCreated.id,
+				userPictures[j],
+				j === 0,
+			])
+		}
+
+		for (const tag of user.tags) {
+			const { id: tagId } = tagsDb.rows.find((tagDb) => tagDb.name === tag)
+			await transact.query(appQueries.createUserTagMutation, [
+				userCreated.id,
+				tagId,
+			])
+		}
+
+		return userCreated.id
 	}
 
 	async fillDb() {
@@ -69,33 +112,37 @@ class adminRepository {
 			const userIds = []
 
 			for (let i = 0; i < users.length; i++) {
-				const { tags, data } = users[i]
-
-				const createUserResult = await transact.query(
-					adminQueries.createUserMutation,
-					[hashedPassword, ...data.slice(1)],
+				const id = await this.insertSeedUser(
+					transact,
+					tagsDb,
+					hashedPassword,
+					users[i],
+					pictures[i],
 				)
-				const userCreated = createUserResult.rows[0]
-				userIds.push(userCreated.id)
-				for (let j = 0; j < pictures[i].length; j++) {
-					await transact.query(appQueries.createPictureMutation, [
-						userCreated.id,
-						pictures[i][j],
-						j === 0,
-					])
-				}
-
-				for (const tag of tags) {
-					const { id: tagId } = tagsDb.rows.find((tagDb) => tagDb.name === tag)
-					await transact.query(appQueries.createUserTagMutation, [
-						userCreated.id,
-						tagId,
-					])
-				}
+				userIds.push(id)
 
 				if ((i + 1) % 50 === 0)
 					this.log.info(`DB: ${i + 1}/${users.length} users created`)
 			}
+		})
+	}
+
+	// Seed du seul compte dev (`ilandols`), exclu des ~500 profils générés.
+	// Appelé par `npm run seed:dev` (cf. seed.dev.ts). Le schéma et les tags
+	// sont créés au préalable par `dbPlugin` (onReady → initDb) au app.ready().
+	async fillDevUser() {
+		await this.db.transact(async (transact) => {
+			const tagsDb = await transact.query(appQueries.getTagsQuery)
+			const hashedPassword = await bcrypt.hash(SEED_PASSWORD, 10)
+
+			this.log.info(`DB: Create dev user "${devUser.data[3]}"`)
+			await this.insertSeedUser(
+				transact,
+				tagsDb,
+				hashedPassword,
+				devUser,
+				devUserPictures,
+			)
 		})
 	}
 
