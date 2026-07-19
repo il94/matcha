@@ -19,6 +19,7 @@ import Step4 from "./Step4"
 import { Loader2Icon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
+import AuthLayout from "@/views/AuthLayout"
 
 export const formSchema = z.object({
 	birthDate: z
@@ -110,11 +111,11 @@ export default function CompletePage() {
 	const watched = form.watch()
 
 	return (
-		<main className="h-dvh lg:mx-auto lg:max-w-md">
+		<AuthLayout>
 			<FormProvider {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
-					className="flex h-full w-full flex-col items-center justify-between px-9 pb-4 pt-10"
+					className="flex h-full w-full flex-col items-center justify-between px-9 pb-4 pt-10 lg:h-auto lg:max-w-md lg:justify-center lg:gap-10 lg:py-0"
 				>
 					{currentStep === 1 && <Step1 />}
 					{currentStep === 2 && <Step2 />}
@@ -163,6 +164,6 @@ export default function CompletePage() {
 					</div>
 				</form>
 			</FormProvider>
-		</main>
+		</AuthLayout>
 	)
 }

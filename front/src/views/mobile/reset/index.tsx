@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router"
 import { z } from "zod"
 import { AxiosError } from "axios"
+import AuthLayout from "@/views/AuthLayout"
 
 export const formSchema = z
 	.object({
@@ -94,11 +95,11 @@ export default function ResetPage() {
 	const error = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
 
 	return (
-		<main className="h-dvh lg:mx-auto lg:max-w-md">
+		<AuthLayout>
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
-					className="flex h-full w-full flex-col items-center justify-between px-9 pb-4 pt-10"
+					className="flex h-full w-full flex-col items-center justify-between px-9 pb-4 pt-10 lg:h-auto lg:max-w-md lg:justify-center lg:gap-10 lg:py-0"
 				>
 					<div className="flex flex-col gap-16">
 						<h1 className="text-4xl">Choose a New Password</h1>
@@ -147,6 +148,6 @@ export default function ResetPage() {
 					</div>
 				</form>
 			</Form>
-		</main>
+		</AuthLayout>
 	)
 }

@@ -12,6 +12,7 @@ import { useMutation } from "@tanstack/react-query"
 import { AxiosError } from "axios"
 import { Loader2Icon } from "lucide-react"
 import ActivationDialog from "./ActivationDialog"
+import AuthLayout from "@/views/AuthLayout"
 import { cn, formatRetryAfter } from "@/lib/utils"
 
 const formSchema = z.object({
@@ -130,11 +131,17 @@ export default function RegisterPage() {
 	const error = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
 
 	return (
-		<main className="h-dvh lg:mx-auto lg:max-w-md">
+		<AuthLayout>
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
-					className="flex h-full w-full flex-col items-center justify-between px-9 pb-4 pt-10"
+					onKeyDown={(e) => {
+						if (e.key === "Enter") {
+							e.preventDefault()
+							form.handleSubmit(onSubmit)()
+						}
+					}}
+					className="flex h-full w-full flex-col items-center justify-between px-9 pb-4 pt-10 lg:h-auto lg:max-w-md lg:justify-center lg:gap-10 lg:py-0"
 				>
 					<h1 className="text-6xl">Register</h1>
 					<div className="flex w-full flex-col gap-6">
@@ -198,6 +205,6 @@ export default function RegisterPage() {
 				onOpenChange={() => setIsRegistered("")}
 				email={isRegistered}
 			/>
-		</main>
+		</AuthLayout>
 	)
 }

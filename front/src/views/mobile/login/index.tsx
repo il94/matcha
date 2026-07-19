@@ -12,6 +12,7 @@ import { Loader2Icon } from "lucide-react"
 import { useCallback, useState } from "react"
 
 import ForgotPasswordDialog from "./ForgotPasswordDialog"
+import AuthLayout from "@/views/AuthLayout"
 import useNavigateFrom from "@/hooks/useNavigateFrom"
 import { cn, formatRetryAfter } from "@/lib/utils"
 
@@ -73,11 +74,17 @@ export default function LoginPage() {
 	const error = Object.values(form.formState.errors ?? [])[0]?.message ?? " "
 
 	return (
-		<main className="h-dvh lg:mx-auto lg:max-w-md">
+		<AuthLayout>
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
-					className="flex h-full w-full flex-col items-center justify-between px-9 pb-4 pt-10"
+					onKeyDown={(e) => {
+						if (e.key === "Enter") {
+							e.preventDefault()
+							form.handleSubmit(onSubmit)()
+						}
+					}}
+					className="flex h-full w-full flex-col items-center justify-between px-9 pb-4 pt-10 lg:h-auto lg:max-w-md lg:justify-center lg:gap-10 lg:py-0"
 				>
 					<h1 className="text-6xl">Login</h1>
 					<div className="flex w-full flex-col gap-6">
@@ -132,6 +139,6 @@ export default function LoginPage() {
 				open={!!isForgotPassword}
 				onOpenChange={setIsForgotPassword}
 			/>
-		</main>
+		</AuthLayout>
 	)
 }
