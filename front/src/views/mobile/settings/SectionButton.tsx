@@ -19,7 +19,8 @@ export default function SectionButton({
 			variant="outline"
 			className={cn(
 				"h-10 w-full justify-between",
-				selected && "border-primary bg-secondary/60",
+				selected &&
+					"border-transparent bg-secondary/60 hover:border-transparent hover:bg-secondary hover:text-foreground",
 			)}
 		>
 			{label}
