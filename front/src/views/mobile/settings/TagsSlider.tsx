@@ -53,6 +53,7 @@ export default function TagsSlider({
 		onSuccess: () => {
 			toast.success("Tags successfully updated !")
 			queryClient.invalidateQueries({ queryKey: ["verify"] })
+			queryClient.resetQueries({ queryKey: ["users"] })
 			onClose()
 		},
 		onError: () => {

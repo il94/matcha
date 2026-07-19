@@ -48,6 +48,7 @@ export default function BirthDateSlider({
 		onSuccess: () => {
 			toast.success("Birth date successfully updated !")
 			queryClient.invalidateQueries({ queryKey: ["verify"] })
+			queryClient.resetQueries({ queryKey: ["users"] })
 			onClose()
 		},
 		onError: () => {

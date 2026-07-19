@@ -55,6 +55,7 @@ export default function LocationSlider({
 		onSuccess: () => {
 			toast.success("Location successfully updated !")
 			queryClient.invalidateQueries({ queryKey: ["verify"] })
+			queryClient.resetQueries({ queryKey: ["users"] })
 			onClose()
 		},
 		onError: (error: AxiosError<{ message: string }>) => {

@@ -50,6 +50,7 @@ export default function SexualOrientationSlider({
 		onSuccess: () => {
 			toast.success("Sexual orientation successfully updated !")
 			queryClient.invalidateQueries({ queryKey: ["verify"] })
+			queryClient.resetQueries({ queryKey: ["users"] })
 			onClose()
 		},
 		onError: (error: AxiosError<{ message: string }>) => {

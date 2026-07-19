@@ -46,6 +46,7 @@ export default function GenderSlider({
 		onSuccess: () => {
 			toast.success("Gender successfully updated !")
 			queryClient.invalidateQueries({ queryKey: ["verify"] })
+			queryClient.resetQueries({ queryKey: ["users"] })
 			onClose()
 		},
 		onError: (error: AxiosError<{ message: string }>) => {
