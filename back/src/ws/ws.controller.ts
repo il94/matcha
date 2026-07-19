@@ -8,7 +8,9 @@ import { FastifyPluginAsync } from "fastify"
 const RED = "\x1b[31m"
 const END = "\x1b[0m"
 
-const MAX_MESSAGE_CONTENT_LENGTH = 2000
+const MAX_MESSAGE_CONTENT_LENGTH = parseInt(
+	process.env.WS_MAX_MESSAGE_CONTENT_LENGTH!,
+)
 
 const print = (color: string, message: string) => {
 	return `${color}${message}${END}`

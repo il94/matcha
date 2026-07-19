@@ -5,7 +5,6 @@ import {
 	users,
 	devUser,
 	devUserPictures,
-	SEED_PASSWORD,
 	SeedUser,
 } from "./data/generateUsers"
 import bcrypt from "bcrypt"
@@ -106,7 +105,7 @@ class adminRepository {
 
 			// Tous les comptes seed partagent le même mot de passe : on le hache
 			// une seule fois au lieu de 500+ bcrypt (≈ 30 s économisées).
-			const hashedPassword = await bcrypt.hash(SEED_PASSWORD, 10)
+			const hashedPassword = await bcrypt.hash(process.env.SEED_PASSWORD || 'password', 10)
 
 			this.log.info(`DB: Create ${users.length} users`)
 			const userIds = []
@@ -127,13 +126,16 @@ class adminRepository {
 		})
 	}
 
-	// Seed du seul compte dev (`ilandols`), exclu des ~500 profils générés.
+	// Seed du seul compte dev, exclu des ~500 profils générés.
 	// Appelé par `npm run seed:dev` (cf. seed.dev.ts). Le schéma et les tags
 	// sont créés au préalable par `dbPlugin` (onReady → initDb) au app.ready().
 	async fillDevUser() {
 		await this.db.transact(async (transact) => {
 			const tagsDb = await transact.query(appQueries.getTagsQuery)
-			const hashedPassword = await bcrypt.hash(SEED_PASSWORD, 10)
+			const hashedPassword = await bcrypt.hash(
+				process.env.SEED_PASSWORD || "password",
+				10,
+			)
 
 			this.log.info(`DB: Create dev user "${devUser.data[3]}"`)
 			await this.insertSeedUser(
@@ -149,13 +151,15 @@ class adminRepository {
 	async createChats() {
 		await this.db.query(adminQueries.deleteChatsMutation)
 
-		await this.db.query(adminQueries.createChatMutation, ["ilandols", "mbappe"])
+		const devUsername = devUser.data[3]
+
+		await this.db.query(adminQueries.createChatMutation, [devUsername, "mbappe"])
 		await this.db.query(adminQueries.createChatMutation, [
-			"ilandols",
+			devUsername,
 			"hermione",
 		])
 		await this.db.query(adminQueries.createChatMutation, [
-			"ilandols",
+			devUsername,
 			"harleyquinn",
 		])
 	}

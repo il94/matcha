@@ -11,7 +11,7 @@ import adminRepository from "./admin/admin.repository"
  * Réutilise `adminRepository.fillDb()` : crée le schéma (CREATE TABLE IF NOT EXISTS),
  * seed les tags puis les ~500 profils (personnages).
  *
- * NB : le compte dev `ilandols` n'est PLUS inclus ici ; il est seedé à part via
+ * NB : le compte dev n'est PLUS inclus ici ; il est seedé à part via
  * `npm run seed:dev` (cf. seed.dev.ts).
  *
  * Usage : `docker compose exec back npm run seed`

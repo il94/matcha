@@ -29,8 +29,7 @@ class appService {
 	private mailerService
 
 	private NOMINATIM_HEADERS = {
-		"User-Agent":
-			"Matcha (matcha school project - contact: system.matcha@gmail.com)",
+		"User-Agent": `Matcha (matcha school project - contact: ${process.env.MAILER_USER})`,
 	}
 
 	constructor(app: FastifyInstance, options: FastifyPluginOptions) {

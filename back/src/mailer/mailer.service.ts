@@ -5,7 +5,7 @@ import { FastifyInstance, FastifyPluginOptions } from "fastify"
 class mailerService {
 	private mailer
 
-	private MAILER_FROM = "Matcha <system.matcha@gmail.com>"
+	private MAILER_FROM = process.env.MAILER_FROM
 
 	constructor(app: FastifyInstance, options: FastifyPluginOptions) {
 		this.mailer = app.mailer

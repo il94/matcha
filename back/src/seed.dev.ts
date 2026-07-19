@@ -7,7 +7,7 @@ import adminRepository from "./admin/admin.repository"
 /**
  * Script de seed du compte dev uniquement (hors HTTP).
  *
- * Crée le seul compte de développement `ilandols` (login connu pour les tests
+ * Crée le seul compte de développement (login connu pour les tests
  * manuels), désormais exclu des ~500 profils générés par `npm run seed`.
  * Le schéma et les tags sont créés au préalable par `dbPlugin` (onReady → initDb),
  * `fillDevUser()` n'a donc qu'à insérer le user.

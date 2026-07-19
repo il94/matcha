@@ -15,8 +15,6 @@ import {
 } from "./characters"
 import { CHARACTER_PICTURES } from "./characterPictures"
 
-export const SEED_PASSWORD = "password"
-
 export type SeedUser = {
 	data: (string | number | boolean)[]
 	tags: string[]
@@ -146,7 +144,7 @@ function buildCharacterUser(row: CharacterRow, index: number): SeedUser {
 
 	return {
 		data: [
-			SEED_PASSWORD,
+			process.env.SEED_PASSWORD || "password",
 			firstName,
 			lastName,
 			username,
@@ -172,7 +170,7 @@ function buildCharacterUser(row: CharacterRow, index: number): SeedUser {
 // Compte de développement fixe (login connu pour les tests manuels), ce n'est
 // pas un personnage et reste donc en dehors des 500 profils générés.
 function buildDevUser(): SeedUser {
-	const username = "ilandols"
+	const username = process.env.DEV_USER_USERNAME ?? faker.internet.username()
 	takenUsernames.add(username)
 
 	const city = faker.helpers.arrayElement(cities)
@@ -181,11 +179,11 @@ function buildDevUser(): SeedUser {
 
 	return {
 		data: [
-			SEED_PASSWORD,
-			"Ilyes",
-			"Landolsi",
+			process.env.SEED_PASSWORD || "password",
+			process.env.DEV_USER_FIRSTNAME ?? faker.person.firstName(),
+			process.env.DEV_USER_LASTNAME ?? faker.person.lastName(),
 			username,
-			`ilyes.landolsi@outlook.fr`,
+			process.env.DEV_USER_EMAIL ?? faker.internet.email(),
 			faker.date
 				.birthdate({ min: 18, max: 40, mode: "age" })
 				.toISOString()
@@ -211,6 +209,7 @@ function buildDevUser(): SeedUser {
 // `completed = true` reste cohérent avec le reste de l'app. Le seed est un
 // identifiant neutre, sans lien avec l'identité réelle du développeur.
 const DEV_USER_AVATAR =
+	process.env.DEV_USER_AVATAR ??
 	"https://api.dicebear.com/9.x/identicon/svg?seed=matcha-dev-account"
 
 function generate(): { users: SeedUser[]; pictures: string[][] } {
@@ -229,7 +228,7 @@ function generate(): { users: SeedUser[]; pictures: string[][] } {
 // Le compte dev est construit AVANT les personnages, et volontairement hors de
 // `users` : il est seedé séparément par `npm run seed:dev` (cf. seed.dev.ts).
 // Le construire en premier préserve deux invariants :
-//  - il réserve le pseudo "ilandols" (aucun personnage ne peut le reprendre) ;
+//  - il réserve son pseudo (aucun personnage ne peut le reprendre) ;
 //  - il consomme ses tirages faker avant les personnages, ce qui laisse le
 //    dataset des ~500 profils identique à l'ordre historique.
 const devUser = buildDevUser()
