@@ -51,7 +51,7 @@ class appService {
 		await this.repository.createNotification(recipientId, senderId, type)
 
 		const socket = this.app.clients.get(recipientId)
-		if (socket) socketSend(socket, "notification")
+		if (socket) socketSend(socket, "notification", { notificationType: type })
 	}
 
 	async getUserNotifications(userId: UserData["id"]) {

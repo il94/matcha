@@ -93,6 +93,12 @@ export default function useSocket(enabled: boolean) {
 				}
 			} else if (message.type === "notification") {
 				queryClient.invalidateQueries({ queryKey: ["notifications"] })
+
+				if (
+					message.notificationType === "match" ||
+					message.notificationType === "unlike"
+				)
+					queryClient.invalidateQueries({ queryKey: ["chats"] })
 			} else if (message.type === "location") {
 				queryClient.invalidateQueries({ queryKey: ["verify"] })
 			} else if (message.type === "error") {
