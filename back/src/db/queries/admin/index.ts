@@ -15,5 +15,3 @@ export * from "./createUserBlocksTableMutation"
 export * from "./createNotificationsTableMutation"
 
 export * from "./createUserMutation"
-export * from "./createChatMutation"
-export * from "./deleteChatsMutation"

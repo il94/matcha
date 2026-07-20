@@ -250,13 +250,6 @@ export const CLOSINGS = [
 	"Envie de faire des rencontres sincères.",
 ]
 
-// Usernames imposés pour préserver les comptes historiques utilisés par
-// POST /admin/chats (Kylian Mbappé se dérive déjà naturellement en "mbappe").
-export const USERNAME_OVERRIDES: Record<string, string> = {
-	"Hermione Granger": "hermione",
-	"Harley Quinn": "harleyquinn",
-}
-
 // ---------------------------------------------------------------------------
 // 450 personnages réels
 // ---------------------------------------------------------------------------

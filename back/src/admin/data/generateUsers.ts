@@ -7,7 +7,6 @@ import {
 	FICTIONAL_CHARACTERS,
 	DOMAIN_INFO,
 	CLOSINGS,
-	USERNAME_OVERRIDES,
 	CharacterRow,
 	CharacterGender,
 	CharacterOrientation,
@@ -60,12 +59,6 @@ function slugify(value: string): string {
 }
 
 function makeUsername(firstName: string, lastName: string): string {
-	const override = USERNAME_OVERRIDES[`${firstName} ${lastName}`]
-	if (override) {
-		takenUsernames.add(override)
-		return override
-	}
-
 	const candidates = [
 		slugify(lastName),
 		slugify(firstName),

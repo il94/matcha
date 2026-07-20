@@ -148,22 +148,6 @@ class adminRepository {
 		})
 	}
 
-	async createChats() {
-		await this.db.query(adminQueries.deleteChatsMutation)
-
-		const devUsername = devUser.data[3]
-
-		await this.db.query(adminQueries.createChatMutation, [devUsername, "mbappe"])
-		await this.db.query(adminQueries.createChatMutation, [
-			devUsername,
-			"hermione",
-		])
-		await this.db.query(adminQueries.createChatMutation, [
-			devUsername,
-			"harleyquinn",
-		])
-	}
-
 	async dropDb() {
 		await this.db.transact(async (transact) => {
 			await transact.query(adminQueries.dropDatabaseMutation)
