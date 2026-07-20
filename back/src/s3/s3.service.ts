@@ -7,6 +7,7 @@ import {
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { randomBytes, randomUUID } from "crypto"
 import { FastifyInstance, FastifyPluginOptions } from "fastify"
+import { normalizeImage } from "../lib/normalizeImage"
 
 class s3Service {
 	private s3
@@ -36,12 +37,14 @@ class s3Service {
 	}
 
 	async uploadFile(file: Buffer) {
+		const { buffer, contentType } = await normalizeImage(file)
 		const fileName = this.getRandomToken()
 		await this.s3.send(
 			new PutObjectCommand({
 				Bucket: process.env.AWS_BUCKET_NAME,
 				Key: fileName,
-				Body: file,
+				Body: buffer,
+				ContentType: contentType,
 			}),
 		)
 

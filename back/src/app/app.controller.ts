@@ -222,6 +222,8 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 		"/user/pictures",
 		{ schema: schemas.updateUserPictures },
 		(request) => {
+			if (!request.isMultipart) throw new BadRequestException()
+
 			const userId = request.userId
 			const picturesData = request.body
 

@@ -3,6 +3,10 @@ import fastifyCors from "@fastify/cors"
 import fastifyMultipart from "@fastify/multipart"
 import { FastifyPluginAsync } from "fastify"
 import { BadRequestException } from "./lib/HttpException"
+import {
+	ALLOWED_IMAGE_FORMATS,
+	MAX_INPUT_PIXELS,
+} from "./lib/normalizeImage"
 import sharp from "sharp"
 
 const appConfig: FastifyPluginAsync = async (app, options) => {
@@ -30,12 +34,19 @@ const appConfig: FastifyPluginAsync = async (app, options) => {
 			try {
 				const buffer = await part.toBuffer()
 
-				await sharp(buffer).metadata()
+				const metadata = await sharp(buffer, {
+					limitInputPixels: MAX_INPUT_PIXELS,
+				}).metadata()
+
+				if (
+					!metadata.format ||
+					!ALLOWED_IMAGE_FORMATS.includes(metadata.format)
+				) {
+					throw new BadRequestException()
+				}
 			} catch (error) {
 				throw new BadRequestException()
 			}
-
-			await part.toBuffer()
 		},
 	})
 }
