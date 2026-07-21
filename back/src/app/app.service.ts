@@ -113,6 +113,15 @@ class appService {
 			"email" | "firstName" | "lastName" | "username" | "password"
 		>,
 	) {
+		console.log(
+			"Env : ",
+			process.env.MAILER_FROM,
+			process.env.MAILER_USER,
+			process.env.MAILER_PASS,
+			process.env.MAILER_SECURE,
+			process.env.MAILER_PORT,
+			process.env.MAILER_HOST,
+		)
 		const token = this.getRandomToken()
 		let userId: UserData["id"] = ""
 
