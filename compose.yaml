@@ -23,8 +23,8 @@ services:
       context: ./back
       dockerfile: Dockerfile
     env_file: ./back/.env
-    ports:
-      - '3009:3000'
+    # ports:
+    #   - '3009:3000'
     restart: on-failure
 
   front:
@@ -34,8 +34,8 @@ services:
       context: ./front
       dockerfile: Dockerfile
     env_file: ./front/.env
-    ports:
-      - '4009:4173'
+    # ports:
+    #   - '4009:4173'
 
 volumes:
   db_data:
