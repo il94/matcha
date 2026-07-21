@@ -2366,9 +2366,7 @@ export const CHARACTER_PICTURES: Record<string, string[]> = {
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Cosplay_of_Mikasa_Ackerman_from_Attack_on_Titan_at_Fancy_Frontier_24_%28FF24_DSC7887_30.jpg/960px-Cosplay_of_Mikasa_Ackerman_from_Attack_on_Titan_at_Fancy_Frontier_24_%28FF24_DSC7887_30.jpg",
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Cosplay_of_Touka_Kirishima_from_Tokyo_Ghoul_and_Mikasa_Ackerman_from_Attack_on_Titan_at_Japan_Expo_2023%2C_Day_2_%2853056237308%29.jpg/960px-Cosplay_of_Touka_Kirishima_from_Tokyo_Ghoul_and_Mikasa_Ackerman_from_Attack_on_Titan_at_Japan_Expo_2023%2C_Day_2_%2853056237308%29.jpg",
 	],
-	"Light Yagami": [
-		"https://i.redd.it/ikjmfjp2f6of1.jpeg",
-	],
+	"Light Yagami": ["https://i.redd.it/ikjmfjp2f6of1.jpeg"],
 	"L Lawliet": [
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Cosplay_of_L_Lawliet%2C_with_satchel%2C_Otakon_2012.jpg/960px-Cosplay_of_L_Lawliet%2C_with_satchel%2C_Otakon_2012.jpg",
 		"https://upload.wikimedia.org/wikipedia/commons/a/a7/Cosplayers_of_Misa_Amane_and_L_Lawliet%2C_Death_Note_at_Anime_Expo_2010_Day_3.jpg",
