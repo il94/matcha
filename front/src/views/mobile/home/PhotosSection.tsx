@@ -82,6 +82,7 @@ export default forwardRef(function PhotosSection(
 						pictures={user.pictures}
 						setNextCard={setNextCard}
 						parentWidth={cardContainerSize.width}
+						parentHeight={cardContainerSize.height}
 						ref={cardRefs[Math.abs(index - users.length) - 1]}
 						disabled={disabled}
 					/>
