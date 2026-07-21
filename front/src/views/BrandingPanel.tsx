@@ -26,16 +26,15 @@ export default function BrandingPanel() {
 			/>
 			<div
 				aria-hidden="true"
-				className="absolute -bottom-32 -right-20 h-[28rem] w-[28rem] rounded-full bg-secondary/40 blur-3xl motion-safe:animate-blob [animation-delay:-7s]"
+				className="absolute -bottom-32 -right-20 h-[28rem] w-[28rem] rounded-full bg-secondary/40 blur-3xl [animation-delay:-7s] motion-safe:animate-blob"
 			/>
-
 
 			<div className="relative z-10 flex flex-col items-center gap-4 px-8">
 				<MatchaLeaf className="h-12 w-12 motion-safe:animate-fade-in-up" />
-				<h2 className="text-7xl font-bold tracking-tight motion-safe:animate-fade-in-up [animation-delay:80ms]">
+				<h2 className="text-7xl font-bold tracking-tight [animation-delay:80ms] motion-safe:animate-fade-in-up">
 					matcha
 				</h2>
-				<p className="text-lg tracking-wide text-primary-foreground/95 motion-safe:animate-fade-in-up [animation-delay:160ms]">
+				<p className="text-lg tracking-wide text-primary-foreground/95 [animation-delay:160ms] motion-safe:animate-fade-in-up">
 					Steep. Sip. Match.
 				</p>
 			</div>

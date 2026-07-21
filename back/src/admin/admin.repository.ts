@@ -105,7 +105,10 @@ class adminRepository {
 
 			// Tous les comptes seed partagent le même mot de passe : on le hache
 			// une seule fois au lieu de 500+ bcrypt (≈ 30 s économisées).
-			const hashedPassword = await bcrypt.hash(process.env.SEED_PASSWORD || 'password', 10)
+			const hashedPassword = await bcrypt.hash(
+				process.env.SEED_PASSWORD || "password",
+				10,
+			)
 
 			this.log.info(`DB: Create ${users.length} users`)
 			const userIds = []

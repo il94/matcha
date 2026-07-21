@@ -3,10 +3,7 @@ import fastifyCors from "@fastify/cors"
 import fastifyMultipart from "@fastify/multipart"
 import { FastifyPluginAsync } from "fastify"
 import { BadRequestException } from "./lib/HttpException"
-import {
-	ALLOWED_IMAGE_FORMATS,
-	MAX_INPUT_PIXELS,
-} from "./lib/normalizeImage"
+import { ALLOWED_IMAGE_FORMATS, MAX_INPUT_PIXELS } from "./lib/normalizeImage"
 import sharp from "sharp"
 
 const appConfig: FastifyPluginAsync = async (app, options) => {
