@@ -174,7 +174,7 @@ export default forwardRef(function SwipeableCard(
 		<motion.div
 			{...dragProps}
 			transition={{
-				x: { duration: 0.35 },
+				x: { duration: 0.5 },
 				rotate: { ease: "backOut" },
 			}}
 			onAnimationComplete={(latest: { x: number }) => {
