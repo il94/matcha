@@ -39,6 +39,7 @@ type SwipeableCardProps = {
 	pictures: User["pictures"]
 	setNextCard: () => void
 	parentWidth: number
+	parentHeight: number
 	disabled?: boolean
 }
 
@@ -54,13 +55,14 @@ export default forwardRef(function SwipeableCard(
 		pictures,
 		setNextCard,
 		parentWidth,
+		parentHeight,
 		disabled,
 	}: SwipeableCardProps,
 	ref,
 ) {
 	const velocityThreshold = parentWidth * 2 // Seuil de vitesse pour valider le like/dislike
 	const confrimThreshold = parentWidth / 3.5 // Seuil de distance pour valider le like/dislike
-	const hideCardDistance = parentWidth * 1.5 // Distance à laquelle la carte doit être déplacée pour être cachée
+	const hideCardDistance = parentWidth + parentHeight // Distance à laquelle la carte doit être déplacée pour être cachée (largeur + hauteur pour couvrir la carte pivotée à 45°)
 
 	const [cardRotation, setCardRotation] = useState(0)
 	const [cardX, setSwipeableCardX] = useState(0)
@@ -172,7 +174,7 @@ export default forwardRef(function SwipeableCard(
 		<motion.div
 			{...dragProps}
 			transition={{
-				x: { duration: 0.2 },
+				x: { duration: 0.35 },
 				rotate: { ease: "backOut" },
 			}}
 			onAnimationComplete={(latest: { x: number }) => {
