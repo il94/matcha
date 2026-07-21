@@ -102,9 +102,6 @@ class mailerService {
 	}
 
 	getEmailTemplate(body: string) {
-		const logo =
-			"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjQgNDRWMjIiLz48cGF0aCBkPSJNMjQgMzBDMjQgMjEgMzAgMTIgNDEgMTBjMSAxMS01IDIwLTE3IDIwWiIvPjxwYXRoIGQ9Ik0yNCAyNEMyNCAxNiAxOSA4IDggN2MtMSAxMCA0IDE3IDE2IDE3WiIvPjwvc3ZnPg=="
-
 		return `
 			<!DOCTYPE html>
 			<html>
@@ -145,13 +142,6 @@ class mailerService {
 						text-align: center;
 					}
 
-					.header img {
-						display: block;
-						width: 40px;
-						height: 40px;
-						margin: 0 auto 8px;
-					}
-
 					.header .wordmark {
 						color: #ffffff;
 						font-size: 30px;
@@ -188,7 +178,6 @@ class mailerService {
 			<body>
 				<div class="container">
 					<div class="header">
-						<img src="${logo}" alt="Matcha" />
 						<p class="wordmark">matcha</p>
 					</div>
 					<div class="body-content">
