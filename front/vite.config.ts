@@ -4,11 +4,11 @@ import { defineConfig } from "vite"
 
 export default defineConfig({
 	plugins: [react()],
-	// preview: {
-	// 	host: true,
-	// 	port: 4009,
-	// 	allowedHosts: ["matcha.ilandols.com"],
-	// },
+	preview: {
+		host: true,
+		port: 4009,
+		allowedHosts: ["matcha.ilandols.com"],
+	},
 	resolve: {
 		alias: {
 			"@": path.resolve(__dirname, "./src"),
