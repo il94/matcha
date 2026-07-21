@@ -74,10 +74,33 @@ export default {
 						height: "0",
 					},
 				},
+				blob: {
+					"0%, 100%": {
+						transform: "translate(0, 0) scale(1)",
+					},
+					"33%": {
+						transform: "translate(6%, -8%) scale(1.1)",
+					},
+					"66%": {
+						transform: "translate(-5%, 5%) scale(0.95)",
+					},
+				},
+				"fade-in-up": {
+					from: {
+						opacity: "0",
+						transform: "translateY(8px)",
+					},
+					to: {
+						opacity: "1",
+						transform: "translateY(0)",
+					},
+				},
 			},
 			animation: {
 				"accordion-down": "accordion-down 0.2s ease-out",
 				"accordion-up": "accordion-up 0.2s ease-out",
+				blob: "blob 14s ease-in-out infinite",
+				"fade-in-up": "fade-in-up 0.6s ease-out both",
 			},
 		},
 	},
