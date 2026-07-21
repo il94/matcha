@@ -3,7 +3,7 @@ import appErrorHandler from "./app.errorHandler"
 import dbPlugin from "./db/db.plugin"
 import fastifyPlugin from "fastify-plugin"
 import appController from "./app/app.controller"
-// import adminController from "./admin/admin.controller" // désactivé : endpoints /admin destructifs (cf. seed via "npm run seed")
+import adminController from "./admin/admin.controller"
 import s3Plugin from "./s3/s3.plugin"
 import redisPlugin from "./redis/redis.plugin"
 import appPublicController from "./app/app.public-controller"
@@ -26,7 +26,7 @@ const appPlugin: FastifyPluginAsync = async (app, options) => {
 	app.register(fastifyPlugin(wsPlugin))
 	app.register(fastifyPlugin(appLogger))
 
-	// app.register(adminController, { prefix: "/admin" })
+	app.register(adminController, { prefix: "/admin" })
 
 	app.register(appController)
 	app.register(appPublicController)

@@ -1,8 +1,11 @@
 import { FastifyPluginAsync } from "fastify"
+import adminGuard from "./admin.guard"
 import adminRepository from "./admin.repository"
 
 const adminController: FastifyPluginAsync = async (app, options) => {
 	const repository = new adminRepository(app, options)
+
+	app.addHook("preHandler", adminGuard)
 
 	app.post("/", async () => {
 		await repository.fillDb()
