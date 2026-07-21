@@ -70,7 +70,7 @@ export default function InputImageFileField<T extends FieldValues>({
 						<div className="relative">
 							<Input
 								type="file"
-								accept="image/jpeg,image/png,image/webp"
+								accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
 								{...props}
 								{...fileRef}
 								onChange={async (event) => {
