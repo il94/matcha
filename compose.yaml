@@ -2,6 +2,8 @@ services:
 
   redis:
     image: redis:latest
+    env_file: ./back/.env
+    command: sh -c 'redis-server --requirepass "$$REDIS_PASSWORD"'
     ports:
       - "6379:6379"
     volumes:
