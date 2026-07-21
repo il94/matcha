@@ -8,8 +8,6 @@ services:
     volumes:
       - redis_data:/data
     restart: always
-    env_file: ./back/.env
-    command: sh -c 'redis-server --requirepass "$$REDIS_PASSWORD"'
 
   db:
     image: postgres:16.1
