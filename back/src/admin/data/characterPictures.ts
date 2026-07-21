@@ -4,9 +4,9 @@
 
 export const CHARACTER_PICTURES: Record<string, string[]> = {
 	"Kylian Mbappé": [
-		"https://upload.wikimedia.org/wikipedia/commons/5/52/Kylian_Mbapp%C3%A9_%282%29.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Kylian_Mbapp%C3%A9_receives_the_best_young_player_award_at_the_2018_Football_World_Cup_Russia.jpg/960px-Kylian_Mbapp%C3%A9_receives_the_best_young_player_award_at_the_2018_Football_World_Cup_Russia.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/e/e5/Kylian_Mbapp%C3%A9_2018.jpg",
+		"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Kylian_Mbappe_-_France_v_Norway_-_26_June_2026_%28cropped%29.jpg/960px-Kylian_Mbappe_-_France_v_Norway_-_26_June_2026_%28cropped%29.jpg",
+		"https://www.lequipe.fr/_medias/img-photo-jpg/mbappe-est-devenu-meilleur-buteur-de-l-histoire-de-la-coupe-du-monde-en-inscrivant-10-buts-lors-de-l/1500000002536228/0:0,2000:1333-828-828-75/82450.jpg",
+		"https://www.leparisien.fr/resizer/jpnd9zLlb4V-wxLBWeUiLng_RiQ=/1400x0/arc-anglerfish-eu-central-1-prod-leparisien.s3.amazonaws.com/public/L3VMTAGYWZBT3NK332D45LJ4TE.jpg",
 	],
 	"Lionel Messi": [
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Suisse_vs_Argentine_-_Granit_Xhaka_%26_Lionel_Messi.jpg/960px-Suisse_vs_Argentine_-_Granit_Xhaka_%26_Lionel_Messi.jpg",
@@ -549,9 +549,9 @@ export const CHARACTER_PICTURES: Record<string, string[]> = {
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Denzel_Washington_%282106641898%29.jpg/960px-Denzel_Washington_%282106641898%29.jpg",
 	],
 	"Will Smith": [
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Will_Smith.jpg/960px-Will_Smith.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Gazing_adoringly_at_Will_Smith.jpg/960px-Gazing_adoringly_at_Will_Smith.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/8/84/Will-smith-userbox.jpg",
+		"https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUycnlpN3R2MG16ZWR3dnNtOTk3dm91ODF4cjl1MDZwanUzc2V0eHd2aiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/CnRmpfxlPutVAFChvm/giphy.gif",
+		"https://fr.web.img6.acsta.net/c_310_420/pictures/20/01/16/09/48/3201727.jpg",
+		"https://image.tmdb.org/t/p/w500/8TlKqbXYgHmmaEoPBJ7djJ8Rxxa.jpg",
 	],
 	"Johnny Depp": [
 		"https://upload.wikimedia.org/wikipedia/commons/4/41/Johnny_Depp_%28July_2009%29_2.jpg",
@@ -569,14 +569,11 @@ export const CHARACTER_PICTURES: Record<string, string[]> = {
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Jennifer_Lawrence_at_214._Wetten%2C_dass.._show_in_Graz%2C_8._Nov._2014_02.jpg/960px-Jennifer_Lawrence_at_214._Wetten%2C_dass.._show_in_Graz%2C_8._Nov._2014_02.jpg",
 	],
 	"Emma Watson": [
-		"https://upload.wikimedia.org/wikipedia/commons/7/77/Emma_Watson_GoF_Premiere_2.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Emma_Watson%2C_2012.jpg/960px-Emma_Watson%2C_2012.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/0/00/Emma_Watson_by_Ben_Salter_2.jpg",
+		"https://fr.web.img3.acsta.net/img/11/f3/11f3a37627c1ed6e362066e4d0b16dd7.jpg",
+		"https://image.tmdb.org/t/p/w500/A14lLCZYDhfYdBa0fFRpwMDiwRN.jpg",
 	],
 	"Emma Stone": [
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Emma_Stone_Comic-Con_2011.jpg/960px-Emma_Stone_Comic-Con_2011.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Emma_Stone_%287001665617%29.jpg/960px-Emma_Stone_%287001665617%29.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Emma_Stone_%287001663171%29.jpg/960px-Emma_Stone_%287001663171%29.jpg",
+		"https://m.media-amazon.com/images/M/MV5BMjI4NjM1NDkyN15BMl5BanBnXkFtZTgwODgyNTY1MjE@._V1_FMjpg_UX1000_.jpg",
 	],
 	"Margot Robbie": [
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/SDCC_2015_-_Viola_Davis%2C_Margot_Robbie%2C_Will_Smith_%26_David_Ayer_%2819520936520%29.jpg/960px-SDCC_2015_-_Viola_Davis%2C_Margot_Robbie%2C_Will_Smith_%26_David_Ayer_%2819520936520%29.jpg",
@@ -585,8 +582,8 @@ export const CHARACTER_PICTURES: Record<string, string[]> = {
 	],
 	"Zendaya Coleman": [
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/ZendayaColemanOct2010.jpg/960px-ZendayaColemanOct2010.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/8/83/Zac_Efron_and_Zendaya_Coleman_in_2017.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/3/39/Zac_Efron_and_Zendaya_Coleman_in_2017_%28cropped%29.jpg",
+		"https://media.vogue.fr/photos/6a50306ff53e8c77a36f483b/2:3/w_2560%2Cc_limit/2285248074",
+		"https://upload.wikimedia.org/wikipedia/commons/5/5a/Zendaya-byPhilipRomano.jpg",
 	],
 	"Timothée Chalamet": [
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Timoth%C3%A9e_Chalamet_Berlinale_2017.jpg/960px-Timoth%C3%A9e_Chalamet_Berlinale_2017.jpg",
@@ -619,9 +616,8 @@ export const CHARACTER_PICTURES: Record<string, string[]> = {
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Dwayne_Johnson_%288557345508%29.jpg/960px-Dwayne_Johnson_%288557345508%29.jpg",
 	],
 	"Keanu Reeves": [
-		"https://upload.wikimedia.org/wikipedia/commons/5/57/Keanu_Reeves_%2825448963336%29_%282%29.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Reuni%C3%A3o_com_o_ator_norte-americano_Keanu_Reeves_%2840564290773%29_%28cropped%29.jpg/960px-Reuni%C3%A3o_com_o_ator_norte-americano_Keanu_Reeves_%2840564290773%29_%28cropped%29.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Keanu_Reeves_-_2019_%2847477524302%29_%28cropped%29.jpg/960px-Keanu_Reeves_-_2019_%2847477524302%29_%28cropped%29.jpg",
+		"https://fr.web.img5.acsta.net/c_310_420/pictures/17/02/06/17/01/343859.jpg",
+		"https://hips.hearstapps.com/hmg-prod/images/keanu-reeves-9454211-1-402.jpg",
 	],
 	"Hugh Jackman": [
 		"https://upload.wikimedia.org/wikipedia/commons/8/82/Hugh_Jackman_navy.jpg",
@@ -744,9 +740,9 @@ export const CHARACTER_PICTURES: Record<string, string[]> = {
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Jeremy_Renner_5%2C_2013.jpg/960px-Jeremy_Renner_5%2C_2013.jpg",
 	],
 	"Tom Holland": [
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Tom_Holland_by_Gage_Skidmore.jpg/960px-Tom_Holland_by_Gage_Skidmore.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/f/fd/Tom_Holland_MTV_2018_%2802%29.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Tom_Holland_Bali_2019_2.jpg/960px-Tom_Holland_Bali_2019_2.jpg",
+		"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREijpBTwAFk8fUVGtG381mi9teC6Ll1BRfEAzm48-s_w&s=10",
+		"https://static.wikia.nocookie.net/marvelcinematicuniverse/images/2/2f/Tom_Holland.jpg/revision/latest/scale-to-width-down/1200?cb=20220213015022",
+		"https://numero.com/wp-content/uploads/2020/09/Tom-Holland-.jpg",
 	],
 	"Andrew Garfield": [
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flickr_-_csztova_-_Andrew_Garfield_-_TIFF_09%27_%281%29.jpg/960px-Flickr_-_csztova_-_Andrew_Garfield_-_TIFF_09%27_%281%29.jpg",
@@ -794,9 +790,8 @@ export const CHARACTER_PICTURES: Record<string, string[]> = {
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Virginie_Viard_filmed_by_Sofia_Coppola.jpg/960px-Virginie_Viard_filmed_by_Sofia_Coppola.jpg",
 	],
 	"Marion Cotillard": [
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Marion_Cotillard_%28July_2009%29_3.jpg/960px-Marion_Cotillard_%28July_2009%29_3.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Marion_Cotillard_%28July_2009%29_4.jpg/960px-Marion_Cotillard_%28July_2009%29_4.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/7/79/Marion_Cotillard_2008.jpg",
+		"https://media.vogue.fr/photos/646d1bc648e9361769c7f7ea/2:3/w_2560%2Cc_limit/1492077732",
+		"https://image.tmdb.org/t/p/w500/biitzOF0GffIqFYLyOPkoiaOngQ.jpg",
 	],
 	"Omar Sy": [
 		"https://upload.wikimedia.org/wikipedia/commons/6/6b/Omar_Sy_2012.jpg",
@@ -1014,9 +1009,9 @@ export const CHARACTER_PICTURES: Record<string, string[]> = {
 		"https://upload.wikimedia.org/wikipedia/commons/1/1a/Rihanna_Fenty_2018_2_%28cropped%29.png",
 	],
 	"Taylor Swift": [
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Taylor_Swift_%286820799756%29.jpg/960px-Taylor_Swift_%286820799756%29.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Taylor_Swift_%22Lavender_Haze%22_outfit.jpg/960px-Taylor_Swift_%22Lavender_Haze%22_outfit.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Taylor_Swift_at_the_2023_MTV_Video_Music_Awards_%283%29.png/960px-Taylor_Swift_at_the_2023_MTV_Video_Music_Awards_%283%29.png",
+		"https://upload.wikimedia.org/wikipedia/commons/b/b1/Taylor_Swift_at_the_2023_MTV_Video_Music_Awards_%283%29.png",
+		"https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Taylor_Swift_at_the_Golden_Globes_2024_%28Enhanced%2C_cropped%29_2.jpg/330px-Taylor_Swift_at_the_Golden_Globes_2024_%28Enhanced%2C_cropped%29_2.jpg",
+		"https://fr.web.img3.acsta.net/c_310_420/pictures/19/08/27/09/51/3618586.jpg",
 	],
 	"Adele Adkins": [
 		"https://upload.wikimedia.org/wikipedia/commons/2/28/Adele_adkins_concert1.jpg",
@@ -1029,9 +1024,8 @@ export const CHARACTER_PICTURES: Record<string, string[]> = {
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Ed_Sheeran%2C_Royal_Albert_Hall_%2813401332043%29.jpg/960px-Ed_Sheeran%2C_Royal_Albert_Hall_%2813401332043%29.jpg",
 	],
 	"Bruno Mars": [
-		"https://upload.wikimedia.org/wikipedia/commons/f/fa/Bruno_Mars%2C_Las_Vegas_2010.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Bruno_Mars_Concert_Houston.jpg/960px-Bruno_Mars_Concert_Houston.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Bruno_Mars_Doo-Wops_%26_Hooligans_Black_and_White.jpg/960px-Bruno_Mars_Doo-Wops_%26_Hooligans_Black_and_White.jpg",
+		"https://m.media-amazon.com/images/M/MV5BMjE1NDE3ODA0MV5BMl5BanBnXkFtZTcwODQ5NTgwNQ@@._V1_FMjpg_UX1000_.jpg",
+		"https://img.nrj.fr/7QxKuJ_YEU5E8jKLQmJJoPGJ7k0=/http%3A%2F%2Fmedia.nrj.fr%2F1900x1200%2F2017%2F04%2Fbruno-mars_1360607.png",
 	],
 	"Justin Bieber": [
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Justin_Bieber_-DSC_0336-10.20.12_%288107429328%29.jpg/960px-Justin_Bieber_-DSC_0336-10.20.12_%288107429328%29.jpg",
@@ -1039,9 +1033,9 @@ export const CHARACTER_PICTURES: Record<string, string[]> = {
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Justin_Bieber_-DSC_0448-10.20.12_%288107440949%29.jpg/960px-Justin_Bieber_-DSC_0448-10.20.12_%288107440949%29.jpg",
 	],
 	"Ariana Grande": [
-		"https://upload.wikimedia.org/wikipedia/commons/a/a8/Christmas_Kisses_Ariana_Grande.png",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Ariana_Grande_-_The_Honeymoon_Tour_Live_Jakarta_%284%29.jpg/960px-Ariana_Grande_-_The_Honeymoon_Tour_Live_Jakarta_%284%29.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Ariana_Grande_%2833269921445%29.jpg/960px-Ariana_Grande_%2833269921445%29.jpg",
+		"https://cdn-elle.ladmedia.fr/var/plain_site/storage/images/personnalites/ariana-grande/103275873-1-fre-FR/Ariana-Grande.jpg",
+		"https://media.vogue.fr/photos/65ef3f1fa7560266b8c1aab2/2:3/w_2560%2Cc_limit/GettyImages-2074353032.jpg",
+		"https://www.journalduluxe.fr/files/resize/outside/875-875-ariana-grande-nouvelle-ambassadrice-swarovski_8f08bf76ba19330db05bb6da8d2958e8.jpeg",
 	],
 	"Billie Eilish": [
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Billie_Eilish_-_Los_Angeles_2017_%2809%29.jpg/960px-Billie_Eilish_-_Los_Angeles_2017_%2809%29.jpg",
@@ -1174,9 +1168,8 @@ export const CHARACTER_PICTURES: Record<string, string[]> = {
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Thomas_Barker_%281769-1847%29_-_Mary_Elizabeth_Elton_%281816%E2%80%931840%29%2C_Jane_Octavia_Elton_%281821%E2%80%931896%29%2C_and_Arthur_Hallam_Elton_%281818%E2%80%931883_-_624168_-_National_Trust.jpg/960px-thumbnail.jpg",
 	],
 	"David Bowie": [
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/David_Bowie_%2857399636%29.jpeg/960px-David_Bowie_%2857399636%29.jpeg",
-		"https://upload.wikimedia.org/wikipedia/commons/5/55/Quicksand_by_David_Bowie_UK_vinyl_single.png",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Travaux_du_pont_de_la_rue_David-Bowie_%C3%A0_Paris_juin_2022.jpg/960px-Travaux_du_pont_de_la_rue_David-Bowie_%C3%A0_Paris_juin_2022.jpg",
+		"https://fr.web.img6.acsta.net/c_310_420/pictures/16/01/11/09/13/467205.jpg",
+		"https://anniversaire-celebrite.com/images/celebrites/david-bowie.jpg",
 	],
 	"Madonna Ciccone": [
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Clarissa_Vichi_as_Madonna_Ciccone.jpg/960px-Clarissa_Vichi_as_Madonna_Ciccone.jpg",
@@ -1703,9 +1696,8 @@ export const CHARACTER_PICTURES: Record<string, string[]> = {
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/S%C3%A9gol%C3%A8ne_Royal_-_Cohen%27s_rallye%2C_Toulouse_town_election%2C_2008_-_1407.jpg/960px-S%C3%A9gol%C3%A8ne_Royal_-_Cohen%27s_rallye%2C_Toulouse_town_election%2C_2008_-_1407.jpg",
 	],
 	"Elon Musk": [
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/20_05_2022_Conectividade_e_Prote%C3%A7%C3%A3o_da_Amaz%C3%B4nia_com_Elon_Musk_%2852089881736%29.png/960px-20_05_2022_Conectividade_e_Prote%C3%A7%C3%A3o_da_Amaz%C3%B4nia_com_Elon_Musk_%2852089881736%29.png",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/20_05_2022_Conectividade_e_Prote%C3%A7%C3%A3o_da_Amaz%C3%B4nia_com_Elon_Musk_%2852089904608%29.png/960px-20_05_2022_Conectividade_e_Prote%C3%A7%C3%A3o_da_Amaz%C3%B4nia_com_Elon_Musk_%2852089904608%29.png",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/20_05_2022_Conectividade_e_Prote%C3%A7%C3%A3o_da_Amaz%C3%B4nia_com_Elon_Musk_%2852090204434%29.png/960px-20_05_2022_Conectividade_e_Prote%C3%A7%C3%A3o_da_Amaz%C3%B4nia_com_Elon_Musk_%2852090204434%29.png",
+		"https://upload.wikimedia.org/wikipedia/commons/5/5e/Elon_Musk_-_54820081119_%28cropped%29.jpg",
+		"https://cdn8.futura-sciences.com/s480/Elon%20Musk1.jpg",
 	],
 	"Jeff Bezos": [
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Secretary_of_Defense_Ash_Carter_meets_with_Jeff_Bezos%2C_May_5%2C_2016_%282%29.jpg/960px-Secretary_of_Defense_Ash_Carter_meets_with_Jeff_Bezos%2C_May_5%2C_2016_%282%29.jpg",
@@ -2008,9 +2000,8 @@ export const CHARACTER_PICTURES: Record<string, string[]> = {
 		"https://upload.wikimedia.org/wikipedia/commons/7/74/Kris_Jenner_%28cropped%29.jpg",
 	],
 	"Naomi Campbell": [
-		"https://upload.wikimedia.org/wikipedia/commons/d/d0/Naomi_Campbell_Cannes_cropped.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/4/46/4_-_Naomi_Campbell-002_%2817132479411%29.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/3/3e/2_-_Naomi_Campbell_%2817133117425%29.jpg",
+		"https://media.vogue.fr/photos/64997c134e2f1d2bfa5413df/3:4/w_2560%2Cc_limit/1491756125",
+		"https://www.datocms-assets.com/63746/1646364157-1603962980352246-naomi-campbell-young-birhtday.jpg?auto=format&fit=max&w=1200",
 	],
 	"Cindy Crawford": [
 		"https://upload.wikimedia.org/wikipedia/commons/1/17/Cindy_Crawford_%28porn_star%29_adjusted.jpg",
@@ -2211,9 +2202,9 @@ export const CHARACTER_PICTURES: Record<string, string[]> = {
 		"https://upload.wikimedia.org/wikipedia/commons/a/a6/Michou_2023.jpg",
 	],
 	"Léna Mahfouf": [
-		"https://upload.wikimedia.org/wikipedia/commons/1/1b/L%C3%A9na_Situations_et_Seb_La_Frite.png",
+		"https://resize.elle.fr/original/var/plain_site/storage/images/people/la-vie-des-people/news/lena-situations-de-youtubeuse-a-entrepreneuse-a-succes-son-evolution-en-images/105718737-1-fre-FR/Lena-Situations-de-youtubeuse-a-entrepreneuse-a-succes-son-evolution-en-images.jpg",
+		"https://i.f1g.fr/media/cms/768x1024_cropupscale/2024/11/15/a7c077841bee207652fb7c68ab520af08f4274c3a92493f541af3d45df42b0ea.jpg",
 		"https://upload.wikimedia.org/wikipedia/commons/e/ea/L%C3%A9na_Situations_during_the_MiuMiu_Fashion_Show.png",
-		"https://upload.wikimedia.org/wikipedia/commons/a/a2/L%C3%A9na_Situations_2021.png",
 	],
 	"Marie Lopez": [
 		"https://upload.wikimedia.org/wikipedia/commons/1/11/EnjoyPhoenix_mollat2015.jpg",
@@ -2376,9 +2367,7 @@ export const CHARACTER_PICTURES: Record<string, string[]> = {
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Cosplay_of_Touka_Kirishima_from_Tokyo_Ghoul_and_Mikasa_Ackerman_from_Attack_on_Titan_at_Japan_Expo_2023%2C_Day_2_%2853056237308%29.jpg/960px-Cosplay_of_Touka_Kirishima_from_Tokyo_Ghoul_and_Mikasa_Ackerman_from_Attack_on_Titan_at_Japan_Expo_2023%2C_Day_2_%2853056237308%29.jpg",
 	],
 	"Light Yagami": [
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Cosplayers_of_Misa_Amane%2C_Ryuk_and_Light_Yagami_20110306.jpg/960px-Cosplayers_of_Misa_Amane%2C_Ryuk_and_Light_Yagami_20110306.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Cosplayer_of_Light_Yagami%2C_Death_Note_at_Kuantan_CosWalk_20170319.jpg/960px-Cosplayer_of_Light_Yagami%2C_Death_Note_at_Kuantan_CosWalk_20170319.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Cosplayer_of_Light_Yagami%2C_Death_Note_at_Animethon_20080808a.jpg/960px-Cosplayer_of_Light_Yagami%2C_Death_Note_at_Animethon_20080808a.jpg",
+		"https://i.redd.it/ikjmfjp2f6of1.jpeg",
 	],
 	"L Lawliet": [
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Cosplay_of_L_Lawliet%2C_with_satchel%2C_Otakon_2012.jpg/960px-Cosplay_of_L_Lawliet%2C_with_satchel%2C_Otakon_2012.jpg",
@@ -2431,9 +2420,8 @@ export const CHARACTER_PICTURES: Record<string, string[]> = {
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Cosplay_of_Harley_Quinn_at_Brussels_Comic_Con_2022_%2851962829889%29.jpg/960px-Cosplay_of_Harley_Quinn_at_Brussels_Comic_Con_2022_%2851962829889%29.jpg",
 	],
 	"Homer Simpson": [
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Homer_Simpson_cosplay_at_Antarctica_Animecon_2016.png/960px-Homer_Simpson_cosplay_at_Antarctica_Animecon_2016.png",
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Cosplay_of_Homer_Simpson_at_Comic_Fiesta_2022.jpg/960px-Cosplay_of_Homer_Simpson_at_Comic_Fiesta_2022.jpg",
-		"https://upload.wikimedia.org/wikipedia/commons/f/fa/Hallowbaloo_2010_Homer_Simpson_Cosplayer.jpg",
+		"https://medias.artmajeur.com/hd/15687763_img-20220426-182732.jpg?v=1738650820",
+		"https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyZDU2NDg2cjN4cWx2YXphb3d5ZHdzbHgxcTN6dXRyN3BsdXp2MTB5aSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/jUwpNzg9IcyrK/giphy.gif",
 	],
 	"Marge Simpson": [
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Knit_Marge_Simpson_Cosplay_at_Dragon_Con_2014.jpg/960px-Knit_Marge_Simpson_Cosplay_at_Dragon_Con_2014.jpg",
