@@ -9,7 +9,7 @@
 		"format": "prettier --write .",
 		"check": "eslint . && tsc -p ./tsconfig.json",
 		"format:check": "npm run format && npm run check",
-		"preview": "vite preview --port 4009"
+		"preview": "vite preview --host --port 4009"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.10.0",
