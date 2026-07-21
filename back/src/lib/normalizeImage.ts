@@ -1,7 +1,14 @@
 import sharp from "sharp"
 import { BadRequestException } from "./HttpException"
 
-export const ALLOWED_IMAGE_FORMATS = ["jpeg", "png", "webp"]
+export const ALLOWED_IMAGE_FORMATS = [
+	"jpeg",
+	"png",
+	"webp",
+	"avif",
+	"heif",
+	"gif",
+]
 
 export const MAX_INPUT_PIXELS = parseInt(process.env.MAX_INPUT_PIXELS!)
 
