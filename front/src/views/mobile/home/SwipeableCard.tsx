@@ -79,7 +79,13 @@ export default forwardRef(function SwipeableCard(
 
 	useImperativeHandle(ref, () => ({ like, dislike }))
 
+	const hasDraggedRef = useRef(false)
+
+	const onDragStart: FramerCallback = useCallback(() => {
+		hasDraggedRef.current = false
+	}, [])
 	const onDrag: FramerCallback = useCallback((_, info) => {
+		if (Math.abs(info.offset.x) > 5) hasDraggedRef.current = true
 		setCardRotation(info.offset.x / 10)
 	}, [])
 	const onDragEnd: FramerCallback = useCallback(
@@ -118,6 +124,7 @@ export default forwardRef(function SwipeableCard(
 
 	const handlePictureClick = useCallback(
 		(event: MouseEvent<HTMLDivElement>) => {
+			if (hasDraggedRef.current) return
 			const { clientX, currentTarget } = event
 			const { left, width } = currentTarget.getBoundingClientRect()
 			const clickPosition = (clientX - left) / width
@@ -134,6 +141,7 @@ export default forwardRef(function SwipeableCard(
 				drag: "x" as const,
 				dragConstraints: { left: 0, right: 0, top: 0, bottom: 0 },
 				dragElastic,
+				onDragStart,
 				onDrag,
 				onDragEnd,
 				animate: { x: cardX, rotate: cardRotation },
