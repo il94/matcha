@@ -3,6 +3,7 @@ import useAuth from "./hooks/useAuth"
 import { Navigate, Outlet } from "react-router"
 import { ErrorState } from "@/components/ui/error-state"
 import { AxiosError } from "axios"
+import { IlandolsDemoBadge } from "ilandols-demo-badge/react"
 
 export default function PublicRoute() {
 	const {
@@ -32,5 +33,19 @@ export default function PublicRoute() {
 	if (isReseting) return <Navigate to="/reset" />
 	if (isAuthenticated) return <Navigate to="/home" />
 
-	return <Outlet />
+	return (
+		<>
+			<Outlet />
+			{import.meta.env.VITE_DEMO_ENABLED === "true" && (
+				<IlandolsDemoBadge
+					heading="Demo account"
+					description="Welcome, and thanks for giving Matcha a try ! This demo account lets you jump straight in and explore the app, no sign up, no activation email, no profile to fill in. Log in with the credentials below to browse the profiles, open them and see how everything fits together. It's read-only, so nothing you do can break it for the next visitor."
+					credentials={[
+						{ label: "Username", value: import.meta.env.VITE_DEMO_USERNAME },
+						{ label: "Password", value: import.meta.env.VITE_DEMO_PASSWORD },
+					]}
+				/>
+			)}
+		</>
+	)
 }
