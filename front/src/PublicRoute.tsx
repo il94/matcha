@@ -38,7 +38,7 @@ export default function PublicRoute() {
 			<Outlet />
 			{import.meta.env.VITE_DEMO_ENABLED === "true" && (
 				<IlandolsDemoBadge
-					heading="Demo account"
+					heading="Try Matcha instantly"
 					description="Welcome, and thanks for giving Matcha a try ! This demo account lets you jump straight in and explore the app, no sign up, no activation email, no profile to fill in. Log in with the credentials below to browse the profiles, open them and see how everything fits together. It's read-only, so nothing you do can break it for the next visitor."
 					credentials={[
 						{ label: "Username", value: import.meta.env.VITE_DEMO_USERNAME },
