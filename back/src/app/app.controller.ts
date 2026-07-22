@@ -1,6 +1,7 @@
 import appService from "@/app/app.service"
 import * as schemas from "@/app/app.schemas"
 import appGuard from "./app.guard"
+import appDemoGuard from "./app.demo-guard"
 import { BadRequestException } from "@/lib/HttpException"
 import wsController from "@/ws/ws.controller"
 import { FastifyPluginAsyncJsonSchemaToTs } from "@fastify/type-provider-json-schema-to-ts"
@@ -12,6 +13,7 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 	const service = new appService(app, options)
 
 	app.addHook("preHandler", appGuard)
+	app.addHook("preHandler", appDemoGuard)
 
 	app.register(wsController)
 

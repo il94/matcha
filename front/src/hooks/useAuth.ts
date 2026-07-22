@@ -8,6 +8,7 @@ import useSocket from "./useSocket"
 import toast from "@/lib/toast"
 import { DEBUG_ERRORS, forcedError } from "@/lib/debugError"
 import { formatRetryAfter } from "@/lib/utils"
+import { DEMO_DIALOG_STORAGE_KEY } from "@/views/mobile/login/DemoDialog"
 
 export default function useAuth() {
 	const navigate = useNavigate()
@@ -23,6 +24,7 @@ export default function useAuth() {
 	const { mutate: logoutMutation } = useMutation({
 		mutationFn: DEBUG_ERRORS.logout ? forcedError : logout,
 		onSuccess: () => {
+			sessionStorage.removeItem(DEMO_DIALOG_STORAGE_KEY)
 			navigate(0)
 		},
 		onError: () => {
@@ -49,6 +51,7 @@ export default function useAuth() {
 		isAuthenticated: data?.isAuthenticated,
 		isCompleting: data?.isCompleting,
 		isReseting: data?.isReseting,
+		isDemo: data?.isDemo,
 
 		socket,
 		socketStatus,

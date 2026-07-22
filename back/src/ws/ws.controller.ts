@@ -1,5 +1,10 @@
 import appService from "@/app/app.service"
-import { BadRequestException, HttpException } from "@/lib/HttpException"
+import {
+	BadRequestException,
+	ForbiddenException,
+	HttpException,
+} from "@/lib/HttpException"
+import { isDemoUser } from "@/app/demo"
 import { ERROR_CODES } from "@/lib/errorCodes"
 import dayjs from "@/lib/dayjs"
 import socketSend from "@/lib/socketSend"
@@ -34,6 +39,9 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 		socket.on("message", async (raw) => {
 			try {
 				const message: SocketMessage = JSON.parse(raw.toString())
+
+				if (await isDemoUser(app, userId))
+					throw new ForbiddenException(ERROR_CODES.DEMO_READ_ONLY)
 
 				if (message.type === "message") await onReceiveMessage(message)
 				else if (message.type === "location")

@@ -20,6 +20,7 @@ import { GetUsersFilters } from "@/db/queries/app"
 import Gender from "@/data/Gender"
 import SexualOrientation from "@/data/SexualOrientation"
 import socketSend from "@/lib/socketSend"
+import { isDemoUser } from "./demo"
 
 class appService {
 	private app
@@ -157,6 +158,7 @@ class appService {
 		isAuthenticated?: boolean
 		isCompleting?: boolean
 		isReseting?: boolean
+		isDemo?: boolean
 	}> {
 		if (sessionId) {
 			const userId = await this.redisService.getSession(sessionId)
@@ -169,6 +171,7 @@ class appService {
 				userId,
 				user,
 				isAuthenticated: true,
+				isDemo: await isDemoUser(this.app, userId),
 			}
 		} else if (completingSessionId) {
 			const userId =

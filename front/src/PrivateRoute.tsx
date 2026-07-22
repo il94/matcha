@@ -3,6 +3,7 @@ import useAuth from "./hooks/useAuth"
 import { Navigate, Outlet } from "react-router"
 import { ErrorState } from "@/components/ui/error-state"
 import { AxiosError } from "axios"
+import DemoDialog from "./views/mobile/login/DemoDialog"
 
 export default function PrivateRoute() {
 	const {
@@ -10,6 +11,7 @@ export default function PrivateRoute() {
 		socket,
 		socketStatus,
 		isAuthenticated,
+		isDemo,
 		isPending,
 		isError,
 		error,
@@ -32,5 +34,10 @@ export default function PrivateRoute() {
 
 	if (!isAuthenticated) return <Navigate to="/" />
 
-	return <Outlet context={{ user, logout, socket, socketStatus }} />
+	return (
+		<>
+			<Outlet context={{ user, logout, socket, socketStatus }} />
+			{isDemo && <DemoDialog />}
+		</>
+	)
 }
