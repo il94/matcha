@@ -163,7 +163,7 @@ function buildCharacterUser(row: CharacterRow, index: number): SeedUser {
 // Compte de développement fixe (login connu pour les tests manuels), ce n'est
 // pas un personnage et reste donc en dehors des 500 profils générés.
 function buildDevUser(): SeedUser {
-	const username = process.env.DEV_USER_USERNAME ?? faker.internet.username()
+	const username = process.env.DEV_USER_USERNAME ?? faker.internet.userName()
 	takenUsernames.add(username)
 
 	const city = faker.helpers.arrayElement(cities)

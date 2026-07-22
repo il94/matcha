@@ -42,7 +42,7 @@
 		"tsc-alias": "^1.8.16"
 	},
 	"devDependencies": {
-		"@faker-js/faker": "^10.5.0",
+		"@faker-js/faker": "^8.4.1",
 		"@types/bcrypt": "^5.0.2",
 		"@types/node": "^22.10.5",
 		"eslint": "^8.57.1",
