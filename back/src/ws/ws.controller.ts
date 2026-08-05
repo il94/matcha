@@ -7,7 +7,7 @@ import {
 import { isDemoUser } from "@/app/demo"
 import { ERROR_CODES } from "@/lib/errorCodes"
 import dayjs from "@/lib/dayjs"
-import socketSend from "@/lib/socketSend"
+import socketSend, { socketBroadcast } from "@/lib/socketSend"
 import { FastifyPluginAsync } from "fastify"
 
 const RED = "\x1b[31m"
@@ -27,7 +27,9 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 	app.get("/", { websocket: true }, (socket, request) => {
 		const { userId } = request
 
-		app.clients.set(userId, socket)
+		const userSockets = app.clients.get(userId) ?? new Set()
+		userSockets.add(socket)
+		app.clients.set(userId, userSockets)
 		;(async () => {
 			try {
 				await service.updateUser(userId, { isOnline: true })
@@ -69,12 +71,12 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 				message.content,
 			)
 
-			const receiverSocket = app.clients.get(response.receiverId)
+			const receiverSockets = app.clients.get(response.receiverId)
 
-			if (receiverSocket) {
+			if (receiverSockets?.size) {
 				const author = await service.getUser(userId)
 
-				socketSend(receiverSocket, "message", {
+				socketBroadcast(receiverSockets, "message", {
 					authorId: response.message.authorId,
 					chatId: response.message.chatId,
 					createdAt: response.message.createdAt,
@@ -109,6 +111,11 @@ const wsController: FastifyPluginAsync = async (app, options) => {
 		}
 
 		socket.onclose = async () => {
+			const sockets = app.clients.get(userId)
+			sockets?.delete(socket)
+
+			if (sockets?.size) return
+
 			app.clients.delete(userId)
 
 			try {

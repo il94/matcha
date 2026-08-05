@@ -16,7 +16,7 @@ declare module "fastify" {
 	interface FastifyInstance {
 		s3: S3Client
 		mailer: Transporter
-		clients: Map<UserData["id"], WebSocket>
+		clients: Map<UserData["id"], Set<WebSocket>>
 	}
 }
 

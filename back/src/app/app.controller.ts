@@ -91,9 +91,9 @@ const appController: FastifyPluginAsyncJsonSchemaToTs = async (
 		const { sessionId, completingSessionId, userId } = request
 
 		await service.logout(sessionId, completingSessionId, userId)
-		const client = app.clients.get(userId)
-		if (client) {
-			client.close()
+		const clients = app.clients.get(userId)
+		if (clients) {
+			for (const client of clients) client.close()
 			app.clients.delete(userId)
 		}
 
