@@ -19,7 +19,7 @@ import { NominatimLocation } from "@/types"
 import { GetUsersFilters } from "@/db/queries/app"
 import Gender from "@/data/Gender"
 import SexualOrientation from "@/data/SexualOrientation"
-import socketSend from "@/lib/socketSend"
+import { socketBroadcast } from "@/lib/socketSend"
 import { isDemoUser } from "./demo"
 
 class appService {
@@ -50,8 +50,9 @@ class appService {
 	) {
 		await this.repository.createNotification(recipientId, senderId, type)
 
-		const socket = this.app.clients.get(recipientId)
-		if (socket) socketSend(socket, "notification", { notificationType: type })
+		socketBroadcast(this.app.clients.get(recipientId), "notification", {
+			notificationType: type,
+		})
 	}
 
 	async getUserNotifications(userId: UserData["id"]) {
@@ -320,7 +321,7 @@ class appService {
 		let pictureNames: string[] = []
 
 		try {
-			if (userData.longitude && userData.latitude) {
+			if (userData.longitude != null && userData.latitude != null) {
 				userData.locationLabel = await this.getLocationByCoordinates(
 					userData.latitude,
 					userData.longitude,
@@ -569,7 +570,7 @@ class appService {
 				throw new ForbiddenException(ERROR_CODES.WORD_IN_PASSWORD)
 		}
 
-		if (userData.longitude && userData.latitude) {
+		if (userData.longitude != null && userData.latitude != null) {
 			userData.locationLabel = await this.getLocationByCoordinates(
 				userData.latitude,
 				userData.longitude,

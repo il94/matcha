@@ -1,8 +1,10 @@
-import { WebSocket } from "@fastify/websocket"
+import { WebSocket } from "ws"
+
+type SocketMessageType = "message" | "location" | "notification" | "error"
 
 export default function socketSend(
 	socket: WebSocket,
-	type: "message" | "location" | "notification" | "error",
+	type: SocketMessageType,
 	data?: Record<string, unknown>,
 ) {
 	socket.send(
@@ -11,4 +13,14 @@ export default function socketSend(
 			...data,
 		}),
 	)
+}
+
+export function socketBroadcast(
+	sockets: Set<WebSocket> | undefined,
+	type: SocketMessageType,
+	data?: Record<string, unknown>,
+) {
+	if (!sockets) return
+
+	for (const socket of sockets) socketSend(socket, type, data)
 }
