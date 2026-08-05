@@ -149,7 +149,7 @@ export const getUsers = {
 	querystring: {
 		type: "object",
 		properties: {
-			limit: { type: "number", default: 5 },
+			limit: { type: "integer", minimum: 1, maximum: 50, default: 5 },
 			minAge: { type: "number", minimum: 18 },
 			maxAge: { type: "number", minimum: 18 },
 			maxDistance: { type: "number", minimum: 0 },
