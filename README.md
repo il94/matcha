@@ -43,12 +43,12 @@ docker compose exec back npm run seed:dev
 </p>
 
 ## Filtrage
-<div align="center">
-	<img src="other/readme_images/filters.png">
-</div>
-<p align="center">
-	Pas convaincu par les suggestions ? Prends les choses en main avec la recherche avancée, et filtre les profils par âge, distance, fame rating ou centres d'intérêt communs pour trouver exactement ce que tu cherches.
-</p>
+<table align="center">
+	<tr>
+		<td><img src="other/readme_images/filters.png" width="160"></td>
+		<td width="480">Pas convaincu par les suggestions ? Prends les choses en main avec la recherche avancée, et filtre les profils par âge, distance, fame rating ou centres d'intérêt communs pour trouver exactement ce que tu cherches.</td>
+	</tr>
+</table>
 
 ## Chat
 <div align="center">
@@ -59,10 +59,10 @@ docker compose exec back npm run seed:dev
 </p>
 
 ## Fame rating
-<div align="center">
-	<img src="other/readme_images/profile.png">
-</div>
-<p align="center">
-	Chaque utilisateur a un fame rating, un score inspiré du classement Elo qui monte à chaque like et descend à chaque dislike. Plus tu es populaire, plus tu remontes dans les suggestions des autres !
-</p>
+<table align="center">
+	<tr>
+		<td width="480">Chaque utilisateur a un fame rating, un score inspiré du classement Elo qui monte à chaque like et descend à chaque dislike. Plus tu es populaire, plus tu remontes dans les suggestions des autres !</td>
+		<td><img src="other/readme_images/profile.png" width="160"></td>
+	</tr>
+</table>
 
