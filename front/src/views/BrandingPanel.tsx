@@ -19,22 +19,20 @@ function MatchaLeaf({ className }: { className?: string }) {
 
 export default function BrandingPanel() {
 	return (
-		<aside className="relative hidden overflow-hidden bg-gradient-to-br from-primary via-primary/80 to-secondary text-primary-foreground lg:flex lg:w-1/2 lg:flex-col lg:items-center lg:justify-center">
+		<aside className="relative hidden overflow-hidden bg-gradient-to-br from-primary via-primary/80 to-primary text-primary-foreground lg:flex lg:w-1/2 lg:flex-col lg:items-center lg:justify-center">
 			<div
 				aria-hidden="true"
 				className="absolute -left-24 -top-24 h-96 w-96 rounded-full bg-primary-foreground/10 blur-3xl motion-safe:animate-blob"
 			/>
 			<div
 				aria-hidden="true"
-				className="absolute -bottom-32 -right-20 h-[28rem] w-[28rem] rounded-full bg-secondary/40 blur-3xl [animation-delay:-7s] motion-safe:animate-blob"
+				className="absolute inset-0 origin-bottom-right bg-[radial-gradient(105%_105%_at_100%_100%,hsl(var(--secondary)/0.95)_0%,hsl(var(--secondary)/0.88)_32%,hsl(var(--secondary)/0.35)_58%,transparent_74%)] motion-safe:animate-corner-glow"
 			/>
 
 			<div className="relative z-10 flex flex-col items-center gap-4 px-8">
-				<MatchaLeaf className="h-12 w-12 motion-safe:animate-fade-in-up" />
-				<h2 className="text-7xl font-bold tracking-tight [animation-delay:80ms] motion-safe:animate-fade-in-up">
-					matcha
-				</h2>
-				<p className="text-lg tracking-wide text-primary-foreground/95 [animation-delay:160ms] motion-safe:animate-fade-in-up">
+				<MatchaLeaf className="h-12 w-12" />
+				<h2 className="text-7xl font-bold tracking-tight">matcha</h2>
+				<p className="text-lg tracking-wide text-primary-foreground/95">
 					Steep. Sip. Match.
 				</p>
 			</div>

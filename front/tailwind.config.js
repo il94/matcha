@@ -85,14 +85,14 @@ export default {
 						transform: "translate(-5%, 5%) scale(0.95)",
 					},
 				},
-				"fade-in-up": {
-					from: {
-						opacity: "0",
-						transform: "translateY(8px)",
+				"corner-glow": {
+					"0%, 100%": {
+						transform: "scale(0.75)",
+						opacity: "0.7",
 					},
-					to: {
+					"50%": {
+						transform: "scale(1.15)",
 						opacity: "1",
-						transform: "translateY(0)",
 					},
 				},
 			},
@@ -100,7 +100,7 @@ export default {
 				"accordion-down": "accordion-down 0.2s ease-out",
 				"accordion-up": "accordion-up 0.2s ease-out",
 				blob: "blob 14s ease-in-out infinite",
-				"fade-in-up": "fade-in-up 0.6s ease-out both",
+				"corner-glow": "corner-glow 5s ease-in-out infinite",
 			},
 		},
 	},
