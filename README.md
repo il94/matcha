@@ -3,7 +3,7 @@
 </div>
 
 <h1 align="center">
-	Lien
+	Link
 </h1>
 <p align="center">
 	https://matcha.ilandols.com/
@@ -11,23 +11,23 @@
 
 ## Description
 <p align="center">
-	Fatigué de swiper dans le vide ? Matcha te propose des profils qui te correspondent vraiment, à quelques mètres de chez toi.<br>Ce projet, a été réalisé dans le cadre du cursus de l'école 42.
+	Tired of swiping into the void ? Matcha suggests profiles that really match you, just a few meters away from your place.<br>This project has been completed as part of the 42 School curriculum.
 </p>
 
-## Installation en local
+## Local installation
 
-- Étape 1 : Installer et lancer Docker [Documentation](https://docs.docker.com/engine/install/)
+- Step 1 : Install and run Docker [Documentation](https://docs.docker.com/engine/install/)
 
-- Étape 2 : Clone le projet et renomme les deux fichiers ".env.example" en ".env". Tu les trouveras dans les dossiers "back" et "front". La plupart des variables sont déjà remplies, mais il est recommandé de les remplacer par tes propres valeurs. Attention cependant aux variables `AWS_*` et `MAILER_*` du back : celles-ci ne sont pas fournies, car elles nécessitent respectivement un bucket S3 (stockage des photos) et un compte SMTP (envoi des emails d'activation et de réinitialisation de mot de passe) que tu devras te procurer toi-même.
+- Step 2 : Clone the project and rename the two ".env.example" files to ".env". You can find them located in the "back" and "front" folders. Most variables are already filled, but it's recommended to replace them with your own values. Be careful though with the back's `AWS_*` and `MAILER_*` variables : those ones are not provided, as they respectively require an S3 bucket (photo storage) and an SMTP account (sending the activation and password reset emails) that you'll have to get by yourself.
 
-- Étape 3 : Dans un terminal, place-toi dans le dossier du projet et exécute :
+- Step 3 : On a terminal, go to the project folder and execute :
 ```bash
 docker compose up --build
 ```
 
-Une fois le build terminé, l'app tourne sur localhost:5173.
+After building, your app will be running on localhost:5173.
 
-- Étape 4 (optionnelle) : Pour éviter de démarrer sur une app vide, tu peux peupler la base avec quelques centaines de faux profils :
+- Step 4 (optional) : To avoid starting on an empty app, you can fill the database with a few hundred fake profiles :
 ```bash
 docker compose exec back npm run seed:dev
 ```
@@ -39,14 +39,14 @@ docker compose exec back npm run seed:dev
 	<img src="other/readme_images/swipes.gif">
 </div>
 <p align="center">
-	Une fois ton profil créé, découvre une pile de profils suggérés rien que pour toi. L'algorithme mixe ta localisation, tes centres d'intérêt en commun et la popularité de l'autre pour te proposer les meilleurs matchs en premier. Swipe à droite si ça t'intéresse, et croise les doigts pour le match !
+	Once your profile is created, discover a stack of profiles suggested just for you. The algorithm mixes your location, your common interests and the other's popularity to offer you the best matches first. Swipe right if you're interested, and cross your fingers for the match !
 </p>
 
-## Filtrage
+## Filtering
 <table align="center">
 	<tr>
 		<td><img src="other/readme_images/filters.png" width="160"></td>
-		<td width="480">Pas convaincu par les suggestions ? Prends les choses en main avec la recherche avancée, et filtre les profils par âge, distance, fame rating ou centres d'intérêt communs pour trouver exactement ce que tu cherches.</td>
+		<td width="480">Not convinced by the suggestions ? Take matters into your own hands with the advanced search, and filter profiles by age, distance, fame rating or common interests to find exactly what you're looking for.</td>
 	</tr>
 </table>
 
@@ -55,14 +55,13 @@ docker compose exec back npm run seed:dev
 	<img src="other/readme_images/chat.gif">
 </div>
 <p align="center">
-	C'est un match ! Reste plus qu'à briser la glace. Chaque match débloque une conversation en temps réel, pour ne jamais rater une réponse, où que tu sois sur l'app.
+	It's a match ! Now you just have to break the ice. Each match unlocks a real time conversation, so you never miss an answer, wherever you are on the app.
 </p>
 
 ## Fame rating
 <table align="center">
 	<tr>
-		<td width="480">Chaque utilisateur a un fame rating, un score inspiré du classement Elo qui monte à chaque like et descend à chaque dislike. Plus tu es populaire, plus tu remontes dans les suggestions des autres !</td>
+		<td width="480">Every user has a fame rating, a score inspired by the Elo ranking, which goes up with each like and down with each dislike. The more popular you are, the higher you climb in the others' suggestions !</td>
 		<td><img src="other/readme_images/profile.png" width="160"></td>
 	</tr>
 </table>
-
