@@ -9,6 +9,10 @@ const appPublicController: FastifyPluginAsyncJsonSchemaToTs = async (
 ) => {
 	const service = new appService(app, options)
 
+	app.get("/health", { config: { rateLimit: false } }, async () => ({
+		status: "ok",
+	}))
+
 	// app.addHook("preValidation", async (request, reply) => {
 	// 	switch (request.method) {
 	// 		case "POST":
